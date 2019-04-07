@@ -6,6 +6,8 @@ const { createVideo, combineVideos } = require('./video')
 const fetch = require('node-fetch')
 const timeAgo = require('node-time-ago')
 
+process.setMaxListeners(20)
+
 let access_token
 
 async function getAuth() {
@@ -35,6 +37,7 @@ async function fetchComments(articleId) {
 }
 
 async function renderCommentImgs(commentData, name) {
+    if (!commentData) return console.error("Didnt work")
     let upvoted = Math.random() > 0.9 // 10% of the posts will randomly be seen as upvoted
 
     let items = {
@@ -51,11 +54,18 @@ async function renderCommentImgs(commentData, name) {
 
     items.score = formatNum(items.score)
 
-    let bod = commentData.body.trim()
+    let bod = commentData.body
+        .trim()
+        .replace(/\[(.*)\]\(.*\)/g, d => {
+            let s = d.match(/(?!\[)(.*)(?=\]\(.*?\))/)[0]
+            return d.replace(/\[(.*)\]\(.*?\)/, s)
+        })
+
     let paragraphs = bod.trim().split('\n').filter(d => d.length !== 0)
 
+
     let ps = paragraphs.map(block => {
-        let reg = /(,|\.|\?|!)+( |\n)+/g
+        let reg = /(,|\.|\?|!)+( |\n|")+/g
         let array = []
         let result
         let lastIndex = 0
@@ -84,20 +94,26 @@ async function renderCommentImgs(commentData, name) {
                 if (counter == i) {
                     tts = str
                 }
-                for (key in foulSpanDictionary) {
-                    str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
-                }
                 if (counter++ > i) {
                     return hideSpan(str)
                 } else {
+                    for (key in foulSpanDictionary) {
+                        str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
+                    }
                     return str
                 }
             })
         })
 
+        let instanceName = name + '-' + i
+
         let imgPromise = launchComment({ ...items, showBottom: i == totalSections - 1, body_html: h.map(m => '<p>' + m.join('') + '</p>').join('').replace('*', '') })
-        let audioPromise = synth(name + '-' + i + '.mp3', tts)
-        v = makeVideo(imgPromise, audioPromise, name + '-' + i)
+        let audioPromise = synth(instanceName + '.mp3', tts)
+
+        let v = Promise.all([imgPromise, audioPromise])
+            .then(([img, audio]) => {
+                return createVideo(instanceName, img, audio)
+            })
         vids.push(v)
     }
 
@@ -191,24 +207,29 @@ async function main() {
     await updateAuth()
     console.log("AUTH completed")
 
+    let start = 0,
+        end = 50
+
     let thread = process.argv[2]
     if (!thread) throw new Error("Must enter a thread ID")
     console.log("Fetching from thread", thread)
 
     let [question, comments] = await fetchComments(thread.trim())
         .then(r => (console.log('Fetched comments!'), r))
-        .then(r => [r[0].data.children[0].data, r[1].data.children.slice(0, 0)])
+        .then(r => [r[0].data.children[0].data, r[1].data.children.slice(start, end).map(c => c.data)])
+
+    comments = comments.filter(c => c.body.length < 2000)
 
     await renderQuestion(question)
 
     for (let i = 0; i < comments.length; i++) {
-        await renderCommentImgs(comments[i].data, i)
-        console.log("Rendered", i)
+        await renderCommentImgs(comments[i], i + start)
+        console.log("Rendered", i + start)
     }
 
     console.log("Finished!")
 
-    process.exit(0)
+    // process.exit(0)
 }
 
 main()

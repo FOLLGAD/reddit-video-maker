@@ -588,7 +588,7 @@
 
         #DIV_17 {
             display: flex;
-            /* height: 18px; */
+            height: 18px;
             min-height: 18px;
             /* width: 565px; */
             word-break: break-word;
@@ -1584,8 +1584,8 @@
 
         /*#DIV_GILDS:before*/
 
-        #SPAN_SILVER,
-        #SPAN_GOLD {
+        .SPAN_SILVER,
+        .SPAN_GOLD {
             color: rgb(124, 124, 124);
             display: block;
             height: 16.9063px;
@@ -1604,10 +1604,10 @@
             outline: rgb(124, 124, 124) none 0px;
         }
 
-        /*#SPAN_SILVER, #SPAN_GOLD*/
+        /*.SPAN_SILVER, .SPAN_GOLD*/
 
-        #SPAN_SILVER:after,
-        #SPAN_GOLD:after {
+        .SPAN_SILVER:after,
+        .SPAN_GOLD:after {
             color: rgb(124, 124, 124);
             min-height: auto;
             min-width: auto;
@@ -1621,10 +1621,10 @@
             outline: rgb(124, 124, 124) none 0px;
         }
 
-        /*#SPAN_SILVER:after, #SPAN_GOLD:after*/
+        /*.SPAN_SILVER:after, .SPAN_GOLD:after*/
 
-        #SPAN_SILVER:before,
-        #SPAN_GOLD:before {
+        .SPAN_SILVER:before,
+        .SPAN_GOLD:before {
             color: rgb(124, 124, 124);
             min-height: auto;
             min-width: auto;
@@ -1638,10 +1638,10 @@
             outline: rgb(124, 124, 124) none 0px;
         }
 
-        /*#SPAN_SILVER:before, #SPAN_GOLD:before*/
+        /*.SPAN_SILVER:before, .SPAN_GOLD:before*/
 
-        #I_SILVER,
-        #I_GOLD {
+        .I_SILVER,
+        .I_GOLD {
             color: rgb(124, 124, 124);
             text-decoration: none solid rgb(124, 124, 124);
             word-break: break-word;
@@ -1655,10 +1655,10 @@
             outline: rgb(124, 124, 124) none 0px;
         }
 
-        /*#I_SILVER, #I_GOLD*/
+        /*.I_SILVER, .I_GOLD*/
 
-        #I_SILVER:after,
-        #I_GOLD:after {
+        .I_SILVER:after,
+        .I_GOLD:after {
             color: rgb(124, 124, 124);
             text-decoration: none solid rgb(124, 124, 124);
             word-break: break-word;
@@ -1670,10 +1670,10 @@
             outline: rgb(124, 124, 124) none 0px;
         }
 
-        /*#I_SILVER:after, #I_GOLD:after*/
+        /*.I_SILVER:after, .I_GOLD:after*/
 
-        #I_SILVER:before,
-        #I_GOLD:before {
+        .I_SILVER:before,
+        .I_GOLD:before {
             color: rgb(124, 124, 124);
             text-decoration: none solid rgb(124, 124, 124);
             word-break: break-word;
@@ -1685,10 +1685,10 @@
             outline: rgb(124, 124, 124) none 0px;
         }
 
-        /*#I_SILVER:before, #I_GOLD:before*/
+        /*.I_SILVER:before, .I_GOLD:before*/
 
-        #IMG_SILVER,
-        #IMG_GOLD {
+        .IMG_SILVER,
+        .IMG_GOLD {
             color: rgb(124, 124, 124);
             cursor: default;
             height: 16px;
@@ -1709,10 +1709,10 @@
             outline: rgb(124, 124, 124) none 0px;
         }
 
-        /*#IMG_SILVER, #IMG_GOLD*/
+        /*.IMG_SILVER, .IMG_GOLD*/
 
-        #IMG_SILVER:after,
-        #IMG_GOLD:after {
+        .IMG_SILVER:after,
+        .IMG_GOLD:after {
             color: rgb(124, 124, 124);
             cursor: default;
             text-decoration: none solid rgb(124, 124, 124);
@@ -1725,10 +1725,10 @@
             outline: rgb(124, 124, 124) none 0px;
         }
 
-        /*#IMG_SILVER:after, #IMG_GOLD:after*/
+        /*.IMG_SILVER:after, .IMG_GOLD:after*/
 
-        #IMG_SILVER:before,
-        #IMG_GOLD:before {
+        .IMG_SILVER:before,
+        .IMG_GOLD:before {
             color: rgb(124, 124, 124);
             cursor: default;
             text-decoration: none solid rgb(124, 124, 124);
@@ -1748,7 +1748,13 @@
         }
 
         .invis {
-            color: rgba(0, 0, 0, 0);
+            color: rgba(0, 0, 0, 0) !important;
+            text-shadow: none !important;
+        }
+
+        .invis .span {
+            color: rgba(0, 0, 0, 0) !important;
+            text-shadow: none !important;
         }
 
         .blur {
