@@ -52,6 +52,7 @@ function sanitize(text) {
     for (key in foulDictionary) {
         text = text.replace(new RegExp(key, 'gi'), foulDictionary[key])
     }
+    text = text.replace('*', ' ')
     return text
 }
 

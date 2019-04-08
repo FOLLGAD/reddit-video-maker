@@ -11,7 +11,7 @@ handles.registerHelper('ifgt', function (val1, val2, options) {
 const commentTemplate = handles.compile(fs.readFileSync('../comment.html').toString())
 const questionTemplate = handles.compile(fs.readFileSync('../question.html').toString())
 
-async function launchComment({ username, score, time, body_html, edited, upvoted, showBottom, golds, silvers, platina }) {
+async function launchComment(name, { username, score, time, body_html, edited, upvoted, showBottom, golds, silvers, platina }) {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
     page.setViewport({
@@ -35,12 +35,13 @@ async function launchComment({ username, score, time, body_html, edited, upvoted
 
     await page.setContent(markup);
 
-    let buf = await page.screenshot({ encoding: 'binary' })
+    let filename = `${name}.png`
+
+    let buf = await page.screenshot({ encoding: 'binary', path: `../images/${filename}` })
 
     await browser.close()
 
-    // Return buffer with image
-    return buf
+    return filename
 }
 
 module.exports.launchQuestion = async function launchQuestion({ username, score, time, body_html, golds, silvers, platina, comments }) {
@@ -65,7 +66,8 @@ module.exports.launchQuestion = async function launchQuestion({ username, score,
 
     await page.setContent(markup);
 
-    let buf = await page.screenshot({ encoding: 'binary' })
+    let buf = await page.screenshot({ encoding: 'binary', path: '../images/Q.png' })
+    await page.screenshot({ encoding: 'binary', path: './question.png', fullPage: true })
 
     await browser.close()
 

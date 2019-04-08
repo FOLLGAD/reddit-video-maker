@@ -107,18 +107,18 @@ async function renderCommentImgs(commentData, name) {
 
         let instanceName = name + '-' + i
 
-        let imgPromise = launchComment({ ...items, showBottom: i == totalSections - 1, body_html: h.map(m => '<p>' + m.join('') + '</p>').join('').replace('*', '') })
+        let imgPromise = launchComment(instanceName, { ...items, showBottom: i == totalSections - 1, body_html: h.map(m => '<p>' + m.join('') + '</p>').join('').replace('*', '') })
         let audioPromise = synth(instanceName + '.mp3', tts)
 
         let v = Promise.all([imgPromise, audioPromise])
             .then(([img, audio]) => {
-                return createVideo(instanceName, img, audio)
+                return createVideo(instanceName, audio, img)
             })
         vids.push(v)
     }
 
-    await Promise.all(vids).then(names => {
-        combineVideos(names, name)
+    await Promise.all(vids).then(videos => {
+        combineVideos(videos, name)
     })
 }
 
@@ -174,12 +174,12 @@ function renderQuestion(questionData) {
 
         let instanceName = name + '-' + i
 
-        let imgPromise = launchQuestion({ ...items, body_html: h.join("") })
+        let imgPromise = launchQuestion(instanceName, { ...items, body_html: h.join("") })
         let audioPromise = synth(instanceName + '.mp3', tts)
 
         let v = Promise.all([imgPromise, audioPromise])
             .then(([img, audio]) => {
-                return createVideo(instanceName, img, audio)
+                return createVideo(instanceName, audio, img)
             })
         vids.push(v)
     }
@@ -208,7 +208,7 @@ async function main() {
     console.log("AUTH completed")
 
     let start = 0,
-        end = 50
+        end = 2
 
     let thread = process.argv[2]
     if (!thread) throw new Error("Must enter a thread ID")

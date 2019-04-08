@@ -1,29 +1,28 @@
-const ffmpeg = require('fluent-ffmpeg')
-const Stream = require('stream')
+const fs = require('fs')
 
-module.exports.createVideo = function createVideo(name, imageBuf, audioName) {
-    let imgStream = new Stream.Duplex()
-    imgStream.push(imageBuf)
-    imgStream.push(null)
+const child_process = require('child_process')
+let spawn = child_process.spawn
 
-    return new Promise((resolve) => {
-        ffmpeg()
-            .size('1600x1080')
-            .addInput(`../audio-output/${audioName}`)
-            .addInput(imgStream)
-            .saveToFile(`../video-temp/${name}.mp4`)
-            .on('end', () => {
-                resolve(`${name}.mp4`)
-            })
+let fileFormat = 'mp4'
+
+module.exports.createVideo = function createVideo(name, audioName, imgName) {
+    return new Promise(resolve => {
+        let filename = `${name}.${fileFormat}`
+
+        let ffmpeg = spawn('ffmpeg', ['-i', `../images/${imgName}`, '-i', `../audio-output/${audioName}`, '-pix_fmt', 'yuv420p', `../video-temp/${filename}`])
+        ffmpeg.on('exit', statusCode => {
+            resolve(filename)
+        })
     })
 }
 
 module.exports.combineVideos = function combineVideos(videos, name) {
-    let newvideo = ffmpeg()
+    return new Promise(resolve => {
+        fs.writeFileSync(`../videolists/${name}.txt`, videos.map(v => `file '../video-temp/${v}'`).join('\n'))
 
-    videos.forEach(v => {
-        newvideo.input(`../video-temp/${v}`)
+        let ffmpeg = spawn('ffmpeg', ['-f', `concat`, '-safe', `0`, '-i', `../videolists/${name}.txt`, '-c', 'copy', '-pix_fmt', 'yuv420p', `../video-output/${name}.${fileFormat}`])
+        ffmpeg.on('exit', () => {
+            resolve(`${name}.${fileFormat}`)
+        })
     })
-
-    newvideo.mergeToFile(`../video-output/${name}.mp4`, '../tempdir')
 }
