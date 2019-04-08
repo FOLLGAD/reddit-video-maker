@@ -208,7 +208,7 @@ async function main() {
     console.log("AUTH completed")
 
     let start = 0,
-        end = 2
+        end = 5
 
     let thread = process.argv[2]
     if (!thread) throw new Error("Must enter a thread ID")
