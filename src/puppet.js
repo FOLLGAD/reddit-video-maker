@@ -32,9 +32,9 @@ async function launchComment(name, { username, score, time, body_html, edited, u
 
     const height = await page.$eval('#DIV_1', e => e.scrollHeight)
     page.setViewport({
-        width: 1600 / 2,
-        height,
-        deviceScaleFactor: 2,
+        width: 1920 / 2.4,
+        height: height + 15,
+        deviceScaleFactor: 2.4,
     })
 
     let filename = `${name}.png`
@@ -46,7 +46,7 @@ async function launchComment(name, { username, score, time, body_html, edited, u
     return filename
 }
 
-module.exports.launchQuestion = async function launchQuestion({ username, score, time, body_html, golds, silvers, platina, comments }) {
+module.exports.launchQuestion = async function launchQuestion(name, { username, score, time, body_html, golds, silvers, platina, comments }) {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
@@ -66,15 +66,15 @@ module.exports.launchQuestion = async function launchQuestion({ username, score,
     const height = await page.$eval('#DIV_1', e => e.scrollHeight)
     page.setViewport({
         width: 1600 / 2,
-        height,
+        height: height + 15,
         deviceScaleFactor: 2,
     })
 
-    await page.screenshot({ encoding: 'binary', path: '../images/Q.png' })
+    await page.screenshot({ encoding: 'binary', path: `../images/${name}.png` })
 
     await browser.close()
 
-    return 'Q.png'
+    return `${name}.png`
 }
 
 module.exports.launchComment = launchComment

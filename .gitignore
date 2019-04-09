@@ -1,2 +1,8 @@
 node_modules
+audio-output
+for-compilation
+images
+video-output
+video-temp
+videolists
 env.json

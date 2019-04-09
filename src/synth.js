@@ -6,7 +6,7 @@ const client = new textToSpeech.TextToSpeechClient();
 let voice = 'en-GB-Wavenet-D'
 let rate = 1.25
 
-function synth(name, text = "I worked at an upscale seafood restaurant for about a year.") {
+function synth(name, text) {
     let santext = sanitize(text)
 
     const request = {
@@ -52,7 +52,7 @@ function sanitize(text) {
     for (key in foulDictionary) {
         text = text.replace(new RegExp(key, 'gi'), foulDictionary[key])
     }
-    text = text.replace('*', ' ')
+    text = text.replace(/[\^,\*]|(&gt;)|(&lt;)/g, ' ')
     return text
 }
 

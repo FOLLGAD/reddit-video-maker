@@ -8,6 +8,16 @@ const timeAgo = require('node-time-ago')
 
 process.setMaxListeners(20)
 
+const fs = require('fs')
+
+fs.mkdirSync('../static')
+fs.mkdirSync('../audio-output')
+fs.mkdirSync('../for-compilation')
+fs.mkdirSync('../images')
+fs.mkdirSync('../video-output')
+fs.mkdirSync('../video-temp')
+fs.mkdirSync('../videolists')
+
 let access_token
 
 async function getAuth() {
@@ -26,8 +36,19 @@ async function updateAuth() {
     access_token = await getAuth()
 }
 
-async function fetchComments(articleId) {
-    return await fetch('https://oauth.reddit.com/r/AskReddit/comments/' + articleId, {
+function fetchComments(articleId) {
+    return fetch('https://oauth.reddit.com/r/AskReddit/comments/' + articleId, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+        },
+    })
+        .catch(console.error)
+        .then(r => r.json())
+}
+
+function fetchMoreChildren() {
+    console.log("MOre shildren")
+    return fetch('https://oauth.reddit.com/api/morechildren', {
         headers: {
             Authorization: `Bearer ${access_token}`,
         },
@@ -56,13 +77,12 @@ async function renderCommentImgs(commentData, name) {
 
     let bod = commentData.body
         .trim()
-        .replace(/\[(.*)\]\(.*\)/g, d => {
-            let s = d.match(/(?!\[)(.*)(?=\]\(.*?\))/)[0]
-            return d.replace(/\[(.*)\]\(.*?\)/, s)
+        .replace(/\[.*\]\(.*\)($|\s)/g, d => {
+            let s = d.match(/(?!\[)(.*)(?=\]\(.*\)(?=$|\s))/)[0]
+            return d.replace(/\[(.*)\]\(.*?\)(?=$|\s)/, s)
         })
 
     let paragraphs = bod.trim().split('\n').filter(d => d.length !== 0)
-
 
     let ps = paragraphs.map(block => {
         let reg = /(,|\.|\?|!)+( |\n|")+/g
@@ -107,7 +127,7 @@ async function renderCommentImgs(commentData, name) {
 
         let instanceName = name + '-' + i
 
-        let imgPromise = launchComment(instanceName, { ...items, showBottom: i == totalSections - 1, body_html: h.map(m => '<p>' + m.join('') + '</p>').join('').replace('*', '') })
+        let imgPromise = launchComment(instanceName, { ...items, showBottom: i == totalSections - 1, body_html: h.map(m => '<p>' + m.join('') + '</p>').join('').replace(/\*/g, '') })
         let audioPromise = synth(instanceName + '.mp3', tts)
 
         let v = Promise.all([imgPromise, audioPromise])
@@ -207,18 +227,27 @@ async function main() {
     await updateAuth()
     console.log("AUTH completed")
 
-    let start = 0,
-        end = 5
+    let start = 42,
+        end = 43
 
     let thread = process.argv[2]
     if (!thread) throw new Error("Must enter a thread ID")
     console.log("Fetching from thread", thread)
 
-    let [question, comments] = await fetchComments(thread.trim())
-        .then(r => (console.log('Fetched comments!'), r))
-        .then(r => [r[0].data.children[0].data, r[1].data.children.slice(start, end).map(c => c.data)])
+    let maxchars = 1250
 
-    comments = comments.filter(c => c.body.length < 2000)
+    let [question, commentData] = await fetchComments(thread.trim())
+        .then(r => (console.log('Fetched comments!'), r))
+        .then(r => [r[0].data.children[0].data, r[1].data.children.slice(0, -1)])
+
+    let comments = []
+    for (let i = 0; comments.length < end && i < commentData.length; i++) {
+        if (commentData[i].data.body.length < maxchars) {
+            comments.push(commentData[i].data)
+        }
+    }
+
+    comments = comments.slice(start)
 
     await renderQuestion(question)
 
