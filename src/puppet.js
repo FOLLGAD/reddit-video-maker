@@ -11,9 +11,10 @@ handles.registerHelper('ifgt', function (val1, val2, options) {
 const commentTemplate = handles.compile(fs.readFileSync('../comment.html').toString())
 const questionTemplate = handles.compile(fs.readFileSync('../question.html').toString())
 
-async function launchComment(name, { username, score, time, body_html, edited, upvoted, showBottom, golds, silvers, platina }) {
+module.exports.launchComment = async function launchComment(name, { username, score, time, body_html, edited, upvoted, showBottom, golds, silvers, platina }) {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
+    const filename = `${name}.png`
 
     let markup = commentTemplate({
         username,
@@ -29,7 +30,6 @@ async function launchComment(name, { username, score, time, body_html, edited, u
     })
 
     await page.setContent(markup);
-
     const height = await page.$eval('#DIV_1', e => e.scrollHeight)
     page.setViewport({
         width: 1920 / 2.4,
@@ -37,10 +37,7 @@ async function launchComment(name, { username, score, time, body_html, edited, u
         deviceScaleFactor: 2.4,
     })
 
-    let filename = `${name}.png`
-
     await page.screenshot({ encoding: 'binary', path: `../images/${filename}` })
-
     await browser.close()
 
     return filename
@@ -49,6 +46,7 @@ async function launchComment(name, { username, score, time, body_html, edited, u
 module.exports.launchQuestion = async function launchQuestion(name, { username, score, time, body_html, golds, silvers, platina, comments }) {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
+    const filename = `${name}.png`
 
     let markup = questionTemplate({
         username,
@@ -62,19 +60,15 @@ module.exports.launchQuestion = async function launchQuestion(name, { username, 
     })
 
     await page.setContent(markup)
-
     const height = await page.$eval('#DIV_1', e => e.scrollHeight)
     page.setViewport({
-        width: 1600 / 2,
+        width: 1920 / 3,
         height: height + 15,
-        deviceScaleFactor: 2,
+        deviceScaleFactor: 3,
     })
 
-    await page.screenshot({ encoding: 'binary', path: `../images/${name}.png` })
-
+    await page.screenshot({ encoding: 'binary', path: `../images/${filename}` })
     await browser.close()
 
-    return `${name}.png`
+    return filename
 }
-
-module.exports.launchComment = launchComment

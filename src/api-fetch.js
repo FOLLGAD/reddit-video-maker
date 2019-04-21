@@ -1,7 +1,7 @@
 const env = require('../env.json')
-const { synth, foulSpanDictionary } = require('./synth')
+const { synthDaniel, foulSpanDictionary } = require('./synth')
 const { launchComment, launchQuestion } = require('./puppet')
-const { createVideo, combineVideos } = require('./video')
+const { audioVideoCombine, combineVideos } = require('./video')
 
 const fetch = require('node-fetch')
 const timeAgo = require('node-time-ago')
@@ -10,13 +10,23 @@ process.setMaxListeners(20)
 
 const fs = require('fs')
 
-fs.mkdirSync('../static')
-fs.mkdirSync('../audio-output')
-fs.mkdirSync('../for-compilation')
-fs.mkdirSync('../images')
-fs.mkdirSync('../video-output')
-fs.mkdirSync('../video-temp')
-fs.mkdirSync('../videolists')
+let sortBy = 'best'
+
+let arr = [
+    '../static',
+    '../audio-output',
+    '../for-compilation',
+    '../images',
+    '../video-output',
+    '../video-temp',
+    '../videolists',
+    '../out',
+]
+arr.forEach(pth => {
+    if (!fs.existsSync(pth)) {
+        fs.mkdirSync(pth)
+    }
+})
 
 let access_token
 
@@ -37,18 +47,7 @@ async function updateAuth() {
 }
 
 function fetchComments(articleId) {
-    return fetch('https://oauth.reddit.com/r/AskReddit/comments/' + articleId, {
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-        },
-    })
-        .catch(console.error)
-        .then(r => r.json())
-}
-
-function fetchMoreChildren() {
-    console.log("MOre shildren")
-    return fetch('https://oauth.reddit.com/api/morechildren', {
+    return fetch('https://oauth.reddit.com/comments/' + articleId + '?sort=' + sortBy, {
         headers: {
             Authorization: `Bearer ${access_token}`,
         },
@@ -81,11 +80,13 @@ async function renderCommentImgs(commentData, name) {
             let s = d.match(/(?!\[)(.*)(?=\]\(.*\)(?=$|\s))/)[0]
             return d.replace(/\[(.*)\]\(.*?\)(?=$|\s)/, s)
         })
+        .replace(/&amp;#x200B;/g, '')
+        .replace(/[_\\]/g, '')
 
     let paragraphs = bod.trim().split('\n').filter(d => d.length !== 0)
 
     let ps = paragraphs.map(block => {
-        let reg = /(,|\.|\?|!)+( |\n|")+/g
+        let reg = /(,|\.|\?|!)+( |\n)+"?/g
         let array = []
         let result
         let lastIndex = 0
@@ -98,7 +99,7 @@ async function renderCommentImgs(commentData, name) {
         }
         array.push(block.slice(to))
 
-        return array
+        return array.filter(d => d.trim().length > 0)
     })
 
     let totalSections = ps.map(d => d.length).reduce((a, b) => a + b, 0)
@@ -109,7 +110,7 @@ async function renderCommentImgs(commentData, name) {
         let counter = 0
         let tts = ""
 
-        let h = ps.map(p => {
+        let formattedText = ps.map(p => {
             return p.map(str => {
                 if (counter == i) {
                     tts = str
@@ -127,18 +128,22 @@ async function renderCommentImgs(commentData, name) {
 
         let instanceName = name + '-' + i
 
-        let imgPromise = launchComment(instanceName, { ...items, showBottom: i == totalSections - 1, body_html: h.map(m => '<p>' + m.join('') + '</p>').join('').replace(/\*/g, '') })
-        let audioPromise = synth(instanceName + '.mp3', tts)
+        let imgPromise = launchComment(instanceName, { ...items, showBottom: i == totalSections - 1, body_html: formattedText.map(m => '<p>' + m.join('') + '</p>').join('').replace(/\*/g, '') })
+        let audioPromise = synthDaniel(instanceName + '.mp3', tts)
 
         let v = Promise.all([imgPromise, audioPromise])
             .then(([img, audio]) => {
-                return createVideo(instanceName, audio, img)
+                return audioVideoCombine(instanceName, audio, img)
             })
+            .catch(() => {
+                Promise.resolve(null)
+            })
+
         vids.push(v)
     }
 
     await Promise.all(vids).then(videos => {
-        combineVideos(videos, name)
+        combineVideos(videos.filter(v => v != null), name)
     })
 }
 
@@ -178,28 +183,28 @@ function renderQuestion(questionData) {
         let counter = 0
         let tts = ""
 
-        let h = array.map(str => {
+        let formattedText = array.map(str => {
             if (counter == i) {
                 tts = str
-            }
-            for (key in foulSpanDictionary) {
-                str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
             }
             if (counter++ > i) {
                 return hideSpan(str)
             } else {
+                for (key in foulSpanDictionary) {
+                    str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
+                }
                 return str
             }
         })
 
         let instanceName = name + '-' + i
 
-        let imgPromise = launchQuestion(instanceName, { ...items, body_html: h.join("") })
-        let audioPromise = synth(instanceName + '.mp3', tts)
+        let imgPromise = launchQuestion(instanceName, { ...items, body_html: formattedText.join("") })
+        let audioPromise = synthDaniel(instanceName + '.mp3', tts)
 
         let v = Promise.all([imgPromise, audioPromise])
             .then(([img, audio]) => {
-                return createVideo(instanceName, audio, img)
+                return audioVideoCombine(instanceName, audio, img)
             })
         vids.push(v)
     }
@@ -227,8 +232,8 @@ async function main() {
     await updateAuth()
     console.log("AUTH completed")
 
-    let start = 42,
-        end = 43
+    let start = 0,
+        end = 52
 
     let thread = process.argv[2]
     if (!thread) throw new Error("Must enter a thread ID")
@@ -250,6 +255,7 @@ async function main() {
     comments = comments.slice(start)
 
     await renderQuestion(question)
+    console.log("Rendered", "Q")
 
     for (let i = 0; i < comments.length; i++) {
         await renderCommentImgs(comments[i], i + start)
@@ -257,8 +263,6 @@ async function main() {
     }
 
     console.log("Finished!")
-
-    // process.exit(0)
 }
 
 main()
