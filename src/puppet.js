@@ -12,7 +12,9 @@ const commentTemplate = handles.compile(fs.readFileSync('../comment.html').toStr
 const questionTemplate = handles.compile(fs.readFileSync('../question.html').toString())
 
 module.exports.launchComment = async function launchComment(name, { username, score, time, body_html, edited, upvoted, showBottom, golds, silvers, platina }) {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({args: [
+        'font-render-hinting=none'
+    ]})
     const page = await browser.newPage()
     const filename = `${name}.png`
 
