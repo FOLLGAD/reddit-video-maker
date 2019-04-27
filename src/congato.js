@@ -12,16 +12,15 @@ function pre() {
         })
         .map(file => `../for-compilation/${file}`)
 
-    console.log(files)
-
     let videos = files.sort((ax, bx) => {
         let a = ax.split("/").pop().split('.')[0]
         let b = bx.split("/").pop().split('.')[0]
 
         return parseInt(a) > parseInt(b) ? 1 : -1
     })
+    console.log(videos)
 
-    videos = videos.reduce((r, a) => r.concat(a, '../static/transition.mkv'), []).slice(0, -1)
+    videos = videos.reduce((r, a) => r.concat(a, '../static/transition.ts'), []).slice(0, -1)
 
     combineFinal(videos, 'final')
         .then(console.log)

@@ -1,11 +1,7 @@
 const fs = require('fs')
 const { makeCall } = require('./daniel')
-
-// Google API
-const textToSpeech = require('@google-cloud/text-to-speech');
-const client = new textToSpeech.TextToSpeechClient();
-const voice = 'en-GB-Wavenet-D'
-const rate = 1.25
+const child_process = require('child_process')
+let spawn = child_process.spawn
 
 module.exports.synthDaniel = function synthDaniel(name, text) {
     let sanText = sanitize(text)
@@ -14,14 +10,27 @@ module.exports.synthDaniel = function synthDaniel(name, text) {
         makeCall(sanText)
             .then(res => res.buffer())
             .then(buffer => {
-                fs.writeFileSync(`../audio-output/${name}`, buffer)
-                resolve(name)
+                fs.writeFileSync(`../bad-audio-output/${name}`, buffer)
+
+                let ffmpeg = spawn('ffmpeg', ['-y', `-i`, `../bad-audio-output/${name}`, '-c', 'copy', `../audio-output/${name}`])
+                // ffmpeg -y -framerate 30 -loop 1 -i ../images/Q.png -i ../audio-output/Q.mp3 -vf pad=1920:1080:(ow-iw)/2:(oh-ih)/2:#ffffff -pix_fmt yuv420p -crf 20 -c:v libx264 -c:a aac -ar 24000 -r 30 ../video-temp/Q.ts
+                ffmpeg.on('exit', statusCode => {
+                    resolve(name)
+                })
+                ffmpeg.on('error', d => console.error(`child stderr:\n${d}`))
             })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e)
                 reject()
             })
     })
 }
+
+// Google API
+const textToSpeech = require('@google-cloud/text-to-speech');
+const client = new textToSpeech.TextToSpeechClient();
+const voice = 'en-GB-Wavenet-D'
+const rate = 1.25
 
 module.exports.synthGoogle = function synthGoogle(name, text) {
     let sanText = sanitize(text)
@@ -61,6 +70,8 @@ const foulDictionary = {
     asshole: 'a-hole',
     porn: 'p rn',
     damn: 'darn',
+    dick: 'd k',
+    penis: 'p s',
     ' rape': ' r e',
 }
 
@@ -74,6 +85,8 @@ const foulSpanDictionary = module.exports.foulSpanDictionary = {
     asshole: 'a<span class="blur">ss</span>hole',
     porn: 'p<span class="blur">o</span>rn',
     damn: 'd<span class="blur">a</span>mn',
+    dick: 'd<span class="blur">ic</span>k',
+    penis: 'p<span class="blur">en</span>is',
     " rape": ' r<span class="blur">ap</span>e',
 }
 
@@ -85,6 +98,7 @@ function sanitize(text) {
     return text.replace(/[\^\*]|(&gt;)|(&lt;)|\n/g, ' ')
         .replace(/[:;][\)\(]/g, '')
         .replace(/[\/\\]/g, ' ')
+        .replace(/&amp;/g, ' & ')
 }
 
 // List google voices
