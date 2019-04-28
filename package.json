@@ -12,6 +12,6 @@
     "mp3-duration": "^1.1.0",
     "node-fetch": "^2.3.0",
     "node-time-ago": "^1.0.0",
-    "puppeteer": "^1.14.0"
+    "puppeteer": "^1.15.0"
   }
 }

@@ -3,14 +3,18 @@ const { synthDaniel, foulSpanDictionary } = require('./synth')
 const { launchComment, launchQuestion } = require('./puppet')
 const { audioVideoCombine, combineVideos } = require('./video')
 
+const vidConfig = {
+    start: 0,
+    end: 100,
+    sortBy: 'best',
+}
+
 const fetch = require('node-fetch')
 const timeAgo = require('node-time-ago')
 
 process.setMaxListeners(20)
 
 const fs = require('fs')
-
-let sortBy = 'best'
 
 let arr = [
     '../static',
@@ -46,14 +50,31 @@ async function updateAuth() {
     access_token = await getAuth()
 }
 
-function fetchComments(articleId) {
-    return fetch('https://oauth.reddit.com/comments/' + articleId + '?sort=' + sortBy, {
+async function fetchComments(articleId) {
+    // then(r => [r[1].data.children.slice(0, -1)])
+
+    let parseComments = commentData => {
+        return commentData[1].data.children.slice(0, -1).map(d => d.data)
+    }
+    let parseQuestion = commentData => {
+        return commentData[0].data.children[0].data
+    }
+
+    let to = vidConfig.end
+
+    let p = await fetch(`https://oauth.reddit.com/comments/${articleId}?sort=${vidConfig.sortBy}&depth=1&limit=100&raw_json=1`, {
         headers: {
             Authorization: `Bearer ${access_token}`,
         },
     })
         .catch(console.error)
-        .then(r => r.json())
+        .then(r => {
+            return r.json()
+        })
+
+    let totalComments = parseComments(p)
+
+    return [parseQuestion(p), totalComments]
 }
 
 async function renderCommentImgs(commentData, name) {
@@ -232,27 +253,19 @@ async function main() {
     await updateAuth()
     console.log("AUTH completed")
 
-    let start = 0,
-        end = 1
+    let { start, end } = vidConfig
 
     let thread = process.argv[2]
     if (!thread) throw new Error("Must enter a thread ID")
+    thread = thread.trim()
     console.log("Fetching from thread", thread)
 
     let maxchars = 1250
 
-    let [question, commentData] = await fetchComments(thread.trim())
-        .then(r => (console.log('Fetched comments!'), r))
-        .then(r => [r[0].data.children[0].data, r[1].data.children.slice(0, -1)])
+    let [question, commentData] = await fetchComments(thread)
 
-    let comments = []
-    for (let i = 0; comments.length < end && i < commentData.length; i++) {
-        if (commentData[i].data.body.length < maxchars) {
-            comments.push(commentData[i].data)
-        }
-    }
-
-    comments = comments.slice(start)
+    let comments = commentData.filter(d => d.body.length < maxchars).slice(start)
+    console.log('New filtered length:', comments.length)
 
     await renderQuestion(question)
     console.log("Rendered", "Q")

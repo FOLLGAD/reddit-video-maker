@@ -2,10 +2,10 @@ const fs = require('fs')
 const { makeCall } = require('./daniel')
 
 // Google API
-const textToSpeech = require('@google-cloud/text-to-speech');
-const client = new textToSpeech.TextToSpeechClient();
-const voice = 'en-GB-Wavenet-D'
-const rate = 1.25
+//const textToSpeech = require('@google-cloud/text-to-speech');
+//const client = new textToSpeech.TextToSpeechClient();
+//const voice = 'en-GB-Wavenet-D'
+//const rate = 1.25
 
 module.exports.synthDaniel = function synthDaniel(name, text) {
     let sanText = sanitize(text)
@@ -23,6 +23,7 @@ module.exports.synthDaniel = function synthDaniel(name, text) {
     })
 }
 
+/*
 module.exports.synthGoogle = function synthGoogle(name, text) {
     let sanText = sanitize(text)
 
@@ -50,6 +51,7 @@ module.exports.synthGoogle = function synthGoogle(name, text) {
 
     return promise
 }
+*/
 
 // What synth will say instead
 const foulDictionary = {
@@ -61,6 +63,7 @@ const foulDictionary = {
     asshole: 'a-hole',
     porn: 'p rn',
     damn: 'darn',
+    penis: 'peepee',
     ' rape': ' r e',
 }
 
@@ -74,6 +77,7 @@ const foulSpanDictionary = module.exports.foulSpanDictionary = {
     asshole: 'a<span class="blur">ss</span>hole',
     porn: 'p<span class="blur">o</span>rn',
     damn: 'd<span class="blur">a</span>mn',
+    penis: 'p<span class="blur">en</span>is',
     " rape": ' r<span class="blur">ap</span>e',
 }
 
