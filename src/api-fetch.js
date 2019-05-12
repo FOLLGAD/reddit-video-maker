@@ -1,281 +1,285 @@
 const env = require('../env.json')
-const { synthDaniel, foulSpanDictionary } = require('./synth')
-const { launchComment, launchQuestion } = require('./puppet')
-const { audioVideoCombine, combineVideos } = require('./video')
-
-const vidConfig = {
-    start: 0,
-    end: 100,
-    sortBy: 'best',
-}
-
 const fetch = require('node-fetch')
 const timeAgo = require('node-time-ago')
+const fs = require('fs')
+const cheerio = require('cheerio')
+const { synthDaniel, foulSpanDictionary } = require('./synth')
+const { launchComment, launchQuestion } = require('./puppet')
+const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
 
 process.setMaxListeners(20)
 
-const fs = require('fs')
+const vidConfig = {
+	start: 22,
+	end: 100,
+	sortBy: 'best',
+}
 
 let arr = [
-    '../static',
-    '../audio-output',
-    '../for-compilation',
-    '../images',
-    '../video-output',
-    '../video-temp',
-    '../videolists',
-    '../out',
+	'../static',
+	'../audio-output',
+	'../for-compilation',
+	'../images',
+	'../video-output',
+	'../video-temp',
+	'../videolists',
+	'../out',
 ]
 arr.forEach(pth => {
-    if (!fs.existsSync(pth)) {
-        fs.mkdirSync(pth)
-    }
+	if (!fs.existsSync(pth)) {
+		fs.mkdirSync(pth)
+	}
 })
 
-let access_token
-
+// Fetch the auth token from reddit using credentials in .env
 async function getAuth() {
-    let response = await fetch('https://www.reddit.com/api/v1/access_token?grant_type=client_credentials', {
-        headers: {
-            'Authorization': `Basic ${env.Authorization}`, // Use Basic authentication
-        },
-        method: 'POST',
-    })
-        .then(res => res.json())
-        .catch(console.error)
-    return response.access_token
+	let response = await fetch('https://www.reddit.com/api/v1/access_token?grant_type=client_credentials', {
+		headers: {
+			'Authorization': `Basic ${env.Authorization}`, // Use Basic authentication
+		},
+		method: 'POST',
+	})
+		.then(res => res.json())
+		.catch(console.error)
+	return response.access_token
 }
 
+let access_token
 async function updateAuth() {
-    access_token = await getAuth()
+	access_token = await getAuth()
 }
+
 
 async function fetchComments(articleId) {
-    // then(r => [r[1].data.children.slice(0, -1)])
+	let parseComments = commentData => {
+		return commentData[1].data.children.slice(0, -1).map(d => d.data)
+	}
+	let parseQuestion = commentData => {
+		return commentData[0].data.children[0].data
+	}
 
-    let parseComments = commentData => {
-        return commentData[1].data.children.slice(0, -1).map(d => d.data)
-    }
-    let parseQuestion = commentData => {
-        return commentData[0].data.children[0].data
-    }
+	let p = await fetch(`https://oauth.reddit.com/comments/${articleId}?sort=${vidConfig.sortBy}&depth=1&limit=${vidConfig.end}&raw_json=1`, {
+		headers: {
+			Authorization: `Bearer ${access_token}`,
+		},
+	})
+		.catch(console.error)
+		.then(r => {
+			return r.json()
+		})
 
-    let to = vidConfig.end
+	let totalComments = parseComments(p)
 
-    let p = await fetch(`https://oauth.reddit.com/comments/${articleId}?sort=${vidConfig.sortBy}&depth=1&limit=100&raw_json=1`, {
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-        },
-    })
-        .catch(console.error)
-        .then(r => {
-            return r.json()
-        })
+	return [parseQuestion(p), totalComments]
+}
 
-    let totalComments = parseComments(p)
+let sanitizeHtml = str => {
+	for (key in foulSpanDictionary) {
+		str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
+	}
+	return str
+}
 
-    return [parseQuestion(p), totalComments]
+function splitString(str) {
+	return str
+		.split(/(.+?[\.,?!]+["'\)\s]+)/g)
+		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
 }
 
 async function renderCommentImgs(commentData, name) {
-    if (!commentData) return console.error("Didnt work")
-    let upvoted = Math.random() > 0.9 // 10% of the posts will randomly be seen as upvoted
+	let items = {
+		upvoted: Math.random() > 0.9, // 10% of the posts will randomly be seen as upvoted
+		score: formatNum(commentData.score),
+		username: commentData.author,
+		time: timeAgo(commentData.created_utc * 1000), // Timezones are unimportant
+		edited: commentData.edited ? timeAgo(commentData.edited * 1000) : null,
+		silvers: commentData.gildings.gid_1,
+		golds: commentData.gildings.gid_2,
+		platina: commentData.gildings.gid_3,
+		body: commentData.body_html,
+	}
 
-    let items = {
-        username: commentData.author,
-        score: commentData.score,
-        time: timeAgo(commentData.created_utc * 1000), // Timezones are unimportant
-        edited: commentData.edited ? timeAgo(commentData.edited * 1000) : null,
-        upvoted,
+	let $ = cheerio.load(items.body)
 
-        silvers: commentData.gildings.gid_1,
-        golds: commentData.gildings.gid_2,
-        platina: commentData.gildings.gid_3,
-    }
+	$('p').addClass('text')
 
-    items.score = formatNum(items.score)
+	// Removes .text class from all <p> with <li> children
+	$('p li').parent('p').removeClass('text')
 
-    let bod = commentData.body
-        .trim()
-        .replace(/\[.*\]\(.*\)($|\s)/g, d => {
-            let s = d.match(/(?!\[)(.*)(?=\]\(.*\)(?=$|\s))/)[0]
-            return d.replace(/\[(.*)\]\(.*?\)(?=$|\s)/, s)
-        })
-        .replace(/&amp;#x200B;/g, '')
-        .replace(/[_\\]/g, '')
+	let id = 0,
+		tts = []
+	$('p.text,li').each((_, e) => {
+		let lastWasTag = false
 
-    let paragraphs = bod.trim().split('\n').filter(d => d.length !== 0)
+		let arr = [],
+			contents = $(e).contents()
 
-    let ps = paragraphs.map(block => {
-        let reg = /(,|\.|\?|!)+( |\n)+"?/g
-        let array = []
-        let result
-        let lastIndex = 0
-        let to, from
-        while ((result = reg.exec(block)) != null) {
-            from = lastIndex
-            to = result.index + result[0].length
-            lastIndex = to
-            array.push(block.slice(from, to))
-        }
-        array.push(block.slice(to))
+		// Splits string on punctuation
+		for (let i = 0; i < contents.length; i++) {
+			let h = contents[i]
+			if (h.type == 'text') {
+				let data = splitString(h.data)
+				if (lastWasTag) {
+					arr[arr.length - 1] += data.shift()
+				}
+				lastWasTag = false
 
-        return array.filter(d => d.trim().length > 0)
-    })
+				arr.push(...data)
+			} else {
+				lastWasTag = true
+				let text = cheerio.load(h).html()
+				if (text.indexOf('.') !== -1) lastWasTag = false
+				arr[arr.length - 1] += text
+			}
+		}
+		tts.push(...arr)
+		let html = arr.map(d => `<span id="${id++}" class="hide">${d}</span>`).map(sanitizeHtml).join('')
 
-    let totalSections = ps.map(d => d.length).reduce((a, b) => a + b, 0)
+		$(e).html(html)
+	})
 
-    let vids = []
+	let vids = []
+	let ln = $('span.hide').length
 
-    for (let i = 0; i < totalSections; i++) {
-        let counter = 0
-        let tts = ""
+	$('span.hide').each((i, _) => {
+		$('.hide#' + i).removeClass('hide')
+		let toRender = $.html()
 
-        let formattedText = ps.map(p => {
-            return p.map(str => {
-                if (counter == i) {
-                    tts = str
-                }
-                if (counter++ > i) {
-                    return hideSpan(str)
-                } else {
-                    for (key in foulSpanDictionary) {
-                        str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
-                    }
-                    return str
-                }
-            })
-        })
+		let instanceName = name + '-' + i
+		let imgPromise = launchComment(instanceName, { ...items, body_html: toRender, showBottom: i == ln - 1 })
+		let audioPromise = synthDaniel(instanceName + '.mp3', cheerio.load(tts[i]).text())
 
-        let instanceName = name + '-' + i
+		let v = new Promise((res) => {
+			Promise.all([imgPromise, audioPromise])
+				.then(([img, audio]) => {
+					res(audioVideoCombine(instanceName, audio, img))
+				})
+				.catch(() => {
+					// Daniel probably fucked up, probably because of getting a quasi-empty string
+					// Therefore, omit the frame by returning null.
+					res(null)
+				})
+		})
+		vids.push(v)
+	})
 
-        let imgPromise = launchComment(instanceName, { ...items, showBottom: i == totalSections - 1, body_html: formattedText.map(m => '<p>' + m.join('') + '</p>').join('').replace(/\*/g, '') })
-        let audioPromise = synthDaniel(instanceName + '.mp3', tts)
-
-        let v = Promise.all([imgPromise, audioPromise])
-            .then(([img, audio]) => {
-                return audioVideoCombine(instanceName, audio, img)
-            })
-            .catch(() => {
-                Promise.resolve(null)
-            })
-
-        vids.push(v)
-    }
-
-    await Promise.all(vids).then(videos => {
-        combineVideos(videos.filter(v => v != null), name)
-    })
+	await Promise.all(vids)
+		.then(videos => {
+			combineVideos(videos.filter(v => v != null), name)
+		})
 }
 
 function renderQuestion(questionData) {
-    let items = {
-        username: questionData.author,
-        score: formatNum(questionData.score),
-        time: timeAgo(questionData.created_utc * 1000), // Timezones are unimportant
-        comments: formatNum(questionData.num_comments),
+	let items = {
+		username: questionData.author,
+		score: formatNum(questionData.score),
+		time: timeAgo(questionData.created_utc * 1000), // Timezones are unimportant
+		comments: formatNum(questionData.num_comments),
 
-        body_html: questionData.title,
+		body_html: questionData.title,
 
-        silvers: questionData.gildings.gid_1,
-        golds: questionData.gildings.gid_2,
-        platina: questionData.gildings.gid_3,
-    }
-    let body = items.body_html
+		silvers: questionData.gildings.gid_1,
+		golds: questionData.gildings.gid_2,
+		platina: questionData.gildings.gid_3,
+	}
+	let body = items.body_html
 
-    let reg = /(,|\.|\?|!)+( |\n)+/g
-    let array = []
-    let result
-    let lastIndex = 0
-    let to, from
-    while ((result = reg.exec(body)) != null) {
-        from = lastIndex
-        to = result.index + result[0].length
-        lastIndex = to
-        array.push(body.slice(from, to))
-    }
-    array.push(body.slice(to))
+	let reg = /(,|\.|\?|!)+( |\n)+/g
+	let array = []
+	let result
+	let lastIndex = 0
+	let to, from
+	while ((result = reg.exec(body)) != null) {
+		from = lastIndex
+		to = result.index + result[0].length
+		lastIndex = to
+		array.push(body.slice(from, to))
+	}
+	array.push(body.slice(to))
 
-    let vids = []
+	let vids = []
 
-    let name = 'Q'
+	let name = 'Q'
 
-    for (let i = 0; i < array.length; i++) {
-        let counter = 0
-        let tts = ""
+	for (let i = 0; i < array.length; i++) {
+		let counter = 0
+		let tts = ""
 
-        let formattedText = array.map(str => {
-            if (counter == i) {
-                tts = str
-            }
-            if (counter++ > i) {
-                return hideSpan(str)
-            } else {
-                for (key in foulSpanDictionary) {
-                    str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
-                }
-                return str
-            }
-        })
+		let formattedText = array.map(str => {
+			if (counter == i) {
+				tts = str
+			}
+			if (counter++ > i) {
+				return hideSpan(str)
+			} else {
+				for (key in foulSpanDictionary) {
+					str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
+				}
+				return str
+			}
+		})
 
-        let instanceName = name + '-' + i
+		let instanceName = name + '-' + i
 
-        let imgPromise = launchQuestion(instanceName, { ...items, body_html: formattedText.join("") })
-        let audioPromise = synthDaniel(instanceName + '.mp3', tts)
+		let imgPromise = launchQuestion(instanceName, { ...items, body_html: formattedText.join("") })
+		let audioPromise = synthDaniel(instanceName + '.mp3', tts)
 
-        let v = Promise.all([imgPromise, audioPromise])
-            .then(([img, audio]) => {
-                return audioVideoCombine(instanceName, audio, img)
-            })
-        vids.push(v)
-    }
+		let v = Promise.all([imgPromise, audioPromise])
+			.then(([img, audio]) => {
+				return audioVideoCombine(instanceName, audio, img)
+			})
+		vids.push(v)
+	}
 
-    return Promise.all(vids)
-        .then(videos => combineVideos(videos, name))
+	return Promise.all(vids)
+		.then(videos => combineVideos(videos, name))
+		.then(() => {
+			copyVideo('../video-output/Q.mkv', '../Q.mp4')
+		})
 }
 
 function hideSpan(str) {
-    return '<span class="invis">' + str + '</span>'
+	return '<span class="invis">' + str + '</span>'
 }
 
 function formatNum(num) {
-    let d = parseInt(num)
-    if (num >= 1000) {
-        return Math.round(num / 100) / 10 + 'k'
-    }
-    return d
+	let d = parseInt(num)
+	if (num >= 1000) {
+		return Math.round(num / 100) / 10 + 'k'
+	}
+	return d
 }
 
 setInterval(updateAuth, 55 * 60 * 1000) // Update every 55 minutes (expires in 60 minutes)
 
 async function main() {
-    console.log("Started BOG")
-    await updateAuth()
-    console.log("AUTH completed")
+	console.log("Started BOG")
+	await updateAuth()
+	console.log("AUTH completed")
 
-    let { start, end } = vidConfig
+	let { start } = vidConfig
 
-    let thread = process.argv[2]
-    if (!thread) throw new Error("Must enter a thread ID")
-    thread = thread.trim()
-    console.log("Fetching from thread", thread)
+	let thread = process.argv[2]
+	if (!thread) throw new Error("Must enter a thread ID")
+	thread = thread.trim()
+	console.log("Fetching from thread", thread)
 
-    let maxchars = 1250
+	let [question, commentData] = await fetchComments(thread)
 
-    let [question, commentData] = await fetchComments(thread)
+	let maxchars = 1250
 
-    let comments = commentData.filter(d => d.body.length < maxchars).slice(start)
-    console.log('New filtered length:', comments.length)
+	let comments = commentData.filter(d => d.body.length < maxchars && d.body != '[deleted]' && d.body != '[removed]').slice(start)
+	console.log('Comments fetched:', comments.length)
 
-    await renderQuestion(question)
-    console.log("Rendered", "Q")
+	await renderQuestion(question)
+	console.log("Rendered", "Q")
 
-    for (let i = 0; i < comments.length; i++) {
-        await renderCommentImgs(comments[i], i + start)
-        console.log("Rendered", i + start)
-    }
+	for (let i = 0; i < comments.length; i++) {
+		await renderCommentImgs(comments[i], i + start)
+		console.log("Rendered", i + start)
+	}
 
-    console.log("Finished!")
+	console.log("Finished!")
 }
 
 main()

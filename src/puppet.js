@@ -8,8 +8,8 @@ handles.registerHelper('ifgt', function (val1, val2, options) {
     }
 });
 
-const commentTemplate = handles.compile(fs.readFileSync('../comment.html').toString())
-const questionTemplate = handles.compile(fs.readFileSync('../question.html').toString())
+const commentTemplate = handles.compile(fs.readFileSync('../html/comment.html').toString())
+const questionTemplate = handles.compile(fs.readFileSync('../html/question.html').toString())
 
 module.exports.launchComment = async function launchComment(name, { username, score, time, body_html, edited, upvoted, showBottom, golds, silvers, platina }) {
     const browser = await puppeteer.launch({args: [

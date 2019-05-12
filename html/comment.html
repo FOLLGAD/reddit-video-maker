@@ -1123,6 +1123,15 @@
         /*#P_30:before*/
 
         #DIV_31 {
+            display: flex;
+            flex-direction: row;
+            -moz-box-align: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 16px;
+            color: rgb(129, 131, 132);
+            margin: 4px 0px 8px;
             color: rgb(135, 138, 140);
             display: flex;
             /* height: 17px; */
@@ -1226,6 +1235,13 @@
         /*#BUTTON_32:before*/
 
         #I_33 {
+            margin-bottom: -2px !important;
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            font-size: 16px;
+            line-height: 16px;
+            vertical-align: text-bottom;
             color: rgb(183, 185, 186);
             cursor: pointer;
             display: inline-block;
@@ -1748,13 +1764,13 @@
             padding-bottom: 0.25em;
         }
 
-        .invis {
+        .hide {
             color: rgba(0, 0, 0, 0) !important;
             text-shadow: none !important;
             visibility: hidden;
         }
 
-        .invis .span {
+        .hide .span {
             color: rgba(0, 0, 0, 0) !important;
             text-shadow: none !important;
         }
@@ -1762,6 +1778,31 @@
         .blur {
             color: transparent;
             text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            /* DARK MODE BRUH!!!! */
+            background-color: #19191a;
+        }
+
+        .dark-mode-text {
+            color: rgb(215, 218, 220) !important;
+        }
+
+        .dark-mode-bottom button {
+            color: rgb(129, 131, 132) !important;
+        }
+
+        .dark-mode-meta {
+            color: rgb(129, 131, 132) !important;
+        }
+
+        .dark-mode-user {
+            color: rgb(79, 188, 255) !important;
+        }
+
+        .dark-mode-thread {
+            border-right: 2px solid rgb(52, 53, 54) !important;
         }
     </style>
 
@@ -1784,7 +1825,7 @@
             <div id="DIV_3">
                 <div id="DIV_4">
                     <div id="DIV_5">
-                        <i id="I_6"></i>
+                        <i id="I_6" class="dark-mode-thread"></i>
                     </div>
                 </div>
             </div>
@@ -1802,9 +1843,9 @@
                     </button>
                 </div>
                 <div id="DIV_15">
-                    <div id="DIV_17">
+                    <div id="DIV_17" class="dark-mode-meta">
                         <div id="DIV_18">
-                            <a href="/user/bdkrzy" id="A_19">{{username}}</a>
+                            <a href="/user/bdkrzy" id="A_19" class="dark-mode-user">{{username}}</a>
                             <div id="DIV_20">
                             </div>
                         </div><span id="SPAN_21">{{score}} points</span> <span id="SPAN_22">·</span> <a
@@ -1851,15 +1892,20 @@
                         </div>
                     </div>
                     <div id="DIV_28">
-                        <div id="DIV_29">
+                        <div id="DIV_29" class="dark-mode-text">
                             {{{body_html}}}
                         </div>
                     </div>
                     {{#if showBottom}}
-                    <div id="DIV_31">
-                        <button id="BUTTON_32">
+                    <div id="DIV_31" class="dark-mode-bottom">
+                        <button id="BUTTON_32" style="display: inline-block;">
                             <i id="I_33"></i>Reply
                         </button>
+                        <div id="DIV_34">
+                            <button id="BUTTON_35">
+                                Give Award
+                            </button>
+                        </div>
                         <div id="DIV_34">
                             <button id="BUTTON_35">
                                 Share
@@ -1873,7 +1919,7 @@
                         </button>
                     </div>
                     {{else}}
-                    <div id="DIV_31" class="invis">
+                    <div id="DIV_31" class="hide">
                         <button id="BUTTON_32">
                             <i id="I_33"></i>Reply
                         </button>

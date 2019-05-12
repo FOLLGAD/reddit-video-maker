@@ -3,12 +3,10 @@ const mp3Duration = require('mp3-duration');
 const child_process = require('child_process')
 let spawn = child_process.spawn
 
-// let color = '#1a1a1b' // Dark mode
-let color = '#ffffff' // Light mode
+let color = '#19191a' // Dark mode
+// let color = '#ffffff' // Light mode
 
-let backgroundMusicPath = '../static/onion-capers-by-kevin-macleod.mp3'
-
-let fileFormat = 'mkv'
+let fileFormat = 'mkv' // MVK is preferred since it does not require re-encoding on every concat
 
 module.exports.audioVideoCombine = function createVideo(name, audioName, imgName) {
     return new Promise(resolve => {
@@ -23,7 +21,7 @@ module.exports.audioVideoCombine = function createVideo(name, audioName, imgName
             ffmpeg.on('exit', statusCode => {
                 resolve(filename)
             }).on('error', console.error)
-                .stderr.on('data', d => console.error(new String(d)))
+                // .stderr.on('data', d => console.error(new String(d)))
         })
     })
 }
@@ -38,7 +36,16 @@ module.exports.combineVideos = function combineVideos(videos, name) {
         ffmpeg.on('exit', statusCode => {
             resolve(`${name}.${fileFormat}`)
         })
-            .stderr.on('data', d => console.error(new String(d)))
+            // .stderr.on('data', d => console.error(new String(d)))
+    })
+}
+
+module.exports.copyVideo = function (ins, out) {
+    return new Promise(resolve => {
+        let s = spawn('ffmpeg', ['-y', '-i', ins, '-c', 'copy', out])
+        s.on('exit', statusCode => {
+            resolve(out)
+        })
     })
 }
 
@@ -51,19 +58,6 @@ module.exports.combineFinal = function combineFinal(videos, name) {
         ffmpeg.on('exit', statusCode => {
             resolve(`pre-${name}.mp4`)
         })
-            .stderr.on('data', d => console.error(new String(d)))
-    })
-}
-
-module.exports.addPeripherals = function addPeripherals(arr) {
-    return new Promise(resolve => {
-        fs.writeFileSync(`../videolists/final.txt`, arr.map(v => `file '${v}'`).join('\n'))
-
-        let ffmpeg = spawn('ffmpeg', ['-y', '-r', '25', '-f', 'concat', '-safe', '0', '-i', `../videolists/final.txt`, `../out/final.mp4`])
-
-        ffmpeg.on('exit', statusCode => {
-            resolve(`final.mp4`)
-        })
-            .stderr.on('data', d => console.error(new String(d)))
+            // .stderr.on('data', d => console.error(new String(d)))
     })
 }

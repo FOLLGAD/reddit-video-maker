@@ -1,13 +1,8 @@
 const fs = require('fs')
 const { makeCall } = require('./daniel')
 
-// Google API
-//const textToSpeech = require('@google-cloud/text-to-speech');
-//const client = new textToSpeech.TextToSpeechClient();
-//const voice = 'en-GB-Wavenet-D'
-//const rate = 1.25
-
 module.exports.synthDaniel = function synthDaniel(name, text) {
+    text = text.replace(/&/g, 'and') // '&' doesn't work for Daniel, he says &amp instead
     let sanText = sanitize(text)
 
     return new Promise((resolve, reject) => {
@@ -22,6 +17,14 @@ module.exports.synthDaniel = function synthDaniel(name, text) {
             })
     })
 }
+
+// Google API
+/* 
+const textToSpeech = require('@google-cloud/text-to-speech');
+const client = new textToSpeech.TextToSpeechClient();
+const voice = 'en-GB-Wavenet-D'
+const rate = 1.25
+*/
 
 /*
 module.exports.synthGoogle = function synthGoogle(name, text) {
@@ -62,22 +65,18 @@ const foulDictionary = {
     nigga: 'n-word',
     asshole: 'a-hole',
     porn: 'p rn',
-    damn: 'darn',
-    penis: 'peepee',
     ' rape': ' r e',
 }
 
 // What the html will display instead
 const foulSpanDictionary = module.exports.foulSpanDictionary = {
     fuck: 'f<span class="blur">uck</span>',
-    shit: 'sh<span class="blur">it</span>',
-    bitch: 'b<span class="blur">itch</span>',
-    cunt: 'c<span class="blur">unt</span>',
+    shit: 'sh<span class="blur">i</span>t',
+    bitch: 'b<span class="blur">it</span>ch',
+    cunt: 'c<span class="blur">un</span>t',
     nigga: 'ni<span class="blur">gg</span>a',
     asshole: 'a<span class="blur">ss</span>hole',
     porn: 'p<span class="blur">o</span>rn',
-    damn: 'd<span class="blur">a</span>mn',
-    penis: 'p<span class="blur">en</span>is',
     " rape": ' r<span class="blur">ap</span>e',
 }
 
@@ -86,9 +85,7 @@ function sanitize(text) {
         // Replaces every occurance with the the corresponding value in the dictionary
         text = text.replace(new RegExp(key, 'gi'), foulDictionary[key])
     }
-    return text.replace(/[\^\*]|(&gt;)|(&lt;)|\n/g, ' ')
-        .replace(/[:;][\)\(]/g, '')
-        .replace(/[\/\\]/g, ' ')
+    return text
 }
 
 // List google voices

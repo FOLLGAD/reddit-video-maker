@@ -32,8 +32,8 @@ function final() {
 }
 
 let cmd = process.argv[2]
-if (cmd == "pre") {
-    pre()
-} else {
+if (cmd == "final") {
     final()
+} else {
+    pre()
 }
