@@ -10,7 +10,7 @@ const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
 process.setMaxListeners(20)
 
 const vidConfig = {
-	start: 22,
+	start: 0,
 	end: 100,
 	sortBy: 'best',
 }

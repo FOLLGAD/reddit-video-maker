@@ -36,7 +36,6 @@ module.exports.combineVideos = function combineVideos(videos, name) {
         ffmpeg.on('exit', statusCode => {
             resolve(`${name}.${fileFormat}`)
         })
-            // .stderr.on('data', d => console.error(new String(d)))
     })
 }
 
@@ -57,7 +56,9 @@ module.exports.combineFinal = function combineFinal(videos, name) {
 
         ffmpeg.on('exit', statusCode => {
             resolve(`pre-${name}.mp4`)
-        })
-            // .stderr.on('data', d => console.error(new String(d)))
+		})
+		ffmpeg.on('error', console.error)
+		ffmpeg.stderr.on('data', d => console.error(new String(d)))
+		console.log("ffmpeging")
     })
 }
