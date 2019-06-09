@@ -42,23 +42,35 @@ module.exports.combineVideos = function combineVideos(videos, name) {
 module.exports.copyVideo = function (ins, out) {
     return new Promise(resolve => {
         let s = spawn('ffmpeg', ['-y', '-i', ins, '-c', 'copy', out])
-        s.on('exit', statusCode => {
+        s.on('exit', () => {
             resolve(out)
         })
     })
 }
 
-module.exports.combineFinal = function combineFinal(videos, name) {
+module.exports.combineFinal = function combineFinal(videos, name, extension) {
     return new Promise(resolve => {
         fs.writeFileSync(`../videolists/${name}.txt`, videos.map(v => `file '${v}'`).join('\n'))
 
-        let ffmpeg = spawn('ffmpeg', ['-y', '-f', 'concat', '-safe', '0', '-i', `../videolists/${name}.txt`, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', `../out/pre-${name}.mp4`])
+        let ffmpeg = spawn('ffmpeg', ['-y', '-f', 'concat', '-safe', '0', '-i', `../videolists/${name}.txt`, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', `../out/${name}.${extension}`])
 
-        ffmpeg.on('exit', statusCode => {
-            resolve(`pre-${name}.mp4`)
+        ffmpeg.on('exit', () => {
+            resolve(`${name}.${extension}`)
 		})
 		ffmpeg.on('error', console.error)
 		ffmpeg.stderr.on('data', d => console.error(new String(d)))
-		console.log("ffmpeging")
+    })
+}
+
+module.exports.addSound = function addSound(videoFullPath, soundFullPath, newName, extension = 'mp4') {
+    return new Promise(resolve => {
+        // https://stackoverflow.com/questions/11779490/how-to-add-a-new-audio-not-mixing-into-a-video-using-ffmpeg
+        let ffmpeg = spawn('ffmpeg', ['-y', '-i', videoFullPath, '-i', soundFullPath, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', '-filter_complex', '[0:a][1:a]amerge=inputs=2[a]', '-map', '0:v', '-map', '[a]', '-ac', '2', '-shortest', `../out/${newName}.${extension}`])
+
+        ffmpeg.on('exit', () => {
+            resolve(`${newName}.${extension}`)
+		})
+		ffmpeg.on('error', console.error)
+		ffmpeg.stderr.on('data', d => console.error(new String(d)))
     })
 }

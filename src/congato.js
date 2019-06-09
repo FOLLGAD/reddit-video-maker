@@ -1,18 +1,15 @@
-const { combineFinal, addPeripherals } = require('../src/video')
-// ffmpeg transition between all comments
+const { combineFinal, addSound } = require('../src/video')
 
 const fs = require('fs')
 
 // $ ffmpeg -i transition.mp4 -r 30 -ac 1 mono.mp4
 
-function pre() {
+function pre(ext = 'mp4') {
     let files = fs.readdirSync('../for-compilation')
         .filter(d => {
-            return !isNaN(d.split('/').pop().split('.')[0])
+            return !isNaN(d.split('/').pop().split('.')[0]) // Filter out all that don't have numbers as file names
         })
         .map(file => `../for-compilation/${file}`)
-
-    console.log(files)
 
     let videos = files.sort((ax, bx) => {
         let a = ax.split("/").pop().split('.')[0]
@@ -21,19 +18,37 @@ function pre() {
         return parseInt(a) > parseInt(b) ? 1 : -1
     })
 
-    videos = videos.reduce((r, a) => r.concat(a, '../static/transition.mkv'), []).slice(0, -1)
+    videos = videos.reduce((r, a) => r.concat(a, '../static/transition.mkv'), [])
 
-    combineFinal(videos, 'final')
-        .then(console.log)
+    console.log(videos)
+
+    let name = 'pre-final'
+
+    return combineFinal(videos, name, ext)
 }
 
-function final() {
-    addPeripherals(["../video-output/Q.mp4", "../out/pre-final-mono.mp4", '../static/transition_rs_mono.mp4', "../static/mono-outro.mp4"])
-}
 
 let cmd = process.argv[2]
-if (cmd == "final") {
-    final()
+if (cmd == "full") {
+    if (!process.argv[3]) {
+        console.error("Enter a song file! (relative to 'static' folder)")
+        process.exit(0)
+    }
+    full(process.argv[3])
 } else {
     pre()
+}
+
+full('NORMAL.mp3')
+
+function full(song) {
+    pre('mkv')
+        .then(file => {
+            return addSound('../out/' + file, '../static/'+song, 'with-song', 'mkv')
+        })
+        .then(file => {
+            let videos = ['../video-output/Q.mkv', '../out/' + file, '../static/outro.mkv']
+            return combineFinal(videos, 'final', 'mp4')
+        })
+        .then(console.log)
 }
