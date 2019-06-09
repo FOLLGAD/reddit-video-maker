@@ -50,7 +50,7 @@ async function updateAuth() {
 }
 
 
-async function fetchComments(articleId) {
+async function fetchComments(articleId, options) {
 	let parseComments = commentData => {
 		return commentData[1].data.children.slice(0, -1).map(d => d.data)
 	}
@@ -58,7 +58,7 @@ async function fetchComments(articleId) {
 		return commentData[0].data.children[0].data
 	}
 
-	let p = await fetch(`https://oauth.reddit.com/comments/${articleId}?sort=${vidConfig.sortBy}&depth=1&limit=${vidConfig.end}&raw_json=1`, {
+	let p = await fetch(`https://oauth.reddit.com/comments/${articleId}?sort=${options.sortBy}&depth=1&limit=${options.end}&raw_json=1`, {
 		headers: {
 			Authorization: `Bearer ${access_token}`,
 		},
@@ -155,7 +155,7 @@ async function renderCommentImgs(commentData, name) {
 					res(audioVideoCombine(instanceName, audio, img))
 				})
 				.catch(() => {
-					// Daniel probably fucked up, probably because of getting a quasi-empty string
+					// Daniel probably fucked up
 					// Therefore, omit the frame by returning null.
 					res(null)
 				})
@@ -252,31 +252,77 @@ function formatNum(num) {
 
 setInterval(updateAuth, 55 * 60 * 1000) // Update every 55 minutes (expires in 60 minutes)
 
+function getOptions(optionsArray) {
+	optsArray = optionsArray.slice()
+
+	let opts = {
+		filterEdits: false,
+		start: vidConfig.start,
+		end: vidConfig.end,
+		sortBy: vidConfig.sortBy,
+	}
+
+	editsInd = optionsArray.indexOf('-x') != -1
+	if (editsInd) {
+		opts.filterEdits = true
+		optsArray.splice(editsInd, 1)
+	}
+
+	startInd = optionsArray.indexOf('-start')
+	if (startInd != -1) {
+		opts.start = Number(optionsArray[startInd+1])
+		optsArray.splice(startInd, 2)
+	}
+
+	endInd = optionsArray.indexOf('-end')
+	if (endInd != -1) {
+		opts.end = Number(optionsArray[endInd+1])
+		optsArray.splice(endInd, 2)
+	}
+
+	sortInd = optionsArray.indexOf('-sort')
+	if (sortInd != -1) {
+		opts.sortBy = optionsArray[sortInd+1]
+		optsArray.splice(sortInd, 2)
+	}
+
+	opts.thread = optsArray[0]
+
+	return opts
+}
+
 async function main() {
 	console.log("Started BOG")
 	await updateAuth()
 	console.log("AUTH completed")
 
-	let { start } = vidConfig
+	let options = getOptions(process.argv.slice(2))
 
 	let thread = process.argv[2]
 	if (!thread) throw new Error("Must enter a thread ID")
 	thread = thread.trim()
 	console.log("Fetching from thread", thread)
 
-	let [question, commentData] = await fetchComments(thread)
+	let [question, commentData] = await fetchComments(thread, options)
 
 	let maxchars = 1250
 
-	let comments = commentData.filter(d => d.body.length < maxchars && d.body != '[deleted]' && d.body != '[removed]').slice(start)
+	let comments = commentData.filter(d => d.body.length < maxchars && d.body != '[deleted]' && d.body != '[removed]').slice(options.start)
+
+	if (options.filterEdits) {
+		let reg = /^edit/im
+		comments = comments.filter(d => {
+			return !reg.test(d.body)
+		})
+	}
 	console.log('Comments fetched:', comments.length)
 
 	await renderQuestion(question)
 	console.log("Rendered", "Q")
 
 	for (let i = 0; i < comments.length; i++) {
-		await renderCommentImgs(comments[i], i + start)
-		console.log("Rendered", i + start)
+		await renderCommentImgs(comments[i], i + options.start)
+		console.log("Rendered", i + options.start)
 	}
 
 	console.log("Finished!")
