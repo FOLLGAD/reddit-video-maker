@@ -6,6 +6,13 @@ module.exports.synthDaniel = function synthDaniel(name, text) {
     let sanText = sanitize(text)
 
     return new Promise((resolve, reject) => {
+        let reg = /[\d\w]/
+
+        if (!reg.test(sanText)) { // If no letter or number is in text, don't produce it
+            reject()
+            return
+        }
+
         makeCall(sanText)
             .then(res => res.buffer())
             .then(buffer => {
