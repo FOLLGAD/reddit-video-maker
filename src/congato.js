@@ -39,8 +39,6 @@ if (cmd == "full") {
     pre()
 }
 
-full('NORMAL.mp3')
-
 function full(song) {
     pre('mkv')
         .then(file => {
