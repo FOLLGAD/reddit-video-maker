@@ -42,7 +42,7 @@ if (cmd == "full") {
 function full(song) {
     pre('mkv')
         .then(file => {
-            return addSound('../out/' + file, '../static/'+song, 'with-song', 'mkv')
+            return addSound('../out/' + file, '../static/' + song, 'with-song', 'mkv')
         })
         .then(file => {
             let videos = ['../video-output/Q.mkv', '../out/' + file, '../static/outro.mkv']

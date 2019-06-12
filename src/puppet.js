@@ -11,7 +11,7 @@ handles.registerHelper('ifgt', function (val1, val2, options) {
 const commentTemplate = handles.compile(fs.readFileSync('../html/comment.html').toString())
 const questionTemplate = handles.compile(fs.readFileSync('../html/question.html').toString())
 
-module.exports.launchComment = async function launchComment(name, { username, score, time, body_html, edited, upvoted, showBottom, golds, silvers, platina }) {
+async function launchComment(name, { username, score, time, body_html, edited, upvoted, showBottom, golds, silvers, platina }) {
     const browser = await puppeteer.launch({
         args: [
             'font-render-hinting=none'
@@ -47,7 +47,7 @@ module.exports.launchComment = async function launchComment(name, { username, sc
     return filename
 }
 
-module.exports.launchQuestion = async function launchQuestion(name, { username, score, time, body_html, golds, silvers, platina, comments }) {
+async function launchQuestion(name, { username, score, time, body_html, golds, silvers, platina, comments }) {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
     const filename = `${name}.png`
@@ -75,4 +75,11 @@ module.exports.launchQuestion = async function launchQuestion(name, { username, 
     await browser.close()
 
     return filename
+}
+
+module.exports.launch = function launch(name, type, options) {
+    if (type == 'question') {
+        return launchQuestion(name, options)
+    }
+    return launchComment(name, options)
 }
