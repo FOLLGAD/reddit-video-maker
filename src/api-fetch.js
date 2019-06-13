@@ -1,19 +1,12 @@
-const env = require('../env.json')
-const fetch = require('node-fetch')
 const timeAgo = require('node-time-ago')
 const fs = require('fs')
 const cheerio = require('cheerio')
 const { synthDaniel, foulSpanDictionary } = require('./synth')
 const { launch } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
+const { fetchThread, updateAuth } = require('./reddit-api')
 
 process.setMaxListeners(20)
-
-const vidConfig = {
-	start: 0,
-	end: 100,
-	sortBy: 'best',
-}
 
 let arr = [
 	'../static',
@@ -30,46 +23,6 @@ arr.forEach(pth => {
 		fs.mkdirSync(pth)
 	}
 })
-
-// Fetch the auth token from reddit using credentials in .env
-async function getAuth() {
-	let response = await fetch('https://www.reddit.com/api/v1/access_token?grant_type=client_credentials', {
-		headers: {
-			'Authorization': `Basic ${env.Authorization}`, // Use Basic authentication
-		},
-		method: 'POST',
-	})
-		.then(res => res.json())
-		.catch(console.error)
-	return response.access_token
-}
-
-let access_token
-async function updateAuth() {
-	access_token = await getAuth()
-}
-
-
-async function fetchComments(articleId, options) {
-	let parseComments = commentData => {
-		return commentData[1].data.children.slice(0, -1).map(d => d.data)
-	}
-	let parseQuestion = commentData => {
-		return commentData[0].data.children[0].data
-	}
-
-	let p = await fetch(`https://oauth.reddit.com/comments/${articleId}?sort=${options.sortBy}&depth=1&limit=${options.end}&raw_json=1`, {
-		headers: {
-			Authorization: `Bearer ${access_token}`,
-		},
-	})
-		.catch(console.error)
-		.then(r => {
-			return r.json()
-		})
-
-	return [parseQuestion(p), parseComments(p)]
-}
 
 let sanitizeHtml = str => {
 	for (key in foulSpanDictionary) {
@@ -112,7 +65,7 @@ function compileHtml($) {
 
 				arr.push(...data)
 			} else if (h.name == 'br') {
-				arr[arr.length-1]+="<br>"
+				arr[arr.length - 1] += "<br>"
 			} else {
 				// It's a tag
 				lastWasTag = true
@@ -249,17 +202,15 @@ function formatNum(num) {
 	return d
 }
 
-setInterval(updateAuth, 55 * 60 * 1000) // Update every 55 minutes (expires in 60 minutes)
-
 function getOptions(optionsArray) {
 	optsArray = optionsArray.slice()
 
 	let opts = {
 		filterEdits: false,
 		skipQuestion: false,
-		start: vidConfig.start,
-		end: vidConfig.end,
-		sortBy: vidConfig.sortBy,
+		start: 0,
+		end: 100,
+		sortBy: 'best',
 	}
 
 	let editsInd = optionsArray.indexOf('-x')
@@ -314,8 +265,7 @@ async function main() {
 	} else if (thread == "test") {
 		[question, commentData] = require('./testData')
 	} else {
-		[question, commentData] = await fetchComments(thread, options)
-		console.log(question, commentData)
+		[question, commentData] = await fetchThread(thread, options)
 	}
 
 	let maxchars = 1250
