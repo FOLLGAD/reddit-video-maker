@@ -12,6 +12,7 @@ async function getAuth() {
 	})
 		.then(res => res.json())
 		.catch(console.error)
+
 	return response.access_token
 }
 
@@ -24,20 +25,20 @@ let defaultOpts = {
 	filterEdits: false,
 	skipQuestion: false,
 	start: 0,
-	end: 2,
+	end: 100,
 	sortBy: 'best',
 }
 
-module.exports.moreChildren = async function moreChildren(comment, children) {
-	let query = querystring.stringify({
+// An array of all comments of which you want data
+module.exports.getInfo = async function getInfo(children) {
+	let data = {
 		api_type: 'json',
 		raw_json: 1,
-		children: children.join(','),
-		sort: defaultOpts.sortBy,
-		link: 't3_bxgldm',
-	})
+		id: children.map(d => 't1_' + d).join(','),
+	}
+	let query = querystring.stringify(data)
 
-	let p = await fetch(`https://oauth.reddit.com/comments/${comment}/api/morechildren?${query}`, {
+	let p = await fetch(`https://oauth.reddit.com/api/info.json?${query}`, {
 		headers: {
 			Authorization: `Bearer ${access_token}`,
 		}
@@ -45,8 +46,7 @@ module.exports.moreChildren = async function moreChildren(comment, children) {
 		return r.json()
 	})
 
-	console.log(p)
-	return p
+	return p.data.children
 }
 
 module.exports.fetchThread = async function fetchComments(threadId, options = defaultOpts) {
@@ -75,7 +75,12 @@ module.exports.fetchThread = async function fetchComments(threadId, options = de
 	})
 		.catch(console.error)
 		.then(r => {
-			return r.json()
+			if (r.status >= 200 && r.status < 300) {
+				return r.json()
+			} else {
+				console.log("Failed to fetch thread")
+				throw new Error(r.status)
+			}
 		})
 
 	return [parseQuestion(p), parseComments(p)]

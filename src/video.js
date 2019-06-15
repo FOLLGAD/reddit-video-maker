@@ -1,6 +1,7 @@
 const fs = require('fs')
 const mp3Duration = require('mp3-duration');
 const child_process = require('child_process')
+let path = require('path')
 let spawn = child_process.spawn
 
 let color = '#19191a' // Dark mode
@@ -21,20 +22,7 @@ module.exports.audioVideoCombine = function createVideo(name, audioName, imgName
             ffmpeg.on('exit', statusCode => {
                 resolve(filename)
             }).on('error', console.error)
-                // .stderr.on('data', d => console.error(new String(d)))
-        })
-    })
-}
-
-module.exports.combineVideos = function combineVideos(videos, name) {
-    return new Promise(resolve => {
-        fs.writeFileSync(`../videolists/${name}.txt`, videos.map(v => `file '../video-temp/${v}'`).join('\n'))
-
-        let ffmpeg = spawn('ffmpeg', ['-y', '-f', `concat`, '-safe', '0', '-i', `../videolists/${name}.txt`, '-ar', '24000', '-c:a', 'aac', '-c:v', 'copy', '-r', '25', `../video-output/${name}.${fileFormat}`])
-        // '-r', '30', '-pix_fmt', 'yuv420p', '-c', 'copy'
-
-        ffmpeg.on('exit', statusCode => {
-            resolve(`${name}.${fileFormat}`)
+            // .stderr.on('data', d => console.error(new String(d)))
         })
     })
 }
@@ -48,6 +36,27 @@ module.exports.copyVideo = function (ins, out) {
     })
 }
 
+module.exports.concatFromVideolist = function concatFromVideolist(videolist, path) {
+    return new Promise(resolve => {
+        let ffmpeg = spawn('ffmpeg', ['-y', '-f', `concat`, '-safe', '0', '-i', `../videolists/${videolist}`, '-ar', '24000', '-c:a', 'aac', '-c:v', 'copy', '-r', '25', path])
+        ffmpeg.on('exit', statusCode => {
+            resolve(path)
+        })
+        ffmpeg.on('error', console.error)
+        ffmpeg.stderr.on('data', d => console.error(new String(d)))
+    })
+}
+
+module.exports.combineVideos = function combineVideos(videos, name, extension = fileFormat) {
+    return new Promise(resolve => {
+        fs.writeFileSync(`../videolists/${name}.txt`, videos.map(v => `file '../video-temp/${v}'`).join('\n'))
+
+        module.exports.concatFromVideolist(name + '.txt', `../video-output/${name}.${extension}`)
+            .then(resolve)
+    })
+}
+
+// DEPRECATED, use combineVideos
 module.exports.combineFinal = function combineFinal(videos, name, extension) {
     return new Promise(resolve => {
         fs.writeFileSync(`../videolists/${name}.txt`, videos.map(v => `file '${v}'`).join('\n'))
@@ -56,21 +65,23 @@ module.exports.combineFinal = function combineFinal(videos, name, extension) {
 
         ffmpeg.on('exit', () => {
             resolve(`${name}.${extension}`)
-		})
-		ffmpeg.on('error', console.error)
-		ffmpeg.stderr.on('data', d => console.error(new String(d)))
+        })
+        ffmpeg.on('error', console.error)
+        ffmpeg.stderr.on('data', d => console.error(new String(d)))
     })
 }
 
 module.exports.addSound = function addSound(videoFullPath, soundFullPath, newName, extension = 'mp4') {
+    // let pathify = pt => path.join(__dirname, pt)
     return new Promise(resolve => {
         // https://stackoverflow.com/questions/11779490/how-to-add-a-new-audio-not-mixing-into-a-video-using-ffmpeg
-        let ffmpeg = spawn('ffmpeg', ['-y', '-i', videoFullPath, '-i', soundFullPath, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', '-filter_complex', '[0:a][1:a]amerge=inputs=2[a]', '-map', '0:v', '-map', '[a]', '-ac', '2', '-shortest', `../out/${newName}.${extension}`])
+        let endPath = `../video-output/${newName}.${extension}`
+        let ffmpeg = spawn('ffmpeg', ['-y', '-i', videoFullPath, '-i', soundFullPath, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', '-filter_complex', '[0:a][1:a]amerge=inputs=2[a]', '-map', '0:v', '-map', '[a]', '-ac', '2', '-shortest', endPath])
 
         ffmpeg.on('exit', () => {
-            resolve(`${newName}.${extension}`)
-		})
-		ffmpeg.on('error', console.error)
-		ffmpeg.stderr.on('data', d => console.error(new String(d)))
+            resolve(endPath)
+        })
+        ffmpeg.on('error', console.error)
+        ffmpeg.stderr.on('data', d => console.error(new String(d)))
     })
 }
