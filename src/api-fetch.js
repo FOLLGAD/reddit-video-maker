@@ -122,7 +122,7 @@ module.exports.renderComment = async function renderCommentImgs(commentData, nam
 		})
 }
 
-module.exports.renderQuestion = function renderQuestion(questionData) {
+module.exports.renderQuestion = async function renderQuestion(questionData) {
 	let items = {
 		username: questionData.author,
 		score: formatNum(questionData.score),
