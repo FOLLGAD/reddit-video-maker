@@ -27,7 +27,7 @@ function compileHtml($) {
 
 	let id = 0,
 		tts = []
-	$('p.text,li').each((_, e) => {
+	$('.text,li').each((_, e) => {
 		let lastWasTag = false
 
 		let arr = [],
@@ -139,17 +139,16 @@ module.exports.renderQuestion = function renderQuestion(questionData) {
 	let $ = cheerio.load(items.body)
 	let text = $.text()
 
-	$ = cheerio.load('<p>' + text + '</p>')
+	$ = cheerio.load('<span class="text">' + text + '</span>')
 
 	let tts = compileHtml($)
 
 	let workLine = []
-	let ln = $('span.hide').length
 	let name = 'Q'
 
 	$('span.hide').each((i, _) => {
 		$('.hide#' + i).removeClass('hide')
-		let toRender = $.text()
+		let toRender = $.html()
 
 		let obj = {
 			name: name + '-' + i,
