@@ -122,7 +122,7 @@ module.exports.renderComment = async function renderCommentImgs(commentData, nam
 		})
 }
 
-module.exports.renderQuestion = async function renderQuestion(questionData) {
+module.exports.renderQuestion = function renderQuestion(questionData) {
 	let items = {
 		username: questionData.author,
 		score: formatNum(questionData.score),
@@ -136,35 +136,32 @@ module.exports.renderQuestion = async function renderQuestion(questionData) {
 		platina: questionData.gildings.gid_3,
 	}
 
-	let array = splitString(sanitizeHtml(items.body))
+	let $ = cheerio.load(items.body)
+	let text = $.text()
+
+	$ = cheerio.load('<p>' + text + '</p>')
+
+	let tts = compileHtml($)
 
 	let workLine = []
+	let ln = $('span.hide').length
+	let name = 'Q'
 
-	for (let i = 0; i < array.length; i++) {
-		let counter = 0
-		let tts = ""
-
-		let formattedText = array.map(str => {
-			if (counter == i) {
-				tts = str
-			}
-			if (counter++ > i) {
-				return hideSpan(str)
-			}
-			return str
-		})
+	$('span.hide').each((i, _) => {
+		$('.hide#' + i).removeClass('hide')
+		let toRender = $.text()
 
 		let obj = {
-			name: 'Q-' + i,
-			imgObj: { ...items, body_html: formattedText.join("") },
-			tts: tts,
+			name: name + '-' + i,
+			imgObj: { ...items, body_html: toRender },
+			tts: cheerio.load(tts[i]).text(),
 			type: 'question',
 		}
 
 		workLine.push(obj)
-	}
+	})
 
-	return await sequentialWork(workLine)
+	return sequentialWork(workLine)
 		.then(videos => combineVideos(videos, 'Q'))
 		.then(() => {
 			copyVideo('../video-output/Q.mkv', '../Q.mp4')
