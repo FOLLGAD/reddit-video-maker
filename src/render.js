@@ -19,6 +19,7 @@ commentData format:
 */
 
 module.exports.render = async function render(questionData, commentData, song) {
+	let start = Date.now()
 	let videolist = []
 
 	for (let i = 0; i < commentData.length; i++) {
@@ -46,13 +47,13 @@ module.exports.render = async function render(questionData, commentData, song) {
 		videolist = [question, soundFile, outro]
 			.map(pt => `file '${pt}'`)
 			.join('\n')
-	
+
 		fs.writeFileSync('../videolists/all.txt', videolist)
-	
+
 		let final = await concatFromVideolist('all.txt', '../video-output/final.mkv')
-	} catch(e) {
+	} catch (e) {
 		console.error(e)
 	}
 
-	console.log("Finished render!")
+	console.log("Finished render in", Date.now() - start + "ms")
 }
