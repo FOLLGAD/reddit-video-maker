@@ -19,6 +19,7 @@ commentData format:
 */
 
 module.exports.render = async function render(questionData, commentData, song) {
+	console.log('Started rendering')
 	let start = Date.now()
 	let videolist = []
 
