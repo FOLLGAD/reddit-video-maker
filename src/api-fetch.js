@@ -164,7 +164,7 @@ module.exports.renderQuestion = function renderQuestion(questionData) {
 		workLine.push(obj)
 	}
 
-	return sequentialWork(workLine)
+	return await sequentialWork(workLine)
 		.then(videos => combineVideos(videos, 'Q'))
 		.then(() => {
 			copyVideo('../video-output/Q.mkv', '../Q.mp4')
