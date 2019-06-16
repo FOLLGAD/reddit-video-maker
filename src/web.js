@@ -123,7 +123,6 @@ const server = http.createServer(async (req, res) => {
 
 				res.statusCode = 201
 				res.end(JSON.stringify({ message: 'Rendering' }))
-
 			} break
 			default: {
 				res.statusCode = 404
