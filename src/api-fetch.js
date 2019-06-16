@@ -56,7 +56,8 @@ function compileHtml($) {
 		}
 
 		tts.push(...arr)
-		let html = arr.map(d => `<span id="${id++}" class="hide">${d}</span>`).map(sanitizeHtml).join('')
+		let html = arr.map(d => `<span id="${id++}" class="hide">${d}</span>`)
+		html = html.map(sanitizeHtml).join('')
 
 		$(e).html(html)
 	})
@@ -149,6 +150,7 @@ module.exports.renderQuestion = function renderQuestion(questionData) {
 	$('span.hide').each((i, _) => {
 		$('.hide#' + i).removeClass('hide')
 		let toRender = $.html()
+		console.log(toRender)
 
 		let obj = {
 			name: name + '-' + i,
