@@ -4,7 +4,7 @@ const { synthDaniel, foulSpanDictionary } = require('./synth')
 const { launch } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
 
-let sanitizeHtml = str => {
+let sanitizeHtml = module.exports.sanitizeHtml = str => {
 	for (key in foulSpanDictionary) {
 		str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
 	}
@@ -17,22 +17,23 @@ function splitString(str) {
 		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
 }
 
+module.exports.splitString = splitString
+
 // Takes in a html element
 // Edits $ in the code, and returns an array of all tts segments
 function compileHtml($) {
-	$('p').addClass('text')
+	$('p,li').addClass('text')
+	$('li').addClass('hide-list') // To hide the list dots until they're needed
 
 	// Removes .text class from all <p> with <li> children
 	$('p li').parent('p').removeClass('text')
+	$('li p').parent('li').removeClass('text')
 
 	let id = 0,
 		tts = []
-	$('.text,li').each((_, e) => {
+
+	let handle = function (arr, contents) {
 		let lastWasTag = false
-
-		let arr = [],
-			contents = $(e).contents()
-
 		// Splits string on punctuation
 		for (let i = 0; i < contents.length; i++) {
 			let h = contents[i]
@@ -54,10 +55,19 @@ function compileHtml($) {
 				arr[arr.length - 1] += text
 			}
 		}
+	}
+
+	$('.text').each((_, e) => {
+		let arr = [],
+			contents = $(e).contents()
+
+		handle(arr, contents)
 
 		tts.push(...arr)
-		let html = arr.map(d => `<span id="${id++}" class="hide">${d}</span>`)
-		html = html.map(sanitizeHtml).join('')
+		let html = arr
+			.map(d => `<span id="${id++}" class="hide">${d}</span>`)
+			.map(sanitizeHtml)
+			.join('')
 
 		$(e).html(html)
 	})
@@ -97,6 +107,7 @@ module.exports.renderComment = async function renderCommentImgs(commentData, nam
 	}
 
 	let $ = cheerio.load(items.body)
+	console.log($.html())
 
 	let tts = compileHtml($)
 
@@ -104,7 +115,10 @@ module.exports.renderComment = async function renderCommentImgs(commentData, nam
 	let ln = $('span.hide').length
 
 	$('span.hide').each((i, _) => {
-		$('.hide#' + i).removeClass('hide')
+		let curr = $('.hide#' + i)
+		curr.removeClass('hide')
+		curr.parents('.hide-list').removeClass('hide-list') // Show the parent list
+
 		let toRender = $.html()
 
 		let obj = {
