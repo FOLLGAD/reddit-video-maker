@@ -73,6 +73,7 @@ const foulDictionary = {
     asshole: 'a-hole',
     porn: 'p rn',
     ' rape': ' r e',
+    cock: 'c ck',
 }
 
 // What the html will display instead
@@ -85,6 +86,7 @@ const foulSpanDictionary = module.exports.foulSpanDictionary = {
     asshole: 'a<span class="blur">ss</span>hole',
     porn: 'p<span class="blur">o</span>rn',
     " rape": ' r<span class="blur">ap</span>e',
+    cock: 'c<span class="blur">o</span>ck',
 }
 
 function sanitize(text) {
