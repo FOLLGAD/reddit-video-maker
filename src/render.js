@@ -28,6 +28,7 @@ module.exports.render = async function render(questionData, commentData, song) {
 			let commentFile = await renderComment(commentData[i], i)
 			videolist.push('../video-output/' + commentFile)
 			videolist.push(transition)
+			console.log("Successfully rendered comment", i)
 		} catch (e) {
 			console.log("Comment number", i, "failed to render. It will not be added.")
 		}
@@ -42,8 +43,11 @@ module.exports.render = async function render(questionData, commentData, song) {
 
 	try {
 		let nosoundFile = await concatFromVideolist('all.txt', '../video-output/nosound.mkv')
+		console.log("Added transmissions...")
 		let soundFile = await addSound('../video-output/' + nosoundFile, '../static/' + song, 'withsound', 'mkv')
+		console.log("Added sound...")
 		let question = await renderQuestion(questionData)
+		console.log("Rendered question...")
 
 		videolist = [question, soundFile, outro]
 			.map(pt => `file '${pt}'`)
@@ -56,5 +60,5 @@ module.exports.render = async function render(questionData, commentData, song) {
 		console.error(e)
 	}
 
-	console.log("Finished render in", Date.now() - start + "ms")
+	console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 }
