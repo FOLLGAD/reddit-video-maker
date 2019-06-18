@@ -77,9 +77,11 @@ let compileHtml = function (rootComment) {
 
 		commentTree.body_html = $.html()
 
-		commentTree.replies.forEach(reply => {
-			tts = tts.concat(rec(reply))
-		})
+		if (Array.isArray(commentTree.replies)) {
+			commentTree.replies.forEach(reply => {
+				tts = tts.concat(rec(reply))
+			})
+		}
 
 		return tts
 	}

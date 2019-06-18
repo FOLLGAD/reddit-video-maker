@@ -69,7 +69,13 @@ async function main() {
 
 	let maxchars = 1600
 
-	let comments = commentData.filter(d => d.body_html.length < maxchars && d.body_html != '[deleted]' && d.body_html != '[removed]').slice(options.start)
+	let comments = commentData
+		.filter(d => d.body_html.length < maxchars && d.body_html != '[deleted]' && d.body_html != '[removed]')
+		.slice(options.start)
+		.map(comment => {
+			comment.replies = []
+			return comment
+		})
 
 	if (options.filterEdits) {
 		let reg = /^edit/im
