@@ -51,7 +51,7 @@ module.exports.getInfo = async function getInfo(children) {
 
 module.exports.fetchThread = async function fetchComments(threadId, options = defaultOpts) {
 	let parseComments = commentData => {
-		return commentData[1].data.children.slice(0, -1).map(d => d.data)
+		return commentData[1].data.children.slice(0, -1)
 	}
 	let parseQuestion = commentData => {
 		return commentData[0].data.children[0].data
@@ -83,5 +83,33 @@ module.exports.fetchThread = async function fetchComments(threadId, options = de
 			}
 		})
 
-	return [parseQuestion(p), parseComments(p)]
+	let extractComment = commD => {
+		let comm = commD.data
+		return {
+			score: comm.score,
+			author: comm.author,
+			created_utc: comm.created_utc,
+			edited: comm.edited,
+			gildings: comm.gildings,
+			body_html: comm.body_html,
+
+			replies: comm.replies && comm.replies.data && comm.replies.data.children.slice(0, -1).map(extractComment),
+		}
+	}
+
+	let extractQuestion = question => {
+		return {
+			score: question.score,
+			author: question.author,
+			created_utc: question.created_utc,
+			num_comments: question.num_comments,
+			gildings: question.gildings,
+			title: question.title,
+		}
+	}
+
+	let parsedC = parseComments(p).map(extractComment)
+	let parsedQ = extractQuestion(parseQuestion(p))
+
+	return [parsedQ, parsedC]
 }
