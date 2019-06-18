@@ -67,9 +67,9 @@ async function main() {
 		[question, commentData] = await fetchThread(thread, options)
 	}
 
-	let maxchars = 1250
+	let maxchars = 1600
 
-	let comments = commentData.filter(d => d.body.length < maxchars && d.body != '[deleted]' && d.body != '[removed]').slice(options.start)
+	let comments = commentData.filter(d => d.body_html.length < maxchars && d.body_html != '[deleted]' && d.body_html != '[removed]').slice(options.start)
 
 	if (options.filterEdits) {
 		let reg = /^edit/im

@@ -1,7 +1,7 @@
 const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
 const { synthDaniel, foulSpanDictionary } = require('./synth')
-const { launch } = require('./puppet')
+const { launch, commentTemplate } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
 
 let sanitizeHtml = module.exports.sanitizeHtml = str => {
@@ -21,58 +21,69 @@ module.exports.splitString = splitString
 
 // Takes in a html element
 // Edits $ in the code, and returns an array of all tts segments
-function compileHtml($) {
-	$('p,li').addClass('text')
-	$('li').addClass('hide-list') // To hide the list dots until they're needed
+let compileHtml = function (rootComment) {
+	let id = 0
+	let rec = commentTree => {
+		let $ = cheerio.load(commentTree.body_html)
 
-	// Removes .text class from all <p> with <li> children
-	$('p li').parent('p').removeClass('text')
-	$('li p').parent('li').removeClass('text')
+		$('p,li').addClass('text')
+		$('li').addClass('hide-until-active') // To hide the list dots until they're needed
 
-	let id = 0,
-		tts = []
+		// Removes .text class from all <p> with <li> children
+		$('p li').parent('p').removeClass('text')
+		$('li p').parent('li').removeClass('text')
 
-	let handle = function (arr, contents) {
-		let lastWasTag = false
-		// Splits string on punctuation
-		for (let i = 0; i < contents.length; i++) {
-			let h = contents[i]
-			if (h.type == 'text') {
-				let data = splitString(h.data)
-				if (lastWasTag) {
-					arr[arr.length - 1] += data.shift()
+		let tts = []
+
+		let handle = function (arr, contents) {
+			let lastWasTag = false
+			// Splits string on punctuation
+			for (let i = 0; i < contents.length; i++) {
+				let h = contents[i]
+				if (h.type == 'text') {
+					let data = splitString(h.data)
+					if (lastWasTag) {
+						arr[arr.length - 1] += data.shift()
+					}
+					lastWasTag = false
+
+					arr.push(...data)
+				} else if (h.name == 'br') {
+					arr[arr.length - 1] += "<br>"
+				} else {
+					// It's a tag
+					lastWasTag = true
+					let text = cheerio.load(h).html()
+					if (text.indexOf('.') !== -1) lastWasTag = false
+					arr[arr.length - 1] += text
 				}
-				lastWasTag = false
-
-				arr.push(...data)
-			} else if (h.name == 'br') {
-				arr[arr.length - 1] += "<br>"
-			} else {
-				// It's a tag
-				lastWasTag = true
-				let text = cheerio.load(h).html()
-				if (text.indexOf('.') !== -1) lastWasTag = false
-				arr[arr.length - 1] += text
 			}
 		}
+
+		$('.text').each((_, e) => {
+			let arr = [],
+				contents = $(e).contents()
+
+			handle(arr, contents)
+
+			tts.push(...arr)
+			let html = arr
+				.map(d => `<span id="${id++}" class="hide">${d}</span>`)
+				.map(sanitizeHtml)
+				.join('')
+
+			$(e).html(html)
+		})
+
+		commentTree.body_html = $.html()
+
+		commentTree.replies.forEach(reply => {
+			tts = tts.concat(rec(reply))
+		})
+
+		return tts
 	}
-
-	$('.text').each((_, e) => {
-		let arr = [],
-			contents = $(e).contents()
-
-		handle(arr, contents)
-
-		tts.push(...arr)
-		let html = arr
-			.map(d => `<span id="${id++}" class="hide">${d}</span>`)
-			.map(sanitizeHtml)
-			.join('')
-
-		$(e).html(html)
-	})
-
-	return tts
+	return rec(rootComment)
 }
 
 async function sequentialWork(works) {
@@ -92,37 +103,48 @@ async function sequentialWork(works) {
 	return arr
 }
 
+function hydrateComment(comment) {
+	comment.score = formatNum(comment.score)
+	comment.created = timeAgo(comment.created_utc * 1000)
+	if (comment.edited) {
+		comment.edited = timeAgo(comment.edited * 1000)
+	}
+	if (comment.num_comments) {
+		comment.num_comments = formatNum(comment.num_comments)
+	}
+	comment.silvers = comment.gildings.gid_1
+	comment.golds = comment.gildings.gid_2
+	comment.platina = comment.gildings.gid_3
+	if (comment.replies) {
+		comment.replies = comment.replies.map(hydrateComment)
+	}
+	comment.showBottom = true
+	comment.upvoted = Math.random() < 0.1 // ~10% of the posts will randomly be seen as upvoted
+
+	return comment
+}
+
 // Should return the name of video of the created comment
 module.exports.renderComment = async function renderComment(commentData, name) {
-	let items = {
-		upvoted: Math.random() > 0.9, // ~10% of the posts will randomly be seen as upvoted
-		score: formatNum(commentData.score),
-		username: commentData.author,
-		time: timeAgo(commentData.created_utc * 1000), // Timezones are unimportant
-		edited: commentData.edited ? timeAgo(commentData.edited * 1000) : null,
-		silvers: commentData.gildings.gid_1,
-		golds: commentData.gildings.gid_2,
-		platina: commentData.gildings.gid_3,
-		body: commentData.body_html,
-	}
+	let rootComment = hydrateComment(commentData)
 
-	let $ = cheerio.load(items.body)
-
-	let tts = compileHtml($)
+	let tts = compileHtml(rootComment)
 
 	let workLine = []
+
+	let markup = commentTemplate(rootComment)
+	let $ = cheerio.load(markup)
+
 	let ln = $('span.hide').length
 
 	$('span.hide').each((i, _) => {
 		let curr = $('.hide#' + i)
 		curr.removeClass('hide')
-		curr.parents('.hide-list').removeClass('hide-list') // Show the parent list
-
-		let toRender = $.html()
+		curr.parents('.hide-until-active').removeClass('hide-until-active') // Activate parent elements
 
 		let obj = {
 			name: name + '-' + i,
-			imgObj: { ...items, body_html: toRender, showBottom: i == ln - 1 },
+			imgObj: $.html(),
 			tts: cheerio.load(tts[i]).text(),
 			type: 'comment',
 		}
