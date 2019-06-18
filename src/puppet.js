@@ -35,10 +35,18 @@ async function launchComment(name, { username, score, time, body_html, edited, u
 
     await page.setContent(markup);
     const height = await page.$eval('#DIV_1', e => e.scrollHeight)
+
+    let dsf = 2.4
+
+    if ((height + 15) * dsf > 1080) {
+        // Crash
+        throw new Error("Comment output image was too tall.")
+    }
+
     page.setViewport({
-        width: 1920 / 2.4,
+        width: 1920 / dsf,
         height: height + 15,
-        deviceScaleFactor: 2.4,
+        deviceScaleFactor: dsf,
     })
 
     await page.screenshot({ encoding: 'binary', path: `../images/${filename}` })

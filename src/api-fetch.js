@@ -93,7 +93,7 @@ async function sequentialWork(works) {
 }
 
 // Should return the name of video of the created comment
-module.exports.renderComment = async function renderCommentImgs(commentData, name) {
+module.exports.renderComment = async function renderComment(commentData, name) {
 	let items = {
 		upvoted: Math.random() > 0.9, // ~10% of the posts will randomly be seen as upvoted
 		score: formatNum(commentData.score),
@@ -107,7 +107,6 @@ module.exports.renderComment = async function renderCommentImgs(commentData, nam
 	}
 
 	let $ = cheerio.load(items.body)
-	console.log($.html())
 
 	let tts = compileHtml($)
 

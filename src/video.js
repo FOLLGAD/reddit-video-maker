@@ -21,8 +21,7 @@ module.exports.audioVideoCombine = function createVideo(name, audioName, imgName
             // ffmpeg -y -framerate 30 -loop 1 -i ../images/Q.png -i ../audio-output/Q.mp3 -vf pad=1920:1080:(ow-iw)/2:(oh-ih)/2:#ffffff -pix_fmt yuv420p -crf 20 -c:v libx264 -c:a aac -ar 24000 -r 30 ../video-temp/Q.mkv
             ffmpeg.on('exit', statusCode => {
                 resolve(filename)
-            }).on('error', console.error)
-            // .stderr.on('data', d => console.error(new String(d)))
+            })
         })
     })
 }
