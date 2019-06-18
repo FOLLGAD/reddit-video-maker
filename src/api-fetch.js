@@ -182,10 +182,6 @@ module.exports.renderQuestion = function renderQuestion(questionData) {
 		})
 }
 
-function hideSpan(str) {
-	return '<span class="invis">' + str + '</span>'
-}
-
 function formatNum(num) {
 	let d = parseInt(num)
 	if (num >= 1000) {
