@@ -19,20 +19,20 @@ handles.registerPartial('comment', `
 			</div>
 		</div>
 		<div class="DIV_7">
-			<!-- Upvote/downvote -->
+		<!-- Upvote/downvote -->
 		<div class="DIV_8">
-				<button class="BUTTON_UPVOTE">
-					<div class="DIV_UPVOTE">
-						<i class="I_UPVOTE {{#if upvoted}}is_upvoted{{/if}}"></i>
-					</div>
-				</button>
-				<button class="BUTTON_12">
-					<div class="DIV_13">
-						<i class="I_14"></i>
-					</div>
-				</button>
-			</div>
-			<!-- Body -->
+			<button class="BUTTON_UPVOTE">
+				<div class="DIV_UPVOTE">
+					<i class="I_UPVOTE {{#if upvoted}}is_upvoted{{/if}}"></i>
+				</div>
+			</button>
+			<button class="BUTTON_12">
+				<div class="DIV_13">
+					<i class="I_14"></i>
+				</div>
+			</button>
+		</div>
+		<!-- Body -->
 		<div class="DIV_15">
 			<div class="DIV_17 dark-mode-meta">
 				<div class="DIV_18">
@@ -49,26 +49,26 @@ handles.registerPartial('comment', `
 				<div class="DIV_GILDS">
 					{{#if silvers}}
 				<span class="SPAN_SILVER">
-						<i class="I_SILVER">
-							<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-silver-cartoon.png"
-								class="IMG_SILVER" alt='' />
-						</i>
-						{{#ifgt silvers 1}}
-					{{ silvers }}
-						{{/ ifgt}}
+					<i class="I_SILVER">
+						<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-silver-cartoon.png"
+							class="IMG_SILVER" alt='' />
+					</i>
+					{{#ifgt silvers 1}}
+						{{ silvers }}
+					{{/ ifgt}}
 				</span>
 					{{/if}}
 				{{#if golds}}
 				<span class="SPAN_GOLD">
-						<i class="I_GOLD">
-							<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-gold-cartoon.png"
-								class="IMG_GOLD" alt='' />
-						</i>
-						{{#ifgt golds 1}}
-					{{ golds }}
-						{{/ ifgt}}
+					<i class="I_GOLD">
+						<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-gold-cartoon.png"
+							class="IMG_GOLD" alt='' />
+					</i>
+					{{#ifgt golds 1}}
+						{{ golds }}
+					{{/ ifgt}}
 				</span>
-					{{/if}}
+				{{/if}}
 				{{#if platina}}
 				<span class="SPAN_GOLD">
 						<i class="I_GOLD">
@@ -85,7 +85,7 @@ handles.registerPartial('comment', `
 			<div class="DIV_28">
 				<div class="DIV_29 dark-mode-text">
 					{{{body_html}}}
-			</div>
+				</div>
 			</div>
 			<div class="DIV_31 dark-mode-bottom hide-until-active">
 					<button class="BUTTON_32" style="display: inline-block;">

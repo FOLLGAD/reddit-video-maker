@@ -191,7 +191,11 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 		let curr = $('.hide#' + i)
 		curr.removeClass('hide')
 		curr.parents('.hide-until-active').removeClass('hide-until-active') // Activate parent elements
-		curr.closest('.DIV_1').parent().closest('.DIV_1').find('.DIV_31').eq(0).removeClass('hide-until-active') // Show bottom
+
+		if (curr.is(':last-child') && curr.parentsUntil('.DIV_29').is(':last-child')) {
+			// Is last segment of comment; display bottom
+			curr.closest('.DIV_28').siblings('.DIV_31').removeClass('hide-until-active')
+		}
 
 		if (ln == i + 1) {
 			$('.DIV_31.hide-until-active').removeClass('hide-until-active')
