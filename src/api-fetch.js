@@ -19,8 +19,6 @@ function splitString(str) {
 
 module.exports.splitString = splitString
 
-// Takes in a html element
-// Edits $ in the code, and returns an array of all tts segments
 let compileHtml = function (rootComment) {
 	let id = 0
 	let rec = commentTree => {
@@ -88,6 +86,55 @@ let compileHtml = function (rootComment) {
 	return rec(rootComment)
 }
 
+// Takes in a html element
+// Edits $ in the code, and returns an array of all tts segments
+function compileQuestion($) {
+	let id = 0,
+		tts = []
+
+	let handle = function (arr, contents) {
+		let lastWasTag = false
+		// Splits string on punctuation
+		for (let i = 0; i < contents.length; i++) {
+			let h = contents[i]
+			if (h.type == 'text') {
+				let data = splitString(h.data)
+				if (lastWasTag) {
+					arr[arr.length - 1] += data.shift()
+				}
+				lastWasTag = false
+
+				arr.push(...data)
+			} else if (h.name == 'br') {
+				arr[arr.length - 1] += "<br>"
+			} else {
+				// It's a tag
+				lastWasTag = true
+				let text = cheerio.load(h).html()
+				if (text.indexOf('.') !== -1) lastWasTag = false
+				arr[arr.length - 1] += text
+			}
+		}
+	}
+
+	$('.text').each((_, e) => {
+		let arr = [],
+			contents = $(e).contents()
+
+		handle(arr, contents)
+
+		tts.push(...arr)
+		let html = arr
+			.map(d => `<span id="${id++}" class="hide">${d}</span>`)
+			.map(sanitizeHtml)
+			.join('')
+
+		$(e).html(html)
+	})
+
+	return tts
+}
+
 async function sequentialWork(works) {
 	let arr = []
 	for (let i = 0; i < works.length; i++) {
@@ -135,6 +182,7 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 	let workLine = []
 
 	let markup = commentTemplate(rootComment)
+
 	let $ = cheerio.load(markup)
 
 	let ln = $('span.hide').length
@@ -143,10 +191,17 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 		let curr = $('.hide#' + i)
 		curr.removeClass('hide')
 		curr.parents('.hide-until-active').removeClass('hide-until-active') // Activate parent elements
+		curr.closest('.DIV_1').parent().closest('.DIV_1').find('.DIV_31').eq(0).removeClass('hide-until-active') // Show bottom
+
+		if (ln == i + 1) {
+			$('.DIV_31.hide-until-active').removeClass('hide-until-active')
+		}
+
+		let html = $.html()
 
 		let obj = {
 			name: name + '-' + i,
-			imgObj: $.html(),
+			imgObj: html,
 			tts: cheerio.load(tts[i]).text(),
 			type: 'comment',
 		}
@@ -160,26 +215,15 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 		})
 }
 
-module.exports.renderQuestion = function renderQuestion(questionData) {
-	let items = {
-		username: questionData.author,
-		score: formatNum(questionData.score),
-		time: timeAgo(questionData.created_utc * 1000), // Timezones are unimportant
-		comments: formatNum(questionData.num_comments),
+module.exports.renderQuestion = function renderQuestion(questionData, renderMp4 = true) {
+	let hydrated = hydrateComment(questionData)
 
-		body: questionData.title,
-
-		silvers: questionData.gildings.gid_1,
-		golds: questionData.gildings.gid_2,
-		platina: questionData.gildings.gid_3,
-	}
-
-	let $ = cheerio.load(items.body)
+	let $ = cheerio.load(hydrated.title)
 	let text = $.text()
 
 	$ = cheerio.load('<span class="text">' + text + '</span>')
 
-	let tts = compileHtml($)
+	let tts = compileQuestion($)
 
 	let workLine = []
 	let name = 'Q'
@@ -190,7 +234,7 @@ module.exports.renderQuestion = function renderQuestion(questionData) {
 
 		let obj = {
 			name: name + '-' + i,
-			imgObj: { ...items, body_html: toRender },
+			imgObj: { ...hydrated, body_html: toRender },
 			tts: cheerio.load(tts[i]).text(),
 			type: 'question',
 		}
@@ -201,7 +245,9 @@ module.exports.renderQuestion = function renderQuestion(questionData) {
 	return sequentialWork(workLine)
 		.then(videos => combineVideos(videos, 'Q'))
 		.then(() => {
-			copyVideo('../video-output/Q.mkv', '../Q.mp4')
+			if (renderMp4) {
+				copyVideo('../video-output/Q.mkv', '../Q.mp4')
+			}
 			return '../video-output/Q.mkv'
 		})
 }

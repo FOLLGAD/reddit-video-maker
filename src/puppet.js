@@ -34,61 +34,60 @@ handles.registerPartial('comment', `
 			</div>
 			<!-- Body -->
 		<div class="DIV_15">
-				<div class="DIV_17 dark-mode-meta">
-					<div class="DIV_18">
-						<a href="/user/bdkrzy" class="A_19 dark-mode-user">{{ author }}</a>
-						<div class="DIV_20">
-						</div>
-					</div><span class="SPAN_21">{{ score }} points</span> <span class="SPAN_22">·</span> <a
-						href="/r/AskReddit/comments/ba30oe/whats_a_video_game_you_dislike_that_everybody/ek8p9mu/"
-						class="A_23" rel="nofollow"><span class="SPAN_24">{{ created }}</span></a>{{#if edited}} <span
-							class="SPAN_25">·</span>
-					<span class="SPAN_26">edited {{ edited }}</span>{{/if}}
-				<div class="DIV_27">
+			<div class="DIV_17 dark-mode-meta">
+				<div class="DIV_18">
+					<a href="/user/bdkrzy" class="A_19 dark-mode-user">{{ author }}</a>
+					<div class="DIV_20">
 					</div>
-					<div class="DIV_GILDS">
-						{{#if silvers}}
-					<span class="SPAN_SILVER">
-							<i class="I_SILVER">
-								<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-silver-cartoon.png"
-									class="IMG_SILVER" alt='' />
-							</i>
-							{{#ifgt silvers 1}}
-						{{ silvers }}
-							{{/ ifgt}}
-					</span>
-						{{/if}}
-					{{#if golds}}
-					<span class="SPAN_GOLD">
-							<i class="I_GOLD">
-								<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-gold-cartoon.png"
-									class="IMG_GOLD" alt='' />
-							</i>
-							{{#ifgt golds 1}}
-						{{ golds }}
-							{{/ ifgt}}
-					</span>
-						{{/if}}
-					{{#if platina}}
-					<span class="SPAN_GOLD">
-							<i class="I_GOLD">
-								<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-platinum-cartoon.png"
-									class="IMG_GOLD" alt='' />
-							</i>
-							{{#ifgt platina 1}}
-						{{ golds }}
-							{{/ ifgt}}
-					</span>
-						{{/if}}
+				</div><span class="SPAN_21">{{ score }} points</span> <span class="SPAN_22">·</span> <a
+					href="/r/AskReddit/comments/ba30oe/whats_a_video_game_you_dislike_that_everybody/ek8p9mu/"
+					class="A_23" rel="nofollow"><span class="SPAN_24">{{ created }}</span></a>{{#if edited}} <span
+						class="SPAN_25">·</span>
+				<span class="SPAN_26">edited {{ edited }}</span>{{/if}}
+			<div class="DIV_27">
 				</div>
-				</div>
-				<div class="DIV_28">
-					<div class="DIV_29 dark-mode-text">
-						{{{body_html}}}
-				</div>
-				</div>
-				{{#if showBottom}}
-			<div class="DIV_31 dark-mode-bottom">
+				<div class="DIV_GILDS">
+					{{#if silvers}}
+				<span class="SPAN_SILVER">
+						<i class="I_SILVER">
+							<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-silver-cartoon.png"
+								class="IMG_SILVER" alt='' />
+						</i>
+						{{#ifgt silvers 1}}
+					{{ silvers }}
+						{{/ ifgt}}
+				</span>
+					{{/if}}
+				{{#if golds}}
+				<span class="SPAN_GOLD">
+						<i class="I_GOLD">
+							<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-gold-cartoon.png"
+								class="IMG_GOLD" alt='' />
+						</i>
+						{{#ifgt golds 1}}
+					{{ golds }}
+						{{/ ifgt}}
+				</span>
+					{{/if}}
+				{{#if platina}}
+				<span class="SPAN_GOLD">
+						<i class="I_GOLD">
+							<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-platinum-cartoon.png"
+								class="IMG_GOLD" alt='' />
+						</i>
+						{{#ifgt platina 1}}
+					{{ golds }}
+						{{/ ifgt}}
+				</span>
+					{{/if}}
+			</div>
+			</div>
+			<div class="DIV_28">
+				<div class="DIV_29 dark-mode-text">
+					{{{body_html}}}
+			</div>
+			</div>
+			<div class="DIV_31 dark-mode-bottom hide-until-active">
 					<button class="BUTTON_32" style="display: inline-block;">
 						<i class="I_33"></i>Reply
 				</button>
@@ -108,25 +107,7 @@ handles.registerPartial('comment', `
 					<button class="BUTTON_37">
 						Save
 				</button>
-				</div>
-				{{ else}}
-				<div class="DIV_31 hide">
-					<button class="BUTTON_32">
-						<i class="I_33"></i>Reply
-				</button>
-					<div class="DIV_34">
-						<button class="BUTTON_35">
-							Share
-					</button>
-					</div>
-					<button class="BUTTON_36">
-						Report
-				</button>
-					<button class="BUTTON_37">
-						Save
-				</button>
-				</div>
-				{{/if}}
+			</div>
 			{{#each replies as |reply|}}
 				{{> comment reply}}
 			{{/ each}}

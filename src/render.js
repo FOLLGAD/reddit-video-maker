@@ -46,7 +46,7 @@ module.exports.render = async function render(questionData, commentData, song) {
 		console.log("Added transitions...")
 		let soundFile = await addSound('../video-output/' + nosoundFile, '../static/' + song, 'withsound', 'mkv')
 		console.log("Added sound...")
-		let question = await renderQuestion(questionData)
+		let question = await renderQuestion(questionData, false)
 		console.log("Rendered question...")
 
 		videolist = [question, soundFile, outro]

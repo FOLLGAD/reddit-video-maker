@@ -302,7 +302,7 @@
         /*#BUTTON_UPVOTE:before, #BUTTON_12:before*/
 
         #DIV_UPVOTE {
-            /* color: rgb(135, 138, 140); */
+            color: rgb(135, 138, 140);
             cursor: pointer;
             display: inline-block;
             /* height: 16px; */
@@ -1773,19 +1773,11 @@
         .dark-mode-thread {
             border-right: 2px solid rgb(52, 53, 54) !important;
         }
-    </style>
 
-    {{#if upvoted}}
-    <style>
-        #DIV_UPVOTE,
-        #BUTTON_UPVOTE,
-        #I_UPVOTE,
-        #I_UPVOTE::before,
-        #I_UPVOTE::after {
+        #is_upvoted {
             color: rgb(255, 69, 0) !important;
         }
     </style>
-    {{/if}}
 </head>
 
 <body>

@@ -116,7 +116,7 @@ const server = http.createServer(async (req, res) => {
 				// TODO: Bearbeta innan skicka till render, beroende på options (ta bort edits osv)
 
 				let question = body.questionData
-				let comments = body.commentData.map(d => d.data)
+				let comments = body.commentData
 				let { song } = body.options
 
 				render(question, comments, song)
