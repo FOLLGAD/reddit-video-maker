@@ -2,7 +2,7 @@ let { renderComment, renderQuestion } = require('./api-fetch')
 let { addSound, concatFromVideolist } = require('./video')
 let fs = require('fs')
 
-let transition = '../static/transition.mkv'
+let transition = '../static/transition_dark.mkv'
 let outro = '../static/outro.mkv'
 
 // Input: thread; array of comment ID:s

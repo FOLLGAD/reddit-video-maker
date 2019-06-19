@@ -2,8 +2,6 @@ const { combineFinal, addSound } = require('../src/video')
 
 const fs = require('fs')
 
-// $ ffmpeg -i transition.mp4 -r 30 -ac 1 mono.mp4
-
 function pre(ext = 'mp4') {
     let files = fs.readdirSync('../for-compilation')
         .filter(d => {
@@ -18,7 +16,7 @@ function pre(ext = 'mp4') {
         return parseInt(a) > parseInt(b) ? 1 : -1
     })
 
-    videos = videos.reduce((r, a) => r.concat(a, '../static/transition.mkv'), [])
+    videos = videos.reduce((r, a) => r.concat(a, '../static/transition_dark.mkv'), [])
 
     console.log(videos)
 

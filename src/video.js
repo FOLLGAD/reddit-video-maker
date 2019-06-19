@@ -7,6 +7,8 @@ let spawn = child_process.spawn
 let color = '#19191a' // Dark mode
 // let color = '#ffffff' // Light mode
 
+// ffmpeg -i transition_new_dark.mp4 -c:a aac -c:v libx264 -r 25 -ac 2 -ar 24000 transition_dark.mkv
+
 let fileFormat = 'mkv' // MVK is preferred since it does not require re-encoding on every concat
 
 module.exports.audioVideoCombine = function createVideo(name, audioName, imgName) {
