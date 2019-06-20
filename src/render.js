@@ -42,12 +42,12 @@ module.exports.render = async function render(questionData, commentData, song) {
 	fs.writeFileSync('../videolists/all.txt', videolist)
 
 	try {
+		console.log("Adding transitions...")
 		let nosoundFile = await concatFromVideolist('all.txt', '../video-output/nosound.mkv')
-		console.log("Added transitions...")
+		console.log("Adding sound...")
 		let soundFile = await addSound('../video-output/' + nosoundFile, '../static/' + song, 'withsound', 'mkv')
-		console.log("Added sound...")
+		console.log("Rendering question...")
 		let question = await renderQuestion(questionData, false)
-		console.log("Rendered question...")
 
 		videolist = [question, soundFile, outro]
 			.map(pt => `file '${pt}'`)
@@ -56,9 +56,9 @@ module.exports.render = async function render(questionData, commentData, song) {
 		fs.writeFileSync('../videolists/all.txt', videolist)
 
 		let final = await concatFromVideolist('all.txt', '../video-output/final.mkv')
+		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
+		console.error("Rendering failed")
 		console.error(e)
 	}
-
-	console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 }
