@@ -147,12 +147,14 @@ async function sequentialWork(works) {
 			arr.push(result)
 		} catch (e) {
 			// Do nothing, skips frame
+			console.log("Failed")
+			console.error(e)
 		}
 	}
 	return arr
 }
 
-function hydrateComment(comment) {
+function hydrateComment(comment, upvoteProb = 0.1) {
 	comment.score = formatNum(comment.score)
 	comment.created = timeAgo(comment.created_utc * 1000)
 	if (comment.edited) {
@@ -168,15 +170,14 @@ function hydrateComment(comment) {
 		comment.replies = comment.replies.map(hydrateComment)
 	}
 	comment.showBottom = true
-	comment.upvoted = Math.random() < 0.1 // ~10% of the posts will randomly be seen as upvoted
-	// comment.upvoted = true
+	comment.upvoted = Math.random() < upvoteProb // Some of the posts will randomly be seen as upvoted
 
 	return comment
 }
 
 // Should return the name of video of the created comment
 module.exports.renderComment = async function renderComment(commentData, name) {
-	let rootComment = hydrateComment(commentData)
+	let rootComment = hydrateComment(commentData, 0.1)
 
 	let tts = compileHtml(rootComment)
 
@@ -221,7 +222,7 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 }
 
 module.exports.renderQuestion = function renderQuestion(questionData, renderMp4 = true) {
-	let hydrated = hydrateComment(questionData)
+	let hydrated = hydrateComment(questionData, 0.5)
 
 	let $ = cheerio.load(hydrated.title)
 	let text = $.text()
