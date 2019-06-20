@@ -101,6 +101,7 @@ const server = http.createServer(async (req, res) => {
 				res.end(jso)
 			} break
 			case 'get-info': {
+				// Currently unused
 				// http://localhost:8000/get-info?comments=cmnt1,cmnt2,cmnt3
 				let comments = querystring.parse(parsedUrl.query).comments.split(',')
 				let commentData = await getInfo(comments) // Should return an array of comment data
