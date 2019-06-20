@@ -38,6 +38,7 @@ const foulDictionary = {
     ' rapist': ' r pist',
     cock: 'c ck',
     whore: 'hoe',
+    pussy: 'p ssy',
 }
 
 function sanitize(text) {
@@ -62,6 +63,7 @@ const foulSpanArray = module.exports.foulSpanArray = [
     /( r)(a)(pist)/,
     /(c)(o)(ck)[^an]/, // doesnt match 'cockney', 'cockatrice'
     /(wh)(o)(re)/,
+    /(p)(u)(ssy)/,
 ]
 
 // Old swearword dict
