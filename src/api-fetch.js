@@ -1,13 +1,13 @@
 const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
-const { synthDaniel, foulSpanDictionary } = require('./synth')
+const { synthDaniel, foulSpanArray } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
 
 let sanitizeHtml = module.exports.sanitizeHtml = str => {
-	for (key in foulSpanDictionary) {
-		str = str.replace(new RegExp(key, 'gi'), foulSpanDictionary[key])
-	}
+	foulSpanArray.forEach(reg => {
+		str = str.replace(new RegExp(reg, 'gi'), '$1<span class="blur">$2</span>$3')
+	})
 	return str
 }
 
@@ -168,7 +168,8 @@ function hydrateComment(comment) {
 		comment.replies = comment.replies.map(hydrateComment)
 	}
 	comment.showBottom = true
-	comment.upvoted = Math.random() < 0.1 // ~10% of the posts will randomly be seen as upvoted
+	// comment.upvoted = Math.random() < 0.1 // ~10% of the posts will randomly be seen as upvoted
+	comment.upvoted = true
 
 	return comment
 }

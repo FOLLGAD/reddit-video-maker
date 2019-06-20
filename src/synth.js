@@ -25,44 +25,6 @@ module.exports.synthDaniel = function synthDaniel(name, text) {
     })
 }
 
-// Google API
-/* 
-const textToSpeech = require('@google-cloud/text-to-speech');
-const client = new textToSpeech.TextToSpeechClient();
-const voice = 'en-GB-Wavenet-D'
-const rate = 1.25
-*/
-
-/*
-module.exports.synthGoogle = function synthGoogle(name, text) {
-    let sanText = sanitize(text)
-
-    const request = {
-        input: { text: sanText },
-        voice: { languageCode: 'en-GB', ssmlGender: 'MALE', name: voice },
-        audioConfig: { audioEncoding: 'MP3', speakingRate: rate },
-    }
-
-    let promise = new Promise((resolve, reject) => {
-        client.synthesizeSpeech(request, (err, response) => {
-            if (err) {
-                return reject(err)
-            }
-
-            // Write the binary audio content to a local file
-            fs.writeFile(`../audio-output/${name}`, response.audioContent, 'binary', (err) => {
-                if (err) {
-                    return reject(err)
-                }
-                resolve(name)
-            })
-        })
-    })
-
-    return promise
-}
-*/
-
 // What synth will say instead
 const foulDictionary = {
     fuck: 'f ',
@@ -75,9 +37,34 @@ const foulDictionary = {
     ' rape': ' r e',
     ' rapist': ' r pist',
     cock: 'c ck',
+    whore: 'hoe',
+}
+
+function sanitize(text) {
+    for (key in foulDictionary) {
+        // Replaces every occurance with the the corresponding value in the dictionary
+        text = text.replace(new RegExp(key, 'gi'), foulDictionary[key])
+    }
+    return text
 }
 
 // What the html will display instead
+const foulSpanArray = module.exports.foulSpanArray = [
+    /(f)(u)(ck)/,
+    /(sh)(i)(t)/,
+    /(b)(it)(ch)/,
+    /(c)(un)(t)/,
+    /(ni)(gg)(a)/,
+    /(ni)(gge)(r)/,
+    /(a)(ss)(hole)/,
+    /(p)(o)(rn)/,
+    /( r)(a)(pe)/,
+    /( r)(a)(pist)/,
+    /(c)(o)(ck)[^an]/, // doesnt match 'cockney', 'cockatrice'
+    /(wh)(o)(re)/,
+]
+
+// Old swearword dict
 const foulSpanDictionary = module.exports.foulSpanDictionary = {
     fuck: 'f<span class="blur">uck</span>',
     shit: 'sh<span class="blur">i</span>t',
@@ -89,14 +76,6 @@ const foulSpanDictionary = module.exports.foulSpanDictionary = {
     " rape": ' r<span class="blur">ap</span>e',
     " rapist": ' r<span class="blur">ap</span>ist',
     cock: 'c<span class="blur">o</span>ck',
-}
-
-function sanitize(text) {
-    for (key in foulDictionary) {
-        // Replaces every occurance with the the corresponding value in the dictionary
-        text = text.replace(new RegExp(key, 'gi'), foulDictionary[key])
-    }
-    return text
 }
 
 // List google voices
