@@ -43,7 +43,7 @@ function full(song) {
             return addSound('../out/' + file, '../static/' + song, 'with-song', 'mkv')
         })
         .then(file => {
-            let videos = ['../video-output/Q.mkv', '../out/' + file, '../static/outro.mkv']
+            let videos = ['../video-output/Q.mkv', '../out/' + file, '../static/outro_dark.mkv']
             return combineFinal(videos, 'final', 'mp4')
         })
         .then(console.log)

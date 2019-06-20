@@ -3,7 +3,7 @@ let { addSound, concatFromVideolist } = require('./video')
 let fs = require('fs')
 
 let transition = '../static/transition_dark.mkv'
-let outro = '../static/outro.mkv'
+let outro = '../static/outro_dark.mkv'
 
 // Input: thread; array of comment ID:s
 // Put transitions after every comment and add song.
