@@ -142,7 +142,7 @@ async function launchComment(name, markup) {
 
 	if (height * dsf > 1080) {
 		// Crash
-		console.error("Too tall:", calcHeight)
+		console.error("Too tall:", height * dsf)
 		throw new Error("Comment output image was too tall.")
 	}
 

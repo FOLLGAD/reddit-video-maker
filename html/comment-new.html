@@ -1083,7 +1083,7 @@
             /* LIGHT MODE */
             /* color: rgb(183, 185, 186); */
             /* fill: rgb(183, 185, 186); */
-            
+
             /* DARK MODE */
             color: rgb(129, 131, 132);
             fill: rgb(129, 131, 132);
@@ -1127,11 +1127,11 @@
             /* LIGHT MODE */
             /* color: rgb(183, 185, 186); */
             /* fill: rgb(183, 185, 186); */
-            
+
             /* DARK MODE */
             color: rgb(129, 131, 132);
             fill: rgb(129, 131, 132);
-            
+
             content: '';
             text-align: center;
             word-break: break-word;
@@ -1573,13 +1573,21 @@
             border-right: 2px solid rgb(52, 53, 54) !important;
         }
 
-        .is_upvoted, .is_upvoted::before {
+        .is_upvoted,
+        .is_upvoted::before {
             color: rgb(255, 69, 0) !important;
         }
 
         .DIV_1 .DIV_1 {
             /* All child-comments should have negative margin */
             margin-left: -13px;
+        }
+
+        blockquote {
+            border-left: 4px solid rgba(215, 218, 220, 0.2);
+            margin: 4px 0px 4px 8px;
+            padding-left: 8px;
+            quotes: none;
         }
     </style>
 </head>

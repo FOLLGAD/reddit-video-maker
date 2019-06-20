@@ -24,12 +24,12 @@ let compileHtml = function (rootComment) {
 	let rec = commentTree => {
 		let $ = cheerio.load(commentTree.body_html)
 
-		$('p,li').addClass('text')
-		$('li').addClass('hide-until-active') // To hide the list dots until they're needed
+		$('p,li,blockquote').addClass('text')
+		$('li,blockquote').addClass('hide-until-active') // To hide the list dots until they're needed
 
 		// Removes .text class from all <p> with <li> children
 		$('p li').parent('p').removeClass('text')
-		$('li p').parent('li').removeClass('text')
+		$('p,li,blockquote').parents('p,li,blockquote').removeClass('text')
 
 		let tts = []
 
@@ -135,25 +135,6 @@ function compileQuestion($) {
 	return tts
 }
 
-async function sequentialWork(works) {
-	let arr = []
-	for (let i = 0; i < works.length; i++) {
-		let obj = works[i]
-		let imgPromise = launch(obj.name, obj.type, obj.imgObj)
-		let audioPromise = synthDaniel(obj.name + '.mp3', obj.tts)
-		try {
-			let [img, audio] = await Promise.all([imgPromise, audioPromise])
-			let result = await audioVideoCombine(obj.name, audio, img)
-			arr.push(result)
-		} catch (e) {
-			// Do nothing, skips frame
-			console.log("Failed")
-			console.error(e)
-		}
-	}
-	return arr
-}
-
 function hydrateComment(comment, upvoteProb = 0.1) {
 	comment.score = formatNum(comment.score)
 	comment.created = timeAgo(comment.created_utc * 1000)
@@ -173,6 +154,29 @@ function hydrateComment(comment, upvoteProb = 0.1) {
 	comment.upvoted = Math.random() < upvoteProb // Some of the posts will randomly be seen as upvoted
 
 	return comment
+}
+
+async function sequentialWork(works) {
+	let arr = []
+	for (let i = 0; i < works.length; i++) {
+		let obj = works[i]
+		let imgPromise = launch(obj.name, obj.type, obj.imgObj)
+		let audioPromise = synthDaniel(obj.name + '.mp3', obj.tts)
+		try {
+			let [img, audio] = await Promise.all([imgPromise, audioPromise])
+			let result = await audioVideoCombine(obj.name, audio, img)
+			arr.push(result)
+		} catch (e) {
+			// Do nothing, skips frame
+			console.log("Failed")
+			console.error(e)
+		}
+	}
+	if (arr.length === 0) {
+		// Skip this shit
+		throw new Error("Comment render: No segments succeeded.")
+	}
+	return arr
 }
 
 // Should return the name of video of the created comment
