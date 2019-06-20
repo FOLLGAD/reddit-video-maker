@@ -73,6 +73,7 @@ const foulDictionary = {
     asshole: 'a-hole',
     porn: 'p rn',
     ' rape': ' r e',
+    ' rapist': ' r pist',
     cock: 'c ck',
 }
 
@@ -86,6 +87,7 @@ const foulSpanDictionary = module.exports.foulSpanDictionary = {
     asshole: 'a<span class="blur">ss</span>hole',
     porn: 'p<span class="blur">o</span>rn',
     " rape": ' r<span class="blur">ap</span>e',
+    " rapist": ' r<span class="blur">ap</span>ist',
     cock: 'c<span class="blur">o</span>ck',
 }
 
