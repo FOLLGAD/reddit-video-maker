@@ -638,6 +638,10 @@
         .text, .text * {
             color: rgb(215, 218, 220);
         }
+
+        .is_upvoted, .is_upvoted::before {
+            color: rgb(255, 69, 0) !important;
+        }
     </style>
 </head>
 
@@ -647,7 +651,7 @@
             <div id="DIV_4">
                 <button id="BUTTON_5">
                     <div id="DIV_6">
-                        <i id="I_7"></i>
+                        <i id="I_7" class="{{if upvoted}}is_upvoted{{/if}}"></i>
                     </div>
                 </button>
                 <div id="DIV_8">
