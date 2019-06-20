@@ -118,7 +118,7 @@ handles.registerPartial('comment', `
 `)
 
 const commentTemplate = module.exports.commentTemplate = handles.compile(fs.readFileSync('../html/comment-new.html').toString())
-const questionTemplate = handles.compile(fs.readFileSync('../html/question.html').toString())
+const questionTemplate = module.exports.questionTemplate = handles.compile(fs.readFileSync('../html/question.html').toString())
 
 async function launchComment(name, markup) {
 	const browser = await puppeteer.launch({
@@ -130,12 +130,17 @@ async function launchComment(name, markup) {
 	const filename = `${name}.png`
 
 	await page.setContent(markup);
-	const height = await page.$eval('.DIV_1', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
 
 	let dsf = 2.4
-	let calcHeight = (height + 15) * dsf
+	page.setViewport({
+		width: 1920 / dsf,
+		height: 1080 / dsf,
+		deviceScaleFactor: dsf,
+	})
 
-	if (calcHeight > 1080) {
+	const height = await page.$eval('.DIV_1', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
+
+	if (height * dsf > 1080) {
 		// Crash
 		console.error("Too tall:", calcHeight)
 		throw new Error("Comment output image was too tall.")
@@ -143,7 +148,7 @@ async function launchComment(name, markup) {
 
 	page.setViewport({
 		width: 1920 / dsf,
-		height: height + 15,
+		height: height,
 		deviceScaleFactor: dsf,
 	})
 
@@ -161,10 +166,18 @@ async function launchQuestion(name, context) {
 	let markup = questionTemplate(context)
 
 	await page.setContent(markup)
-	const height = await page.$eval('#DIV_1', e => e.scrollHeight)
+
 	page.setViewport({
 		width: 1920 / 3,
-		height: height + 15,
+		height: 1080,
+		deviceScaleFactor: 3,
+	})
+
+	const height = await page.$eval('#DIV_1', e => e.scrollHeight)
+
+	page.setViewport({
+		width: 1920 / 3,
+		height: height,
 		deviceScaleFactor: 3,
 	})
 
