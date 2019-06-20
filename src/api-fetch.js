@@ -168,8 +168,8 @@ function hydrateComment(comment) {
 		comment.replies = comment.replies.map(hydrateComment)
 	}
 	comment.showBottom = true
-	// comment.upvoted = Math.random() < 0.1 // ~10% of the posts will randomly be seen as upvoted
-	comment.upvoted = true
+	comment.upvoted = Math.random() < 0.1 // ~10% of the posts will randomly be seen as upvoted
+	// comment.upvoted = true
 
 	return comment
 }
