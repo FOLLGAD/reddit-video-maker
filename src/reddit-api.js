@@ -92,6 +92,7 @@ module.exports.fetchThread = async function fetchComments(threadId, options = de
 			edited: comm.edited,
 			gildings: comm.gildings,
 			body_html: comm.body_html,
+			id: comm.id,
 
 			replies: comm.replies && comm.replies.data && comm.replies.data.children.slice(0, -1).map(extractComment),
 		}
@@ -105,6 +106,12 @@ module.exports.fetchThread = async function fetchComments(threadId, options = de
 			num_comments: question.num_comments,
 			gildings: question.gildings,
 			title: question.title,
+			id: question.id,
+			nsfw: question.thumbnail === 'nsfw',
+			flair: {
+				text: question.link_flair_text || null,
+				bgColor: question.link_flair_background_color,
+			},
 		}
 	}
 

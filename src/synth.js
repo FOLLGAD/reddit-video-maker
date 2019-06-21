@@ -39,6 +39,7 @@ const foulDictionary = {
     cock: 'c ck',
     whore: 'hoe',
     pussy: 'p ssy',
+    '.com': ' dot com',
 }
 
 function sanitize(text) {
