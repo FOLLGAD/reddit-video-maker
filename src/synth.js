@@ -26,6 +26,67 @@ module.exports.synthDaniel = function synthDaniel(name, text) {
 }
 
 // What synth will say instead
+const foulDict2 = [{
+    regex: /fuck/,
+    replace: "f ",
+}, {
+    regex: /shit/,
+    replace: "sh ",
+}, {
+    regex: /bitch/,
+    replace: "b ",
+}, {
+    regex: /cunt/,
+    replace: "c ",
+}, {
+    regex: /nigga/,
+    replace: "n-word",
+}, {
+    regex: /asshole/,
+    replace: "a-hole",
+}, {
+    regex: / ass /,
+    replace: " ay ",
+}, {
+    regex: /pornography/,
+    replace: "p graphy",
+}, {
+    regex: /porn/,
+    replace: "p rn",
+}, {
+    regex: / rape/,
+    replace: " r e",
+}, {
+    regex: / rapist/,
+    replace: " r pist",
+}, {
+    regex: /cock/,
+    replace: "c k",
+}, {
+    regex: /whore/,
+    replace: "or",
+}, {
+    regex: /pussy/,
+    replace: "p s y",
+}, {
+    regex: /dick/,
+    replace: "d ",
+}, {
+    regex: /tits/,
+    replace: "t ts",
+}, {
+    regex: /titties/,
+    replace: "t ts",
+}, {
+    regex: / cum/,
+    replace: "c m",
+}, {
+    regex: /sex/,
+    replace: "s",
+}, {
+    regex: /.com/,
+    replace: " dot com"
+}]
 const foulDictionary = {
     fuck: 'f ',
     shit: 'sh ',
@@ -46,7 +107,7 @@ const foulDictionary = {
     titties: 't ts',
     ' cum': 'c m',
     sex: 's',
-    '.com': ' dot com',
+    '\\.com': ' dot com',
 }
 
 function sanitize(text) {
