@@ -84,7 +84,7 @@ const foulDict2 = [{
     regex: /sex/,
     replace: "s",
 }, {
-    regex: /.com/,
+    regex: /\.com/,
     replace: " dot com"
 }]
 const foulDictionary = {
