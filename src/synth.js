@@ -59,8 +59,8 @@ function sanitize(text) {
 
 // What the html will display instead
 const foulSpanArray = module.exports.foulSpanArray = [
-    /(f)(uck)/,
-    /(sh)(it)/,
+    /(f)(uck)()/,
+    /(sh)(it)()/,
     /(b)(it)(ch)/,
     /(c)(un)(t)/,
     /(ni)(gg)(a)/,
