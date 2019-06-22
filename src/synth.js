@@ -33,12 +33,19 @@ const foulDictionary = {
     cunt: 'c ',
     nigga: 'n-word',
     asshole: 'a-hole',
+    ' ass ': ' ay ',
+    pornography: 'p graphy',
     porn: 'p rn',
     ' rape': ' r e',
     ' rapist': ' r pist',
-    cock: 'c ck',
-    whore: 'hoe',
-    pussy: 'p ssy',
+    cock: 'c k',
+    whore: 'or',
+    pussy: 'p s y',
+    dick: 'd ',
+    tits: 't ts',
+    titties: 't ts',
+    ' cum': 'c m',
+    sex: 's',
     '.com': ' dot com',
 }
 
@@ -52,34 +59,26 @@ function sanitize(text) {
 
 // What the html will display instead
 const foulSpanArray = module.exports.foulSpanArray = [
-    /(f)(u)(ck)/,
-    /(sh)(i)(t)/,
+    /(f)(uck)/,
+    /(sh)(it)/,
     /(b)(it)(ch)/,
     /(c)(un)(t)/,
     /(ni)(gg)(a)/,
     /(ni)(gge)(r)/,
     /(a)(ss)(hole)/,
-    /(p)(o)(rn)/,
-    /( r)(a)(pe)/,
-    /( r)(a)(pist)/,
-    /(c)(o)(ck)[^an]/, // doesnt match 'cockney', 'cockatrice'
+    /( a)(ss)( )/,
+    /(p)(or)(n)/,
+    /( c)(u)(m)/,
+    /( r)(ap)(e)/,
+    /( r)(ap)(ist)/,
+    /(c)(o)(ck[^an])/, // doesnt match 'cockney', 'cockatrice'
+    /( t)(i)(ts)/,
+    /(t)(it)(ties)/,
+    /( d)(ic)(k)/,
     /(wh)(o)(re)/,
-    /(p)(u)(ssy)/,
+    /(p)(us)(sy)/,
+    /(s)(e)(x)/,
 ]
-
-// Old swearword dict
-const foulSpanDictionary = module.exports.foulSpanDictionary = {
-    fuck: 'f<span class="blur">uck</span>',
-    shit: 'sh<span class="blur">i</span>t',
-    bitch: 'b<span class="blur">it</span>ch',
-    cunt: 'c<span class="blur">un</span>t',
-    nigga: 'ni<span class="blur">gg</span>a',
-    asshole: 'a<span class="blur">ss</span>hole',
-    porn: 'p<span class="blur">o</span>rn',
-    " rape": ' r<span class="blur">ap</span>e',
-    " rapist": ' r<span class="blur">ap</span>ist',
-    cock: 'c<span class="blur">o</span>ck',
-}
 
 // List google voices
 async function listVoices() {
