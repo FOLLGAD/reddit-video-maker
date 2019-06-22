@@ -13,7 +13,7 @@ let sanitizeHtml = module.exports.sanitizeHtml = str => {
 
 function splitString(str) {
 	return str
-		.split(/<br>|(.+?[\.,?!]+["'\)\s]+)/g)
+		.split(/<br>|(.+?[\.,?!]+["'\)\s\.,?!]+)/g)
 		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
 }
 
