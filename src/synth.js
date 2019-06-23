@@ -107,6 +107,7 @@ const foulDictionary = {
     titties: 't ts',
     ' cum': 'c m',
     sex: 's',
+    'damn': 'darn',
     '\\.com': ' dot com',
 }
 
@@ -139,6 +140,7 @@ const foulSpanArray = module.exports.foulSpanArray = [
     /( d)(ic)(k)/,
     /(wh)(o)(re)/,
     /(p)(us)(sy)/,
+    /(d)(a)(mn)/,
     /(s)(e)(x)/,
 ]
 
