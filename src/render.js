@@ -30,6 +30,7 @@ module.exports.render = async function render(questionData, commentData, song) {
 			videolist.push(transition)
 			console.log("Successfully rendered comment", i)
 		} catch (e) {
+			console.error(e)
 			console.log("Comment number", i, "failed to render. It will not be added.")
 		}
 	}

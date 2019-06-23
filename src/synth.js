@@ -93,7 +93,6 @@ const foulDictionary = {
     bitch: 'b ',
     cunt: 'c ',
     nigga: 'n-word',
-    asshole: 'a-hole',
     ' ass ': ' ay ',
     pornography: 'p graphy',
     porn: 'p rn',
@@ -109,6 +108,8 @@ const foulDictionary = {
     sex: 's',
     'damn': 'darn',
     '\\.com': ' dot com',
+    'retard': 'ret',
+    'ass(hat|face|head|burger|hole)': 'a-$1',
 }
 
 function sanitize(text) {
@@ -128,8 +129,7 @@ const foulSpanArray = module.exports.foulSpanArray = [
     /(c)(un)(t)/,
     /(ni)(gg)(a)/,
     /(ni)(gge)(r)/,
-    /(a)(ss)(hole)/,
-    /( a)(ss)(\D)/,
+    /(\Wa)(ss)(\W)/,
     /(p)(or)(n)/,
     /( c)(u)(m)/,
     /( r)(ap)(e)/,
@@ -142,6 +142,8 @@ const foulSpanArray = module.exports.foulSpanArray = [
     /(p)(us)(sy)/,
     /(d)(a)(mn)/,
     /(s)(e)(x)/,
+    /(ret)(ar)(d)/,
+    /(a)(ss)(hat|face|head|burger|hole)/,
 ]
 
 // List google voices
