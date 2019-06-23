@@ -1,9 +1,10 @@
 const fs = require('fs')
 const { makeCall } = require('./daniel')
+const { sanitizeSynth } = require('./nono')
 
 module.exports.synthDaniel = function synthDaniel(name, text) {
     text = text.replace(/&/g, 'and') // '&' doesn't work for Daniel, he says &amp instead
-    let sanText = sanitize(text)
+    let sanText = sanitizeSynth(text)
 
     return new Promise((resolve, reject) => {
         let reg = /[\d\w]/
@@ -24,127 +25,6 @@ module.exports.synthDaniel = function synthDaniel(name, text) {
             })
     })
 }
-
-// What synth will say instead
-const foulDict2 = [{
-    regex: /fuck/,
-    replace: "f ",
-}, {
-    regex: /shit/,
-    replace: "sh ",
-}, {
-    regex: /bitch/,
-    replace: "b ",
-}, {
-    regex: /cunt/,
-    replace: "c ",
-}, {
-    regex: /nigga/,
-    replace: "n-word",
-}, {
-    regex: /asshole/,
-    replace: "a-hole",
-}, {
-    regex: / ass /,
-    replace: " ay ",
-}, {
-    regex: /pornography/,
-    replace: "p graphy",
-}, {
-    regex: /porn/,
-    replace: "p rn",
-}, {
-    regex: / rape/,
-    replace: " r e",
-}, {
-    regex: / rapist/,
-    replace: " r pist",
-}, {
-    regex: /cock/,
-    replace: "c k",
-}, {
-    regex: /whore/,
-    replace: "or",
-}, {
-    regex: /pussy/,
-    replace: "p s y",
-}, {
-    regex: /dick/,
-    replace: "d ",
-}, {
-    regex: /tits/,
-    replace: "t ts",
-}, {
-    regex: /titties/,
-    replace: "t ts",
-}, {
-    regex: / cum/,
-    replace: "c m",
-}, {
-    regex: /sex/,
-    replace: "s",
-}, {
-    regex: /\.com/,
-    replace: " dot com"
-}]
-const foulDictionary = {
-    fuck: 'f ',
-    shit: 'sh ',
-    bitch: 'b ',
-    cunt: 'c ',
-    nigga: 'n-word',
-    ' ass ': ' ay ',
-    pornography: 'p graphy',
-    porn: 'p rn',
-    ' rape': ' r e',
-    ' rapist': ' r pist',
-    cock: 'c k',
-    whore: 'or',
-    pussy: 'p s y',
-    dick: 'd ',
-    tits: 't ts',
-    titties: 't ts',
-    ' cum': 'c m',
-    sex: 's',
-    'damn': 'darn',
-    '\\.com': ' dot com',
-    'retard': 'ret',
-    'ass(hat|face|head|burger|hole)': 'a-$1',
-}
-
-function sanitize(text) {
-    text = text.replace(/([^\w\s\d])[^\w\s\d]+/g, '$1')
-    for (key in foulDictionary) {
-        // Replaces every occurance with the the corresponding value in the dictionary
-        text = text.replace(new RegExp(key, 'gi'), foulDictionary[key])
-    }
-    return text
-}
-
-// What the html will display instead
-const foulSpanArray = module.exports.foulSpanArray = [
-    /(f)(uck)()/,
-    /(sh)(it)()/,
-    /(b)(it)(ch)/,
-    /(c)(un)(t)/,
-    /(ni)(gg)(a)/,
-    /(ni)(gge)(r)/,
-    /(\Wa)(ss)(\W)/,
-    /(p)(or)(n)/,
-    /(\Wc)(u)(m)/,
-    /(\Wr)(ap)(e)/,
-    /(\Wr)(ap)(ist)/,
-    /(c)(o)(ck[^an])/, // doesnt match 'cockney', 'cockatrice'
-    /(\Wt)(i)(ts)/,
-    /(t)(it)(ties)/,
-    /(\Wd)(ic)(k)/,
-    /(wh)(o)(re)/,
-    /(p)(us)(sy)/,
-    /(d)(a)(mn)/,
-    /(s)(e)(x)/,
-    /(ret)(ar)(d)/,
-    /(a)(ss)(hat|face|head|burger|hole)/,
-]
 
 // List google voices
 async function listVoices() {

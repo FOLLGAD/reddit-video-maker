@@ -5,13 +5,6 @@ const { synthDaniel, foulSpanArray } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
 
-let sanitizeHtml = module.exports.sanitizeHtml = str => {
-	foulSpanArray.forEach(reg => {
-		str = str.replace(new RegExp(reg, 'gi'), '$1<span class="blur">$2</span>$3')
-	})
-	return str
-}
-
 function splitString(str) {
 	return str
 		.split(/<br>|(.+?[\.,?!]+["'\)\s\.,?!]+)/g)
