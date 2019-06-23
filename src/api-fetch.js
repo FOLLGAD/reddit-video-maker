@@ -1,5 +1,6 @@
 const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
+const fs = require('fs')
 const { synthDaniel, foulSpanArray } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
@@ -182,23 +183,21 @@ async function sequentialWork(works) {
 // Should return the name of video of the created comment
 module.exports.renderComment = async function renderComment(commentData, name) {
 	let rootComment = hydrateComment(commentData, 0.1)
-
 	let tts = compileHtml(rootComment)
-
 	let workLine = []
-
 	let markup = commentTemplate(rootComment)
-
 	let $ = cheerio.load(markup)
-
 	let ln = $('span.hide').length
+
+	fs.writeFileSync('./test.html', markup)
 
 	$('span.hide').each((i, _) => {
 		let curr = $('.hide#' + i)
+
 		curr.removeClass('hide')
 		curr.parents('.hide-until-active').removeClass('hide-until-active') // Activate parent elements
 
-		if (curr.is(':last-child') && curr.parentsUntil('.DIV_29').is(':last-child')) {
+		if (curr.is(':last-child') && curr.closest('.DIV_29 > *').is(':last-child')) {
 			// Is last segment of comment; display bottom
 			curr.closest('.DIV_28').siblings('.DIV_31').removeClass('hide-until-active')
 		}
