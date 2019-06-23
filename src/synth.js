@@ -111,6 +111,7 @@ const foulDictionary = {
 }
 
 function sanitize(text) {
+    text = text.replace(/([^\w\s\d])[^\w\s\d]+/g, '$1')
     for (key in foulDictionary) {
         // Replaces every occurance with the the corresponding value in the dictionary
         text = text.replace(new RegExp(key, 'gi'), foulDictionary[key])
