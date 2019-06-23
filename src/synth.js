@@ -129,7 +129,7 @@ const foulSpanArray = module.exports.foulSpanArray = [
     /(ni)(gg)(a)/,
     /(ni)(gge)(r)/,
     /(a)(ss)(hole)/,
-    /( a)(ss)( )/,
+    /( a)(ss)(\D)/,
     /(p)(or)(n)/,
     /( c)(u)(m)/,
     /( r)(ap)(e)/,
