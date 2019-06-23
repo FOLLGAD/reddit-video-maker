@@ -1,4 +1,3 @@
-
 // What synth will say instead
 const foulDict2 = [{
 	regex: /fuck/,
@@ -55,6 +54,9 @@ const foulDict2 = [{
 	regex: /retard/,
 	replace: "ree",
 }, {
+	regex: /damn/,
+	replace: "darn",
+}, {
 	regex: /\.com/,
 	replace: " dot com",
 }, {
@@ -64,38 +66,6 @@ const foulDict2 = [{
 	regex: /ass(hat|face|head|burger|hole)/,
 	replace: "a-$1",
 }]
-
-const foulDictionary = {
-	fuck: 'f ',
-	shit: 'sh ',
-	bitch: 'b ',
-	cunt: 'c ',
-	nigga: 'n-word',
-	' ass ': ' ay ',
-	pornography: 'p graphy',
-	porn: 'p rn',
-	' rape': ' r e',
-	' rapist': ' r pist',
-	cock: 'c k',
-	whore: 'or',
-	pussy: 'p s y',
-	dick: 'd ',
-	tits: 't ts',
-	titties: 't ts',
-	' cum': 'c m',
-	sex: 's',
-	'damn': 'darn',
-	'\\.com': ' dot com',
-	'retard': 'ret',
-	'ass(hat|face|head|burger|hole)': 'a-$1',
-}
-
-module.exports.sanitizeHtml = function (str) {
-	foulSpanArray.forEach(reg => {
-		str = str.replace(new RegExp(reg, 'gi'), '$1<span class="blur">$2</span>$3')
-	})
-	return str
-}
 
 // Sanitize tts text.
 module.exports.sanitizeSynth = function (text) {
@@ -115,19 +85,26 @@ const foulSpanArray = module.exports.foulSpanArray = [
 	/(c)(un)(t)/,
 	/(ni)(gg)(a)/,
 	/(ni)(gge)(r)/,
-	/(\Wa)(ss)(\W)/,
-	/(p)(or)(n)/,
-	/(\Wc)(u)(m)/,
-	/(\Wr)(ap)(e)/,
-	/(\Wr)(ap)(ist)/,
-	/(c)(o)(ck[^an])/, // doesnt match 'cockney', 'cockatrice'
-	/(\Wt)(i)(ts)/,
+	/(p)(o)(rn)/,
+	/((?:\W|^)a)(ss)(\W|$)/,
+	/((?:\W|^)r)(ap)(e|ist)/,
+	/((?:\W|^)c)(u)(m)/,
+	/((?:\W|^)t)(i)(ts)/,
 	/(t)(it)(ties)/,
-	/(\Wd)(ic)(k)/,
-	/(wh)(o)(re)/,
+	/(c)(o)(ck[^an])/, // doesnt match 'cockney', 'cockatrice'
+	/((?:\W)d)(ic)(k)/,
+	/(wh)(or)(e)/,
 	/(p)(us)(sy)/,
 	/(d)(a)(mn)/,
 	/(s)(e)(x)/,
+	/(d)(ic)(k)/,
 	/(ret)(ar)(d)/,
 	/(a)(ss)(hat|face|head|burger|hole)/,
 ]
+
+module.exports.sanitizeHtml = function (str) {
+	foulSpanArray.forEach(reg => {
+		str = str.replace(new RegExp(reg, 'gi'), '$1<span class="blur">$2</span>$3')
+	})
+	return str
+}
