@@ -15,5 +15,8 @@
     "node-time-ago": "^1.0.0",
     "open": "^6.3.0",
     "puppeteer": "^1.15.0"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
   }
 }
