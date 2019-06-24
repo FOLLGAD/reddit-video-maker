@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { makeCall } = require('./daniel')
-const { sanitizeSynth } = require('./nono')
+const { sanitizeSynth } = require('./sanitize')
 
 module.exports.synthDaniel = function synthDaniel(name, text) {
     text = text.replace(/&/g, 'and') // '&' doesn't work for Daniel, he says &amp instead

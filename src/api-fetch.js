@@ -1,7 +1,7 @@
 const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
 const fs = require('fs')
-const { synthDaniel, foulSpanArray } = require('./synth')
+const { synthDaniel } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
 
