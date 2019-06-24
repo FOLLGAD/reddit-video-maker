@@ -33,13 +33,7 @@ async function launchComment(name, markup) {
 		deviceScaleFactor: dsf,
 	})
 
-	const height = await page.$eval('.DIV_1', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
-
-	if (height * dsf > 1080) {
-		// Crash
-		console.error("Too tall:", height * dsf)
-		throw new Error("Comment output image was too tall.")
-	}
+	let height = await page.$eval('.DIV_1', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
 
 	page.setViewport({
 		width: 1920 / dsf,
@@ -47,7 +41,9 @@ async function launchComment(name, markup) {
 		deviceScaleFactor: dsf,
 	})
 
-	await page.screenshot({ encoding: 'binary', path: `../images/${filename}` })
+	await page.screenshot({
+		encoding: 'binary', path: `../images/${filename}`,
+	})
 	await browser.close()
 
 	return filename
