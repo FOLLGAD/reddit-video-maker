@@ -4,6 +4,7 @@ const fs = require('fs')
 const { synthDaniel } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
+const { sanitizeHtml } = require('./sanitize')
 
 function splitString(str) {
 	return str
