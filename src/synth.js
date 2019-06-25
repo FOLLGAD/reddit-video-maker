@@ -7,19 +7,29 @@ module.exports.synthSpeech = function (name, text) {
     let sanText = sanitizeSynth(text)
 
     if (!/[\d\w]/.test(sanText)) { // If no letter or number is in text, don't produce it
-        return new Promise.reject()
+        return Promise.reject()
     }
 
-    if (process.env.synthType === 'google') {
-        return module.exports.synthGoogle(name, sanText)
-    } else {
-        return module.exports.macTTSToFile(name, sanText)
-    }
+    return module.exports.synthOddcast(name, text)
+
+    // if (process.env.synthType === 'google') {
+    //     return module.exports.linuxTTSToFile(name, sanText)
+    // } else {
+    //     return module.exports.macTTSToFile(name, sanText)
+    // }
+}
+
+module.exports.linuxTTSToFile = function (name, text) {
+    return new Promise(resolve => {
+        let proc = spawn('espeak', ['-w', `../audio-output/${name}`, text])
+        proc.on('exit', () => {
+            resolve(name)
+        })
+    })
 }
 
 module.exports.macTTSToFile = function (name, text) {
     return new Promise(resolve => {
-
         if (name.split('.').pop() !== 'aiff') {
             console.error('Format must be .aiff')
         }
