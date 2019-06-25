@@ -3,10 +3,22 @@ const { makeCall } = require('./daniel')
 const { sanitizeSynth } = require('./sanitize')
 const { spawn } = require('child_process')
 
+module.exports.synthSpeech = function (name, text) {
+    let sanText = sanitizeSynth(text)
+
+    if (!/[\d\w]/.test(sanText)) { // If no letter or number is in text, don't produce it
+        return new Promise.reject()
+    }
+
+    if (process.env.synthType === 'google') {
+        return module.exports.synthGoogle(name, sanText)
+    } else {
+        return module.exports.macTTSToFile(name, sanText)
+    }
+}
+
 module.exports.macTTSToFile = function (name, text) {
     return new Promise(resolve => {
-        text = text.replace(/&/g, 'and') // '&' doesn't work for Daniel, he says &amp instead
-        text = text.replace('\n', '').trim()
 
         if (name.split('.').pop() !== 'aiff') {
             console.error('Format must be .aiff')
@@ -27,11 +39,10 @@ const voice = 'en-GB-Wavenet-D'
 const rate = 1.25
 
 module.exports.synthGoogle = function (name, text) {
-    let sanText = sanitize(text)
     const request = {
-        input: { text: sanText },
+        input: { text: text },
         voice: { languageCode: 'en-GB', ssmlGender: 'MALE', name: voice },
-        audioConfig: { audioEncoding: 'MP3', speakingRate: rate },
+        audioConfig: { audioEncoding: 'aiff', speakingRate: rate },
     }
     let promise = new Promise((resolve, reject) => {
         client.synthesizeSpeech(request, (err, response) => {
@@ -51,18 +62,8 @@ module.exports.synthGoogle = function (name, text) {
 }
 
 module.exports.synthOddcast = function (name, text) {
-    text = text.replace(/&/g, 'and') // '&' doesn't work for Daniel, he says &amp instead
-    let sanText = sanitizeSynth(text)
-
     return new Promise((resolve, reject) => {
-        let reg = /[\d\w]/
-
-        if (!reg.test(sanText)) { // If no letter or number is in text, don't produce it
-            reject()
-            return
-        }
-
-        makeCall(sanText)
+        makeCall(text)
             .then(res => res.buffer())
             .then(buffer => {
                 fs.writeFileSync(`../audio-output/${name}`, buffer)

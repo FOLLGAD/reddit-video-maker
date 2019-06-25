@@ -68,6 +68,7 @@ const server = http.createServer(async (req, res) => {
 		return;
 	}
 
+	process.env.synthType = process.platform === 'linux' ? 'google' : 'say-cmd'
 
 	res.setHeader('Content-Type', 'application/json')
 

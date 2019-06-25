@@ -69,6 +69,8 @@ const foulDict2 = [{
 
 // Sanitize tts text.
 module.exports.sanitizeSynth = function (text) {
+	text = text.replace(/&/g, ' and ') // '&' doesn't work for Daniel, he says &amp instead
+	text = text.replace('\n', '').trim()
 	text = text.replace(/([^\w\s\d])[^\w\s\d]+/g, '$1') // Turns repeated punctuation into one
 	text = text.replace(/(\s|^)[^\w\d\s]+(\s|$)/g, '$1$2') // Turns ` :) `, ` " ` into `  `
 	foulDict2.forEach(elem => {
