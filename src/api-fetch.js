@@ -163,7 +163,7 @@ async function sequentialWork(works) {
 			arr.push(result)
 		} catch (e) {
 			// Do nothing, skips frame
-			console.log("Failed")
+			console.log("Failed frame")
 			console.error(e)
 		}
 	}

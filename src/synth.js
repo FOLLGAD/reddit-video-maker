@@ -7,7 +7,7 @@ module.exports.synthSpeech = function (name, text) {
     let sanText = sanitizeSynth(text)
 
     if (!/[\d\w]/.test(sanText)) { // If no letter or number is in text, don't produce it
-        return Promise.reject()
+        return Promise.reject("Error: TTS is empty")
     }
 
     return module.exports.synthOddcast(name, text)
