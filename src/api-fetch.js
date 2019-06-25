@@ -156,7 +156,7 @@ async function sequentialWork(works) {
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
 		let imgPromise = launch(obj.name, obj.type, obj.imgObj)
-		let audioPromise = synthDaniel(obj.name + '.aiff', obj.tts)
+		let audioPromise = macTTSToFile(obj.name + '.aiff', obj.tts)
 		try {
 			let [img, audio] = await Promise.all([imgPromise, audioPromise])
 			let result = await audioVideoCombine(obj.name, audio, img)
