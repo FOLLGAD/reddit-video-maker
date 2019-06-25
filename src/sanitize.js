@@ -69,7 +69,8 @@ const foulDict2 = [{
 
 // Sanitize tts text.
 module.exports.sanitizeSynth = function (text) {
-	text = text.replace(/([^\w\s\d])[^\w\s\d]+/g, '$1')
+	text = text.replace(/([^\w\s\d])[^\w\s\d]+/g, '$1') // Turns repeated punctuation into one
+	text = text.replace(/(\s|^)[^\w\d\s]+(\s|$)/g, '$1$2') // Turns ` :) `, ` " ` into `  `
 	foulDict2.forEach(elem => {
 		// Replaces every occurance with the the corresponding value in the dictionary
 		text = text.replace(new RegExp(elem.regex, 'gi'), elem.replace)
