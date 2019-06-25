@@ -29,7 +29,7 @@ module.exports.audioVideoCombine = function createVideo(name, audioName, imgName
             .then(info => {
                 let duration = info.streams[0].duration
 
-                return exec(`ffmpeg -y -loop 1 -i ../images/${imgName} -i ../audio-output/${audioName} -t ${duration - 0.15} -vf "pad=height=ceil(ih/2)*2:color=${color}" -pix_fmt yuv420p -crf 20 -c:v libx264 -c:a aac -ar 24000 -r 25 ../video-temp/${filename}`)
+                return exec(`ffmpeg -hide_banner -loglevel panic -y -loop 1 -i ../images/${imgName} -i ../audio-output/${audioName} -t ${duration - 0.15} -vf "pad=height=ceil(ih/2)*2:color=${color}" -pix_fmt yuv420p -crf 20 -c:v libx264 -c:a aac -ar 24000 -r 25 ../video-temp/${filename}`)
             })
             .then(() => {
                 resolve(filename)
@@ -39,7 +39,7 @@ module.exports.audioVideoCombine = function createVideo(name, audioName, imgName
 
 module.exports.copyVideo = function (ins, out) {
     return new Promise(resolve => {
-        let s = spawn('ffmpeg', ['-y', '-i', ins, '-c', 'copy', out])
+        let s = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'panic', '-y', '-i', ins, '-c', 'copy', out])
         s.on('exit', () => {
             resolve(out)
         })
@@ -47,7 +47,7 @@ module.exports.copyVideo = function (ins, out) {
 }
 
 module.exports.concatFromVideolist = function concatFromVideolist(videolist, path) {
-    return exec(`ffmpeg -y -f concat -safe 0 -i ../videolists/${videolist} -ar 24000 -c:a aac -c:v copy -r 25 ${path}`)
+    return exec(`ffmpeg -hide_banner -loglevel panic -y -f concat -safe 0 -i ../videolists/${videolist} -ar 24000 -c:a aac -c:v copy -r 25 ${path}`)
         .then(() => {
             return path
         })
@@ -57,7 +57,7 @@ function concatAndPad(videolist, path) {
     let width = 1920,
         height = 1080
 
-    return exec(`ffmpeg -y -f concat -safe 0 -i ../videolists/${videolist} -vf "pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:${color}" -ar 24000 -c:a aac -c:v libx264 -r 25 ${path}`)
+    return exec(`ffmpeg -hide_banner -loglevel panic -y -f concat -safe 0 -i ../videolists/${videolist} -ar 24000 -c:a aac -c:v libx264 -r 25 -vf "pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:${color}" ${path}`)
         .then(() => {
             return path
         })
@@ -71,8 +71,11 @@ async function concatAndScroll(videolist, path) {
     let margin = 6
     let duration = info.format.duration
 
-    await exec(`ffmpeg -y -f lavfi -i "color=c=blue:s=1920x1080" -i ${vidpath} -t ${duration} -filter_complex "[0]overlay=y=if(gte(t\\, ${margin})\\, if(gte(t\\, ${duration} - ${margin})\\, H - h\\, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2))\\, 0)" ${path}`)
-    return vidpath
+    let { stderr } = await exec(`ffmpeg -hide_banner -loglevel panic -y -f lavfi -i "color=c=blue:s=1920x1080" -i ${vidpath} -t ${duration} -ar 24000 -c:a aac -c:v libx264 -r 25 -filter_complex "[0]overlay=y=if(gte(t\\, ${margin})\\, if(gte(t\\, ${duration} - ${margin})\\, H - h\\, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2))\\, 0)" ${path}`)
+    if (stderr) {
+        console.error(stderr)
+    }
+    return path
 }
 
 module.exports.combineVideos = function combineVideos(videos, name, extension = fileFormat) {
@@ -97,7 +100,7 @@ module.exports.combineFinal = function combineFinal(videos, name, extension) {
     return new Promise(resolve => {
         fs.writeFileSync(`../videolists/${name}.txt`, videos.map(v => `file '${v}'`).join('\n'))
 
-        let ffmpeg = spawn('ffmpeg', ['-y', '-f', 'concat', '-safe', '0', '-i', `../videolists/${name}.txt`, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', `../out/${name}.${extension}`])
+        let ffmpeg = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'panic', '-y', '-f', 'concat', '-safe', '0', '-i', `../videolists/${name}.txt`, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', `../out/${name}.${extension}`])
 
         ffmpeg.on('exit', () => {
             resolve(`${name}.${extension}`)
@@ -112,7 +115,7 @@ module.exports.addSound = function addSound(videoFullPath, soundFullPath, newNam
     return new Promise(resolve => {
         // https://stackoverflow.com/questions/11779490/how-to-add-a-new-audio-not-mixing-into-a-video-using-ffmpeg
         let endPath = `../video-output/${newName}.${extension}`
-        let ffmpeg = spawn('ffmpeg', ['-y', '-i', videoFullPath, '-i', soundFullPath, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', '-filter_complex', '[0:a][1:a]amerge=inputs=2[a]', '-map', '0:v', '-map', '[a]', '-ac', '2', '-shortest', endPath])
+        let ffmpeg = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'panic', '-y', '-i', videoFullPath, '-i', soundFullPath, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', '-filter_complex', '[0:a][1:a]amerge=inputs=2[a]', '-map', '0:v', '-map', '[a]', '-ac', '2', '-shortest', endPath])
 
         ffmpeg.on('exit', () => {
             resolve(endPath)
