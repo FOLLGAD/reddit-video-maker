@@ -29,7 +29,7 @@ module.exports.audioVideoCombine = function createVideo(name, audioName, imgName
             .then(info => {
                 let duration = info.streams[0].duration
 
-                return exec(`ffmpeg -y -loop 1 -i ../images/${imgName} -i ../audio-output/${audioName} -t ${duration - 0.15} -vf "pad=height=ceil(ih/2)*2:c=${color}" -pix_fmt yuv420p -crf 20 -c:v libx264 -c:a aac -ar 24000 -r 25 ../video-temp/${filename}`)
+                return exec(`ffmpeg -y -loop 1 -i ../images/${imgName} -i ../audio-output/${audioName} -t ${duration - 0.15} -vf "pad=height=ceil(ih/2)*2:color=${color}" -pix_fmt yuv420p -crf 20 -c:v libx264 -c:a aac -ar 24000 -r 25 ../video-temp/${filename}`)
             })
             .then(() => {
                 resolve(filename)
