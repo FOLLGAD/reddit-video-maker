@@ -1,7 +1,7 @@
 const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
 const fs = require('fs')
-const { synthDaniel } = require('./synth')
+const { macTTSToFile } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
 const { sanitizeHtml } = require('./sanitize')
@@ -156,7 +156,7 @@ async function sequentialWork(works) {
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
 		let imgPromise = launch(obj.name, obj.type, obj.imgObj)
-		let audioPromise = synthDaniel(obj.name + '.mp3', obj.tts)
+		let audioPromise = synthDaniel(obj.name + '.aiff', obj.tts)
 		try {
 			let [img, audio] = await Promise.all([imgPromise, audioPromise])
 			let result = await audioVideoCombine(obj.name, audio, img)

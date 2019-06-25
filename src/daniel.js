@@ -9,18 +9,19 @@ function getMd5Hash(string) {
 
 // Reverse-engineering of the 'demo' api used on http://ttsdemo.com (max ~600 chars)
 // No known request-limit
-function getChecksum(text, engine = 4, language = 1, voice = 5) {
-    return getMd5Hash(`${engine}${language}${voice}` + text + '1' + 'mp3' + '5883747' + 'uetivb9tb8108wfj')
+function getChecksum(text, engine = 4, language = 1, voice = 5, acc = 5883747) {
+    return getMd5Hash(`${engine}${language}${voice}` + text + '1' + 'mp3' + acc + 'uetivb9tb8108wfj')
 }
 
 // Make call will return a request with the mp3 file
-module.exports.makeCall = function makeCall(text, engine = 4, language = 1, voice = 5) {
+module.exports.makeCall = function (text, engine = 4, language = 1, voice = 5) {
     text = text.replace('\n', '').trim()
     let newtext = encodeURIComponent(text)
-    let checksum = getChecksum(text)
+    let acc = 5883747
+    let checksum = getChecksum(text, engine, language, voice, acc)
 
     return new Promise((resolve, reject) =>
-        fetch(`http://cache-a.oddcast.com/tts/gen.php?EID=${engine}&LID=${language}&VID=${voice}&TXT=${newtext}&IS_UTF8=1&EXT=mp3&FNAME&ACC=5883747&API&SESSION&CS=${checksum}&cache_flag=3`, {
+        fetch(`http://cache-a.oddcast.com/tts/gen.php?EID=${engine}&LID=${language}&VID=${voice}&TXT=${newtext}&IS_UTF8=1&EXT=mp3&FNAME&ACC=${acc}&API&SESSION&CS=${checksum}&cache_flag=3`, {
             headers: {
                 'Host': 'cache-a.oddcast.com',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0',
@@ -34,6 +35,7 @@ module.exports.makeCall = function makeCall(text, engine = 4, language = 1, voic
             }
         }).then(res => {
             if (res.headers.get('Content-Type') !== 'audio/mpeg') {
+                console.log(res.headers.get('Content-Type'))
                 console.error('An error ocurred with Daniel:', newtext)
                 reject()
             } else {

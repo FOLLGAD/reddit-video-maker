@@ -1,8 +1,25 @@
 const fs = require('fs')
 const { makeCall } = require('./daniel')
 const { sanitizeSynth } = require('./sanitize')
+const { spawn } = require('child_process')
 
-module.exports.synthDaniel = function synthDaniel(name, text) {
+module.exports.macTTSToFile = function (name, text) {
+    return new Promise(resolve => {
+        text = text.replace(/&/g, 'and') // '&' doesn't work for Daniel, he says &amp instead
+        text = text.replace('\n', '').trim()
+
+        if (name.split('.').pop() !== 'aiff') {
+            console.error('Format must be .aiff')
+        }
+
+        let proc = spawn('say', ['-o', `../audio-output/${name}`, '-v', 'Daniel', text])
+        proc.on('exit', () => {
+            resolve(name)
+        })
+    })
+}
+
+module.exports.synthOddcast = function (name, text) {
     text = text.replace(/&/g, 'and') // '&' doesn't work for Daniel, he says &amp instead
     let sanText = sanitizeSynth(text)
 
