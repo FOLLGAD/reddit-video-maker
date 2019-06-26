@@ -10,7 +10,7 @@ module.exports.synthSpeech = function (name, text) {
         return Promise.reject("Error: TTS is empty")
     }
 
-    return module.exports.synthOddcast(name, text)
+    return module.exports.synthOddcast(name, sanText)
 
     // if (process.env.synthType === 'google') {
     //     return module.exports.linuxTTSToFile(name, sanText)
