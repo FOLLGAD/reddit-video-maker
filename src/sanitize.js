@@ -54,9 +54,6 @@ const foulDict2 = [{
 	regex: /retard/,
 	replace: "ree",
 }, {
-	regex: /damn/,
-	replace: "darn",
-}, {
 	regex: /\.com/,
 	replace: " dot com",
 }, {
@@ -98,7 +95,6 @@ const foulSpanArray = module.exports.foulSpanArray = [
 	/((?:\W)d)(ic)(k)/,
 	/(wh)(or)(e)/,
 	/(p)(us)(sy)/,
-	/(d)(a)(mn)/,
 	/(s)(e)(x)/,
 	/(d)(ic)(k)/,
 	/(ret)(ar)(d)/,
