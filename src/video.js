@@ -1,126 +1,156 @@
-const fs = require('fs')
-const util = require('util')
-const child_process = require('child_process')
-const exec = util.promisify(child_process.exec)
-const spawn = child_process.spawn
+const ffmpeg = require('fluent-ffmpeg')
 
 let color = '#19191a' // Dark mode
 // let color = '#ffffff' // Light mode
 
 // ffmpeg -i transition_new_dark.mp4 -c:a aac -c:v libx264 -r 25 -ac 2 -ar 24000 transition_dark.mkv
 
-let fileFormat = 'mkv' // MVK is preferred since it does not require re-encoding on every concat
+let intermediaryFileFormat = 'ts'
+let tempFolder = '../video-temp/'
 
-function ffprobe(path) {
+const probe = module.exports.probe = function (path) {
     return new Promise((res, rej) => {
-        exec(`ffprobe -v quiet -print_format json -show_format -show_streams ${path}`)
-            .then(({ stdout }) => {
-                res(JSON.parse(stdout))
-            })
-            .catch(rej)
-    })
-}
-
-module.exports.audioVideoCombine = function createVideo(name, audioName, imgName) {
-    return new Promise(resolve => {
-        let filename = `${name}.${fileFormat}`
-
-        return ffprobe(`../audio-output/${audioName}`)
-            .then(info => {
-                let duration = info.streams[0].duration
-
-                return exec(`ffmpeg -hide_banner -loglevel error -y -loop 1 -i ../images/${imgName} -i ../audio-output/${audioName} -t ${duration - 0.15} -vf "pad=height=ceil(ih/2)*2:color=${color}" -pix_fmt yuv420p -crf 20 -c:v libx264 -c:a aac -ar 24000 -r 25 ../video-temp/${filename}`)
-            })
-            .then(() => {
-                resolve(filename)
-            })
-    })
-}
-
-module.exports.copyVideo = function (ins, out) {
-    return new Promise(resolve => {
-        let s = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', ins, '-c', 'copy', out])
-        s.on('exit', () => {
-            resolve(out)
+        ffmpeg.ffprobe(path, (err, data) => {
+            if (err) rej(err);
+            else res(data);
         })
     })
 }
 
-module.exports.concatFromVideolist = function concatFromVideolist(videolist, path) {
-    return exec(`ffmpeg -hide_banner -loglevel error -y -f concat -safe 0 -i ../videolists/${videolist} -ar 24000 -c:a aac -c:v copy -r 25 ${path}`)
-        .then(() => {
-            return path
-        })
+const concatAndReencode = module.exports.concatAndReencode = function (videoPaths, outPath) {
+    return new Promise((res, rej) => {
+        ffmpeg(`concat:${videoPaths.join('|')}`)
+            .videoCodec('copy')
+            .audioCodec('copy')
+            .audioFrequency(24000)
+            .output(outPath)
+            .fps(25)
+            .on('end', res)
+            .on('error', console.error)
+            .exec()
+    })
 }
 
-function concatAndPad(videolist, path) {
-    let width = 1920,
-        height = 1080
-
-    return exec(`ffmpeg -hide_banner -loglevel error -y -f concat -safe 0 -i ../videolists/${videolist} -ar 24000 -c:a aac -c:v libx264 -r 25 -vf "pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:${color}" ${path}`)
-        .then(() => {
-            return path
-        })
+const simpleConcat = module.exports.simpleConcat = function (videoPaths, outPath) {
+    return new Promise((res, rej) => {
+        ffmpeg(`concat:${videoPaths.join('|')}`)
+            .videoCodec('copy')
+            .audioCodec('copy')
+            .inputFPS(25)
+            .audioFrequency(24000)
+            .audioChannels(1)
+            .output(outPath)
+            .on('end', res)
+            .on('error', console.error)
+            .exec()
+    })
 }
 
-async function concatAndScroll(videolist, path) {
-    let vidpath = await module.exports.concatFromVideolist(videolist, '../video-temp/scroll-vid.' + fileFormat)
+const combineImageAudio = module.exports.combineImageAudio = function (videoPath, audioPath, outPath) {
+    return new Promise(async (res, rej) => {
+        let info = await probe(audioPath)
+        ffmpeg(videoPath)
+            .inputOptions([
+                '-loop 1',
+            ])
+            .videoCodec('libx264')
+            .videoFilters([
+                `pad=height=ceil(ih/2)*2:color=${color}`
+            ])
+            .input(audioPath)
+            .duration(info.format.duration)
+            .fps(25)
+            .outputOptions([
+                '-shortest',
+                '-pix_fmt yuv420p',
+                '-crf 20',
+            ])
+            .audioCodec('aac')
+            .audioFrequency(24000)
+            .audioChannels(1)
+            .size('1920x?')
+            .output(outPath)
+            .on('end', res)
+            .on('error', console.error)
+            .exec()
+    })
+}
 
-    let info = await ffprobe(vidpath)
+const combineVideoAudio = module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
+    return new Promise((res, rej) => {
+        ffmpeg(videoPath)
+            .videoCodec('libx264')
+            .input(audioPath)
+            .audioCodec('aac')
+            .complexFilter([
+                '[0:a][1:a]amerge=inputs=2[a]',
+            ])
+            .outputOptions([
+                '-shortest',
+                '-map 0:v',
+                '-map [a]',
+            ])
+            .audioFrequency(24000)
+            .audioChannels(1)
+            .output(outPath)
+            .on('end', res)
+            .on('error', console.error)
+            .exec()
+    })
+}
 
+const padAndConcat = module.exports.padAndConcat = function (videoPaths, outPath) {
+    return new Promise((res, rej) => {
+        ffmpeg(`concat:${videoPaths.join('|')}`)
+            .videoFilters([
+                `pad=1920:1080:(ow-iw)/2:(oh-ih)/2:${color}`
+            ])
+            .videoCodec('libx264')
+            .audioCodec('aac')
+            .audioFrequency(24000)
+            .audioChannels(1)
+            .output(outPath)
+            .on('end', res)
+            .on('error', console.error)
+            .exec()
+    })
+}
+
+const scrollAndConcat = module.exports.scrollAndConcat = async function (videoPaths, outPath) {
+    let temp = tempFolder + 'scroll-temp.' + intermediaryFileFormat
+    await simpleConcat(videoPaths, temp)
+
+    let info = await probe(temp)
     let margin = 6
     let duration = info.format.duration
 
-    let { stderr } = await exec(`ffmpeg -hide_banner -loglevel error -y -f lavfi -i "color=c=blue:s=1920x1080" -i ${vidpath} -t ${duration} -ar 24000 -c:a aac -c:v libx264 -r 25 -filter_complex "[0]overlay=y=if(gte(t\\, ${margin})\\, if(gte(t\\, ${duration} - ${margin})\\, H - h\\, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2))\\, 0)" ${path}`)
-    if (stderr) {
-        console.error(stderr)
+    return await new Promise(res => {
+        ffmpeg('color=c=green:s=1920x1080')
+            .inputFormat('lavfi')
+            .input(temp)
+            .duration(duration)
+            .complexFilter([
+                // `[0]overlay=y=if(gte(t, ${margin}), if(gte(t, ${duration} - ${margin}), H - h, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2)), 0)`
+                {
+                    inputs: '0', filter: 'overlay',
+                    options: {
+                        y: `if(gte(t, ${duration / 2}), H - h, 0)` // Simple up/down
+                    }
+                }
+            ])
+            .output(outPath)
+            .on('end', res)
+            .on('error', console.error)
+            .exec()
+    })
+}
+
+const advancedConcat = module.exports.advancedConcat = async function (videoPaths, outPath) {
+    let info = await probe(videoPaths[0])
+    let { height } = info.streams.find(obj => obj.codec_type === 'video')
+    if (height > 1080) {
+        return await scrollAndConcat(videoPaths, outPath)
+    } else {
+        return await padAndConcat(videoPaths, outPath)
     }
-    return path
-}
-
-module.exports.combineVideos = function combineVideos(videos, name, extension = fileFormat) {
-    return new Promise(async resolve => {
-        fs.writeFileSync(`../videolists/${name}.txt`, videos.map(v => `file '../video-temp/${v}'`).join('\n'))
-
-        let info = await ffprobe(`../video-temp/${videos[0]}`)
-        let { height } = info.streams.find(obj => obj.codec_type === 'video')
-
-        if (height > 1080) {
-            concatAndScroll(name + '.txt', `../video-output/${name}.${extension}`)
-                .then(resolve)
-        } else {
-            concatAndPad(name + '.txt', `../video-output/${name}.${extension}`)
-                .then(resolve)
-        }
-    })
-}
-
-// DEPRECATED, use combineVideos
-module.exports.combineFinal = function combineFinal(videos, name, extension) {
-    return new Promise(resolve => {
-        fs.writeFileSync(`../videolists/${name}.txt`, videos.map(v => `file '${v}'`).join('\n'))
-
-        let ffmpeg = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', `../videolists/${name}.txt`, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', `../out/${name}.${extension}`])
-
-        ffmpeg.on('exit', () => {
-            resolve(`${name}.${extension}`)
-        })
-        ffmpeg.on('error', console.error)
-        ffmpeg.stderr.on('data', d => console.error(new String(d)))
-    })
-}
-
-module.exports.addSound = function addSound(videoFullPath, soundFullPath, newName, extension = 'mp4') {
-    // let pathify = pt => path.join(__dirname, pt)
-    return new Promise(resolve => {
-        // https://stackoverflow.com/questions/11779490/how-to-add-a-new-audio-not-mixing-into-a-video-using-ffmpeg
-        let endPath = `../video-output/${newName}.${extension}`
-        let ffmpeg = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-i', videoFullPath, '-i', soundFullPath, '-c:a', 'aac', '-c:v', 'libx264', '-r', '25', '-filter_complex', '[0:a][1:a]amerge=inputs=2[a]', '-map', '0:v', '-map', '[a]', '-ac', '2', '-shortest', endPath])
-
-        ffmpeg.on('exit', () => {
-            resolve(endPath)
-        })
-        ffmpeg.on('error', console.error)
-        ffmpeg.stderr.on('data', d => console.error(new String(d)))
-    })
 }

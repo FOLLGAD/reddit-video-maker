@@ -2,7 +2,7 @@ const { fetchThread, updateAuth } = require('./reddit-api')
 const { renderComment, renderQuestion } = require('./api-fetch')
 
 function getOptions(optionsArray) {
-	optsArray = optionsArray.slice()
+	let optsArray = optionsArray.slice()
 
 	let opts = {
 		filterEdits: false,

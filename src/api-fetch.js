@@ -3,7 +3,7 @@ const cheerio = require('cheerio')
 const fs = require('fs')
 const { synthSpeech } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
-const { audioVideoCombine, combineVideos, copyVideo } = require('./video')
+const { advancedConcat, combineImageAudio, padAndConcat } = require('./video')
 const { sanitizeHtml } = require('./sanitize')
 
 function splitString(str) {
@@ -159,8 +159,9 @@ async function sequentialWork(works) {
 		let audioPromise = synthSpeech(obj.name + '.aiff', obj.tts)
 		try {
 			let [img, audio] = await Promise.all([imgPromise, audioPromise])
-			let result = await audioVideoCombine(obj.name, audio, img)
-			arr.push(result)
+			let path = `../video-temp/${obj.name}.ts`
+			await combineImageAudio('../images/' + img, '../audio-output/' + audio, path)
+			arr.push(path)
 		} catch (e) {
 			// Do nothing, skips frame
 			console.log("Failed frame")
@@ -213,8 +214,10 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 	})
 
 	return await sequentialWork(workLine)
-		.then(videos => {
-			return combineVideos(videos.filter(v => v != null), name)
+		.then(async videos => {
+			let path = `../video-output/${name}.ts`
+			await advancedConcat(videos.filter(v => v != null), path)
+			return path
 		})
 }
 
@@ -246,12 +249,10 @@ module.exports.renderQuestion = function renderQuestion(questionData, renderMp4 
 	})
 
 	return sequentialWork(workLine)
-		.then(videos => combineVideos(videos, 'Q'))
-		.then(() => {
-			if (renderMp4) {
-				copyVideo('../video-output/Q.mkv', '../Q.mp4')
-			}
-			return '../video-output/Q.mkv'
+		.then(async videos => {
+			let path = `../video-output/${name}.ts`
+			await padAndConcat(videos.filter(v => v != null), path)
+			return path
 		})
 }
 

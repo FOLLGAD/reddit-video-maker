@@ -1,28 +1,19 @@
 let { renderComment, renderQuestion } = require('./api-fetch')
-let { addSound, concatFromVideolist } = require('./video')
-let fs = require('fs')
+let { combineVideoAudio, concatAndReencode, simpleConcat } = require('./video')
 
-let transition = '../static/transition_dark.mkv'
-let outro = '../static/outro_dark.mkv'
+let transition = '../static/transition_dark.ts'
+let outro = '../static/outro_dark.ts'
 
 // Input: thread; array of comment ID:s
 // Put transitions after every comment and add song.
 // add question & outro
-/*
-commentData format:
-[
-	{
-		data: *comment*,
-		children: *child comments, if any*
-	}
-]
-*/
 
-module.exports.render = async function render(questionData, commentData, song) {
+module.exports.render = async function (questionData, commentData, song) {
 	console.log('Started rendering')
 	let start = Date.now()
 	let videolist = []
 
+	console.log('Rendering', commentData.length, 'comments')
 	for (let i = 0; i < commentData.length; i++) {
 		try {
 			let commentFile = await renderComment(commentData[i], i)
@@ -35,28 +26,20 @@ module.exports.render = async function render(questionData, commentData, song) {
 		}
 	}
 
-	videolist = videolist
-		// .map(pt => path.join(__dirname, pt))
-		.map(pt => `file '${pt}'`)
-		.join('\n')
-
-	fs.writeFileSync('../videolists/all.txt', videolist)
-
 	try {
 		console.log("Adding transitions...")
-		let nosoundFile = await concatFromVideolist('all.txt', '../video-output/nosound.mkv')
+		let nosoundFile = '../video-output/no-sound.ts'
+		await simpleConcat(videolist, nosoundFile)
+
 		console.log("Adding sound...")
-		let soundFile = await addSound('../video-output/' + nosoundFile, '../static/' + song, 'withsound', 'mkv')
+		let soundFile = '../video-output/with-sound.ts'
+		await combineVideoAudio(nosoundFile, '../static/' + song, soundFile)
+
 		console.log("Rendering question...")
 		let question = await renderQuestion(questionData, false)
 
-		videolist = [question, soundFile, outro]
-			.map(pt => `file '${pt}'`)
-			.join('\n')
-
-		fs.writeFileSync('../videolists/all.txt', videolist)
-
-		let final = await concatFromVideolist('all.txt', '../video-output/final.mkv')
+		console.log("Rendering final...")
+		await concatAndReencode([question, soundFile, outro], '../video-output/final.mkv')
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
 		console.error("Rendering failed")
