@@ -13,7 +13,7 @@ module.exports.render = async function (questionData, commentData, song) {
 	let start = Date.now()
 	let videolist = []
 
-	console.log('Rendering', commentData.length, 'comments')
+	console.log('Rendering', commentData.length, commentData.length === 1 ? 'comment' : 'comments')
 	for (let i = 0; i < commentData.length; i++) {
 		try {
 			let commentFile = await renderComment(commentData[i], i)

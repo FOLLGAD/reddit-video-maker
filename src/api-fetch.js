@@ -184,8 +184,6 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 	let $ = cheerio.load(markup)
 	let ln = $('span.hide').length
 
-	fs.writeFileSync('./test.html', markup)
-
 	$('span.hide').each((i, _) => {
 		let curr = $('.hide#' + i)
 

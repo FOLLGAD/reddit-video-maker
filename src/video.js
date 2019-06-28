@@ -128,6 +128,10 @@ const scrollAndConcat = module.exports.scrollAndConcat = async function (videoPa
         ffmpeg('color=c=green:s=1920x1080')
             .inputFormat('lavfi')
             .input(temp)
+            .videoCodec('libx264')
+            .audioCodec('aac')
+            .audioFrequency(24000)
+            .audioChannels(1)
             .duration(duration)
             .complexFilter([
                 // `[0]overlay=y=if(gte(t, ${margin}), if(gte(t, ${duration} - ${margin}), H - h, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2)), 0)`
