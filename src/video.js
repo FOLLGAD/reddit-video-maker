@@ -5,8 +5,16 @@ let color = '#19191a' // Dark mode
 
 // ffmpeg -i transition_new_dark.mp4 -c:a aac -c:v libx264 -r 25 -ac 2 -ar 24000 transition_dark.mkv
 
-let intermediaryFileFormat = 'ts'
+let intermediaryFileFormat = 'mkv'
 let tempFolder = '../video-temp/'
+
+function getConcat(videoPaths, outPath) {
+    // ffmpeg(`concat:${videoPaths.join('|')}`)
+    let f = ffmpeg()
+    videoPaths.forEach(v => f.input(v))
+    // f.mergeToFile(outPath, tempFolder)
+    return f
+}
 
 const probe = module.exports.probe = function (path) {
     return new Promise((res, rej) => {
@@ -19,46 +27,50 @@ const probe = module.exports.probe = function (path) {
 
 const concatAndReencode = module.exports.concatAndReencode = function (videoPaths, outPath) {
     return new Promise((res, rej) => {
-        ffmpeg(`concat:${videoPaths.join('|')}`)
-            .videoCodec('copy')
-            .audioCodec('copy')
+        getConcat(videoPaths, outPath)
+            .videoCodec('libx264')
+            .audioCodec('aac')
             .audioFrequency(24000)
-            .output(outPath)
             .fps(25)
             .on('end', res)
             .on('error', console.error)
-            .exec()
     })
 }
 
 const simpleConcat = module.exports.simpleConcat = function (videoPaths, outPath) {
     return new Promise((res, rej) => {
-        ffmpeg(`concat:${videoPaths.join('|')}`)
-            .videoCodec('copy')
-            .audioCodec('copy')
+        getConcat(videoPaths, outPath)
+            .videoCodec('libx264')
+            .audioCodec('aac')
             .inputFPS(25)
             .audioFrequency(24000)
             .audioChannels(1)
-            .output(outPath)
             .on('end', res)
             .on('error', console.error)
-            .exec()
+            .mergeToFile(outPath, tempFolder)
     })
 }
 
-const combineImageAudio = module.exports.combineImageAudio = function (videoPath, audioPath, outPath) {
+const combineImageAudio = module.exports.combineImageAudio = function (imagePath, audioPath, outPath) {
     return new Promise(async (res, rej) => {
-        let info = await probe(audioPath)
-        ffmpeg(videoPath)
+        let [imageInfo, audioInfo] = await Promise.all([probe(imagePath), probe(audioPath)])
+        let f = ffmpeg(imagePath)
             .inputOptions([
                 '-loop 1',
             ])
             .videoCodec('libx264')
-            .videoFilters([
+
+        if (imageInfo.streams[0].height > 1080) {
+            f.videoFilters([
                 `pad=height=ceil(ih/2)*2:color=${color}`,
             ])
-            .input(audioPath)
-            .duration(info.format.duration - 0.15)
+        } else {
+            f.videoFilters([
+                `pad=1920:1080:(ow-iw)/2:(oh-ih)/2:${color}`
+            ])
+        }
+        f.input(audioPath)
+            .duration(audioInfo.format.duration - 0.15)
             .fps(25)
             .outputOptions([
                 '-shortest',
@@ -101,18 +113,14 @@ const combineVideoAudio = module.exports.combineVideoAudio = function (videoPath
 
 const padAndConcat = module.exports.padAndConcat = function (videoPaths, outPath) {
     return new Promise((res, rej) => {
-        ffmpeg(`concat:${videoPaths.join('|')}`)
-            .videoFilters([
-                `pad=1920:1080:(ow-iw)/2:(oh-ih)/2:${color}`
-            ])
+        getConcat(videoPaths, outPath)
             .videoCodec('libx264')
             .audioCodec('aac')
             .audioFrequency(24000)
             .audioChannels(1)
-            .output(outPath)
             .on('end', res)
             .on('error', console.error)
-            .exec()
+            .mergeToFile(outPath, tempFolder)
     })
 }
 
@@ -131,18 +139,18 @@ const scrollAndConcat = module.exports.scrollAndConcat = async function (videoPa
             .videoCodec('libx264')
             .audioCodec('aac')
             .audioFrequency(24000)
-            .audioChannels(1)
             .duration(duration)
             .complexFilter([
-                // `[0]overlay=y=if(gte(t, ${margin}), if(gte(t, ${duration} - ${margin}), H - h, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2)), 0)`
-                {
-                    inputs: '0', filter: 'overlay',
-                    options: {
-                        y: `if(gte(t, ${duration / 2}), H - h, 0)` // Simple up/down
-                    }
-                }
+                `[0]overlay=y=if(gte(t\\, ${margin})\\, if(gte(t\\, ${duration} - ${margin})\\, H - h\\, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2))\\, 0)`,
+                // {
+                //     inputs: '0', filter: 'overlay',
+                //     options: {
+                //         y: `if(gte(t, ${duration / 2}), H - h, 0)` // Simple up/down
+                //     }
+                // }
             ])
             .output(outPath)
+            .on('start', console.log)
             .on('end', res)
             .on('error', console.error)
             .exec()

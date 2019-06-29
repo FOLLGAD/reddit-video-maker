@@ -1,6 +1,5 @@
 const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
-const fs = require('fs')
 const { synthSpeech } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { advancedConcat, combineImageAudio, padAndConcat } = require('./video')
@@ -11,6 +10,8 @@ function splitString(str) {
 		.split(/<br>|(.+?[.,?!]+(?=["')\s.,?!]+))/g)
 		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
 }
+
+let fileExt = 'mkv'
 
 module.exports.splitString = splitString
 
@@ -159,7 +160,7 @@ async function sequentialWork(works) {
 		let audioPromise = synthSpeech(obj.name + '.aiff', obj.tts)
 		try {
 			let [img, audio] = await Promise.all([imgPromise, audioPromise])
-			let path = `../video-temp/${obj.name}.ts`
+			let path = `../video-temp/${obj.name}.${fileExt}`
 			await combineImageAudio('../images/' + img, '../audio-output/' + audio, path)
 			arr.push(path)
 		} catch (e) {
@@ -213,7 +214,7 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 
 	return await sequentialWork(workLine)
 		.then(async videos => {
-			let path = `../video-output/${name}.ts`
+			let path = `../video-output/${name}.${fileExt}`
 			await advancedConcat(videos.filter(v => v != null), path)
 			return path
 		})
@@ -248,7 +249,7 @@ module.exports.renderQuestion = function renderQuestion(questionData, renderMp4 
 
 	return sequentialWork(workLine)
 		.then(async videos => {
-			let path = `../video-output/${name}.ts`
+			let path = `../video-output/${name}.${fileExt}`
 			await padAndConcat(videos.filter(v => v != null), path)
 			return path
 		})

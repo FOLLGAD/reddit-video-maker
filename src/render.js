@@ -1,8 +1,8 @@
 let { renderComment, renderQuestion } = require('./api-fetch')
 let { combineVideoAudio, concatAndReencode, simpleConcat } = require('./video')
 
-let transition = '../static/transition_dark.ts'
-let outro = '../static/outro_dark.ts'
+let transition = '../static/transition_dark.mkv'
+let outro = '../static/outro_dark.mkv'
 
 // Input: thread; array of comment ID:s
 // Put transitions after every comment and add song.
@@ -28,11 +28,11 @@ module.exports.render = async function (questionData, commentData, song) {
 
 	try {
 		console.log("Adding transitions...")
-		let nosoundFile = '../video-output/no-sound.ts'
+		let nosoundFile = '../video-output/no-sound.mkv'
 		await simpleConcat(videolist, nosoundFile)
 
 		console.log("Adding sound...")
-		let soundFile = '../video-output/with-sound.ts'
+		let soundFile = '../video-output/with-sound.mkv'
 		await combineVideoAudio(nosoundFile, '../static/' + song, soundFile)
 
 		console.log("Rendering question...")
