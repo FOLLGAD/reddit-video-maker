@@ -3,7 +3,7 @@ const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { advancedConcat, combineImageAudio, padAndConcat } = require('./video')
-const { sanitizeHtml } = require('./sanitize')
+const { sanitizeHtml, sanitizeUsername } = require('./sanitize')
 
 function splitString(str) {
 	return str
@@ -131,7 +131,7 @@ function compileQuestion($) {
 	return tts
 }
 
-function hydrateComment(comment, upvoteProb = 0.1) {
+function hydrate(comment, upvoteProb = 0.1) {
 	comment.score = formatNum(comment.score)
 	comment.created = timeAgo(comment.created_utc * 1000)
 	if (comment.edited) {
@@ -144,10 +144,11 @@ function hydrateComment(comment, upvoteProb = 0.1) {
 	comment.golds = comment.gildings.gid_2
 	comment.platina = comment.gildings.gid_3
 	if (comment.replies) {
-		comment.replies = comment.replies.map(hydrateComment)
+		comment.replies = comment.replies.map(hydrate)
 	}
 	comment.showBottom = true
 	comment.upvoted = Math.random() < upvoteProb // Some of the posts will randomly be seen as upvoted
+	comment.authorHtml = sanitizeUsername(comment.author)
 
 	return comment
 }
@@ -178,7 +179,7 @@ async function sequentialWork(works) {
 
 // Should return the name of video of the created comment
 module.exports.renderComment = async function renderComment(commentData, name) {
-	let rootComment = hydrateComment(commentData, 0.1)
+	let rootComment = hydrate(commentData, 0.1)
 	let tts = compileHtml(rootComment)
 	let workLine = []
 	let markup = commentTemplate(rootComment)
@@ -220,8 +221,8 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 		})
 }
 
-module.exports.renderQuestion = function renderQuestion(questionData, renderMp4 = true) {
-	let hydrated = hydrateComment(questionData, 0.5)
+module.exports.renderQuestion = function renderQuestion(questionData) {
+	let hydrated = hydrate(questionData, 0.5)
 
 	let $ = cheerio.load(hydrated.title)
 	let text = $.text()

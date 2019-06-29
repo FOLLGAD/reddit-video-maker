@@ -62,6 +62,12 @@ const foulDict2 = [{
 }, {
 	regex: /ass(hat|face|head|burger|hole)/,
 	replace: "a-$1",
+}, {
+	regex: /penis/,
+	replace: "peepee",
+}, {
+	regex: /vagina/,
+	replace: "vajayjay",
 }]
 
 // Sanitize tts text.
@@ -78,7 +84,7 @@ module.exports.sanitizeSynth = function (text) {
 }
 
 // What the html will display instead
-const foulSpanArray = module.exports.foulSpanArray = [
+const foulSpanArray = [
 	/(f)(uck)()/,
 	/(sh)(it)()/,
 	/(b)(it)(ch)/,
@@ -86,19 +92,22 @@ const foulSpanArray = module.exports.foulSpanArray = [
 	/(ni)(gg)(a)/,
 	/(ni)(gge)(r)/,
 	/(p)(o)(rn)/,
+	/((?:\W|^)d)(ic)(k)/,
 	/((?:\W|^)a)(ss)(\W|$)/,
 	/((?:\W|^)r)(ap)(e|ist)/,
 	/((?:\W|^)c)(u)(m)/,
 	/((?:\W|^)t)(i)(ts)/,
 	/(t)(it)(ties)/,
 	/(c)(o)(ck[^an])/, // doesnt match 'cockney', 'cockatrice'
-	/((?:\W)d)(ic)(k)/,
 	/(wh)(or)(e)/,
 	/(p)(us)(sy)/,
 	/(s)(e)(x)/,
 	/(d)(ic)(k)/,
 	/(ret)(ar)(d)/,
 	/(a)(ss)(hat|face|head|burger|hole)/,
+	/((?:\W|^)a)(n)(al)/,
+	/(pe)(n)(is)/,
+	/(va)(gi)(na)/,
 ]
 
 module.exports.sanitizeHtml = function (str) {
@@ -106,4 +115,21 @@ module.exports.sanitizeHtml = function (str) {
 		str = str.replace(new RegExp(reg, 'gi'), '$1<span class="blur">$2</span>$3')
 	})
 	return str
+}
+
+const sanitizeUsenameArray = [
+	/(d)(ic)(k)/,
+	/(a)(ss)()/,
+	/(r)(ap)(e|ist)/,
+	/(c)(u)(m)/,
+	/(t)(i)(ts)/,
+	/(a)(n)(al)/,
+	...foulSpanArray,
+]
+
+module.exports.sanitizeUsername = function (username) {
+	sanitizeUsenameArray.forEach(reg => {
+		username = username.replace(new RegExp(reg, 'gi'), '$1<span class="blur">$2</span>$3')
+	})
+	return username
 }

@@ -36,7 +36,7 @@ module.exports.render = async function (questionData, commentData, song) {
 		await combineVideoAudio(nosoundFile, '../static/' + song, soundFile)
 
 		console.log("Rendering question...")
-		let question = await renderQuestion(questionData, false)
+		let question = await renderQuestion(questionData)
 
 		console.log("Rendering final...")
 		await concatAndReencode([question, soundFile, outro], '../video-output/final.mkv')
