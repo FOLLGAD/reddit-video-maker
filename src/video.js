@@ -55,10 +55,10 @@ const combineImageAudio = module.exports.combineImageAudio = function (videoPath
             ])
             .videoCodec('libx264')
             .videoFilters([
-                `pad=height=ceil(ih/2)*2:color=${color}`
+                `pad=height=ceil(ih/2)*2:color=${color}`,
             ])
             .input(audioPath)
-            .duration(info.format.duration)
+            .duration(info.format.duration - 0.15)
             .fps(25)
             .outputOptions([
                 '-shortest',
@@ -121,11 +121,11 @@ const scrollAndConcat = module.exports.scrollAndConcat = async function (videoPa
     await simpleConcat(videoPaths, temp)
 
     let info = await probe(temp)
-    let margin = 6
     let duration = info.format.duration
+    let margin = 6
 
     return await new Promise(res => {
-        ffmpeg('color=c=green:s=1920x1080')
+        ffmpeg(`color=c=${color}:s=1920x1080`)
             .inputFormat('lavfi')
             .input(temp)
             .videoCodec('libx264')
