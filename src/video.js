@@ -34,6 +34,7 @@ const concatAndReencode = module.exports.concatAndReencode = function (videoPath
             .fps(25)
             .on('end', res)
             .on('error', console.error)
+            .mergeToFile(outPath, tempFolder)
     })
 }
 
