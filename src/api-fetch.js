@@ -82,6 +82,12 @@ let compileHtml = function (rootComment) {
 	return rec(rootComment)
 }
 
+function splitQuestion(str) {
+	return str
+		.split(/.+?[^\w\s]+(\s|$)/g)
+		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
+}
+
 // Takes in a html element
 // Edits $ in the code, and returns an array of all tts segments
 function compileQuestion($) {
@@ -94,7 +100,7 @@ function compileQuestion($) {
 		for (let i = 0; i < contents.length; i++) {
 			let h = contents[i]
 			if (h.type == 'text') {
-				let data = splitString(h.data)
+				let data = splitQuestion(h.data)
 				if (lastWasTag) {
 					arr[arr.length - 1] += data.shift()
 				}
