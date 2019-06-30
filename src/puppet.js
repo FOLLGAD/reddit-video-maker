@@ -15,12 +15,20 @@ handles.registerPartial('comment', commentPartial)
 const commentTemplate = module.exports.commentTemplate = handles.compile(fs.readFileSync('../html/comment-new.html').toString())
 const questionTemplate = module.exports.questionTemplate = handles.compile(fs.readFileSync('../html/question.html').toString())
 
-async function launchComment(name, markup) {
-	const browser = await puppeteer.launch({
+let browser
+
+module.exports.startInstance = async function startInstance() {
+	console.log('Starting puppeteer instance')
+	browser = await puppeteer.launch({
 		args: [
 			'font-render-hinting=none'
 		]
 	})
+	
+	return
+}
+
+async function launchComment(name, markup) {
 	const page = await browser.newPage()
 	const filename = `${name}.png`
 
@@ -44,13 +52,12 @@ async function launchComment(name, markup) {
 	await page.screenshot({
 		encoding: 'binary', path: `../images/${filename}`,
 	})
-	await browser.close()
+	page.close()
 
 	return filename
 }
 
 async function launchQuestion(name, context) {
-	const browser = await puppeteer.launch()
 	const page = await browser.newPage()
 	const filename = `${name}.png`
 
@@ -73,7 +80,7 @@ async function launchQuestion(name, context) {
 	})
 
 	await page.screenshot({ encoding: 'binary', path: `../images/${filename}` })
-	await browser.close()
+	page.close()
 
 	return filename
 }

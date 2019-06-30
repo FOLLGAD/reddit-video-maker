@@ -1,5 +1,6 @@
 let { renderComment, renderQuestion } = require('./api-fetch')
 let { combineVideoAudio, concatAndReencode, simpleConcat } = require('./video')
+let puppet = require('./puppet')
 
 let transition = '../static/transition_dark.mkv'
 let outro = '../static/outro_dark.mkv'
@@ -12,6 +13,8 @@ module.exports.render = async function (questionData, commentData, song) {
 	console.log('Started rendering')
 	let start = Date.now()
 	let videolist = []
+
+	await puppet.startInstance()
 
 	console.log('Rendering', commentData.length, commentData.length === 1 ? 'comment' : 'comments')
 	for (let i = 0; i < commentData.length; i++) {
