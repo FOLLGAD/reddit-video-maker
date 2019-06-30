@@ -142,13 +142,13 @@ const scrollAndConcat = module.exports.scrollAndConcat = async function (videoPa
             .audioFrequency(24000)
             .duration(duration)
             .complexFilter([
-                `[0]overlay=y=if(gte(t\\, ${margin})\\, if(gte(t\\, ${duration} - ${margin})\\, H - h\\, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2))\\, 0)`,
-                // {
-                //     inputs: '0', filter: 'overlay',
-                //     options: {
-                //         y: `if(gte(t, ${duration / 2}), H - h, 0)` // Simple up/down
-                //     }
-                // }
+                // `[0]overlay=y=if(gte(t\\, ${margin})\\, if(gte(t\\, ${duration} - ${margin})\\, H - h\\, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2))\\, 0)`,
+                {
+                    inputs: '0', filter: 'overlay',
+                    options: {
+                        y: `if(gte(t, ${duration / 2}), H - h, 0)` // Simple up/down
+                    }
+                }
             ])
             .output(outPath)
             .on('start', console.log)
