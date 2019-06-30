@@ -105,7 +105,7 @@ const foulSpanArray = [
 	/(d)(ic)(k)/,
 	/(ret)(ar)(d)/,
 	/(a)(ss)(hat|face|head|burger|hole)/,
-	/((?:\W|^)a)(n)(al)/,
+	/((?:\W|^)a)(n)(al[^y])/,
 	/(pe)(n)(is)/,
 	/(va)(gi)(na)/,
 ]
@@ -118,13 +118,13 @@ module.exports.sanitizeHtml = function (str) {
 }
 
 const sanitizeUsenameArray = [
+	/(a)(ss)()/, // HAS TO BE FIRST
+	...foulSpanArray,
 	/(d)(ic)(k)/,
-	/(a)(ss)()/,
 	/(r)(ap)(e|ist)/,
 	/(c)(u)(m)/,
 	/(t)(i)(ts)/,
 	/(a)(n)(al)/,
-	...foulSpanArray,
 ]
 
 module.exports.sanitizeUsername = function (username) {

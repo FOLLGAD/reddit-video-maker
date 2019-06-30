@@ -1,4 +1,4 @@
-const { sanitizeSynth, sanitizeHtml } = require('./sanitize')
+const { sanitizeSynth, sanitizeHtml, sanitizeUsername } = require('./sanitize')
 
 let synthTestCases = [
 	{
@@ -100,5 +100,25 @@ test('sanitize html', () => {
 	for (let i = 0; i < htmlTestCases.length; i++) {
 		expect(sanitizeHtml(htmlTestCases[i].in))
 			.toBe(htmlTestCases[i].out)
+	}
+})
+
+let usernameTestCases = [
+	{
+		in: 'PM_me_big_dicks_',
+		out: 'PM_me_big_d<span class="blur">ic</span>ks_'
+	}, {
+		in: 'bitch-cunt',
+		out: 'b<span class="blur">it</span>ch-c<span class="blur">un</span>t'
+	}, {
+		in: 'raperrapist',
+		out: 'r<span class="blur">ap</span>err<span class="blur">ap</span>ist'
+	},
+]
+
+test('sanitize username', () => {
+	for (let i = 0; i < usernameTestCases.length; i++) {
+		expect(sanitizeUsername(usernameTestCases[i].in))
+			.toBe(usernameTestCases[i].out)
 	}
 })
