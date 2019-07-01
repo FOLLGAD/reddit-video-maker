@@ -5,21 +5,22 @@ const { launch, commentTemplate } = require('./puppet')
 const { advancedConcat, combineImageAudio, padAndConcat } = require('./video')
 const { sanitizeHtml, sanitizeUsername } = require('./sanitize')
 
-function splitString(str) {
+function splitComment(str) {
 	return str
-		.split(/<br>|(.+?[.,?!]+(?=["')\s.,?!]+))/g)
+		.split(/<br>|(.+?[.,?!]+[^\w\s]*\s+)/g)
 		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
 }
 
 function splitQuestion(str) {
 	return str
-		.split(/(.+?[^\w\s]+(\s|$))/g)
+		.split(/(.+?[^\w\s]+\s+)/g)
 		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
 }
 
 let fileExt = 'mkv'
 
-module.exports.splitString = splitString
+module.exports.splitComment = splitComment
+module.exports.splitQuestion = splitQuestion
 
 let compileHtml = function (rootComment) {
 	let id = 0
@@ -41,7 +42,7 @@ let compileHtml = function (rootComment) {
 			for (let i = 0; i < contents.length; i++) {
 				let h = contents[i]
 				if (h.type == 'text') {
-					let data = splitString(h.data)
+					let data = splitComment(h.data)
 					if (lastWasTag) {
 						arr[arr.length - 1] += data.shift()
 					}
