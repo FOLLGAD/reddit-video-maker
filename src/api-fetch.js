@@ -11,6 +11,12 @@ function splitString(str) {
 		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
 }
 
+function splitQuestion(str) {
+	return str
+		.split(/(.+?[^\w\s]+(\s|$))/g)
+		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
+}
+
 let fileExt = 'mkv'
 
 module.exports.splitString = splitString
@@ -80,12 +86,6 @@ let compileHtml = function (rootComment) {
 		return tts
 	}
 	return rec(rootComment)
-}
-
-function splitQuestion(str) {
-	return str
-		.split(/.+?[^\w\s]+(\s|$)/g)
-		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
 }
 
 // Takes in a html element
