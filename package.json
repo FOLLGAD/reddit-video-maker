@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/api-fetch.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx jest"
+  },
   "author": "follgad",
   "license": "ISC",
   "dependencies": {
@@ -17,6 +19,10 @@
     "puppeteer": "^1.15.0"
   },
   "devDependencies": {
-    "jest": "^24.8.0"
-  }
+    "jest": "^24.8.0",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "test"
+  ]
 }
