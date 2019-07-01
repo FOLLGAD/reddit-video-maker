@@ -57,6 +57,9 @@ const foulDict2 = [{
 	regex: /\.com/,
 	replace: " dot com",
 }, {
+	regex: /(?:\W|^)asses(?!\w)/,
+	replace: "ay",
+}, {
 	regex: /(\W|^)ass(?=\W|$)/,
 	replace: "$1ay",
 }, {
@@ -78,7 +81,7 @@ module.exports.sanitizeSynth = function (text) {
 	text = text.replace(/(\s|^)[^\w\d\s]+(\s|$)/g, '$1$2') // Turns ` :) `, ` " ` into `  `
 	foulDict2.forEach(elem => {
 		// Replaces every occurance with the the corresponding value in the dictionary
-		text = text.replace(new RegExp(elem.regex, 'gi'), elem.replace)
+		text = text.replace(new RegExp(elem.regex, 'gmi'), elem.replace)
 	})
 	return text
 }
@@ -93,6 +96,7 @@ const foulSpanArray = [
 	/(ni)(gge)(r)/,
 	/(p)(o)(rn)/,
 	/((?:\W|^)d)(ic)(k)/,
+	/((?:\W|^)a)(ss)(es)(?!\w)/,
 	/((?:\W|^)a)(ss)(\W|$)/,
 	/((?:\W|^)r)(ap)(e|ist)/,
 	/((?:\W|^)c)(u)(m)/,
@@ -112,7 +116,7 @@ const foulSpanArray = [
 
 module.exports.sanitizeHtml = function (str) {
 	foulSpanArray.forEach(reg => {
-		str = str.replace(new RegExp(reg, 'gi'), '$1<span class="blur">$2</span>$3')
+		str = str.replace(new RegExp(reg, 'gmi'), '$1<span class="blur">$2</span>$3')
 	})
 	return str
 }
