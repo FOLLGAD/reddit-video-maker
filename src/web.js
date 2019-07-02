@@ -101,15 +101,15 @@ const server = http.createServer(async (req, res) => {
 				let thread = pathnames[2]
 
 				fetchThread(thread)
-					.then(data => {
-						res.endJson(data)
-					})
 					.catch(err => {
 						res.statusCode = 404
 						res.endJson({
 							error: 404,
-							message: 'Something went wrong',
+							message: `Couldn't fetch thread`,
 						})
+					})
+					.then(data => {
+						res.endJson(data)
 					})
 			} break
 			case 'get-info': {

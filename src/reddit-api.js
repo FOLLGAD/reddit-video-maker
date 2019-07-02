@@ -49,7 +49,7 @@ module.exports.getInfo = async function getInfo(children) {
 	return p.data.children
 }
 
-module.exports.fetchThread = async function fetchComments(threadId, options = defaultOpts) {
+module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 	let parseComments = commentData => {
 		return commentData[1].data.children.slice(0, -1)
 	}
@@ -75,11 +75,11 @@ module.exports.fetchThread = async function fetchComments(threadId, options = de
 	})
 		.catch(console.error)
 		.then(r => {
-			if (r.status >= 200 && r.status < 300) {
+			if (r.ok) {
 				return r.json()
 			} else {
 				console.log("Failed to fetch thread")
-				throw new Error(r.status)
+				return Promise.reject(r)
 			}
 		})
 
