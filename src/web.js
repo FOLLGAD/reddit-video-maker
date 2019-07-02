@@ -7,6 +7,10 @@ const { fetchThread, updateAuth, getInfo } = require('./reddit-api')
 const { render } = require('./render')
 const port = 5566
 
+http.ServerResponse.prototype.endJson = function (data, ...args) {
+	return this.end(JSON.stringify(data), ...args)
+}
+
 let contentTypeDict = {
 	"html": "text/html",
 	"css": "text/css",
@@ -95,11 +99,18 @@ const server = http.createServer(async (req, res) => {
 		switch (pathnames[1]) {
 			case 'get-thread': {
 				let thread = pathnames[2]
-				let data = await fetchThread(thread)
 
-				let jso = JSON.stringify(data)
-
-				res.end(jso)
+				fetchThread(thread)
+					.then(data => {
+						res.endJson(data)
+					})
+					.catch(err => {
+						res.statusCode = 404
+						res.endJson({
+							error: 404,
+							message: 'Something went wrong',
+						})
+					})
 			} break
 			case 'get-info': {
 				// Currently unused
@@ -107,11 +118,27 @@ const server = http.createServer(async (req, res) => {
 				let comments = querystring.parse(parsedUrl.query).comments.split(',')
 				let commentData = await getInfo(comments) // Should return an array of comment data
 
-				res.end(JSON.stringify(commentData))
+				res.endJson(commentData)
+			} break
+			case 'get-themes': {
+				let themes = fs.readdirSync('../themes', { withFileTypes: true })
+					.filter(dirent => dirent.isDirectory())
+					.map(dirent => ({ name: dirent.name }))
+
+				let data = themes.map(th => {
+					let mp3s = fs.readdirSync('../themes/' + th.name).filter(d => d.split('.').pop() == 'mp3')
+
+					return {
+						name: th.name,
+						songs: mp3s,
+					}
+				})
+
+				res.endJson(data)
 			} break
 			case 'get-songs': {
 				let mp3s = fs.readdirSync('../static').filter(d => d.split('.').pop() == 'mp3')
-				res.end(JSON.stringify(mp3s))
+				res.endJson(mp3s)
 			} break
 			case 'render-video': {
 				let body = await readJsonBody(req)
@@ -119,16 +146,19 @@ const server = http.createServer(async (req, res) => {
 
 				let question = body.questionData
 				let comments = body.commentData
-				let { song } = body.options
+				let options = body.options
 
-				render(question, comments, song)
+				if (!options.theme) console.error("No theme selected")
+				if (!options.song) console.error("No song selected")
+
+				render(question, comments, options)
 
 				res.statusCode = 201
-				res.end(JSON.stringify({ message: 'Rendering' }))
+				res.endJson({ message: 'Rendering' })
 			} break
 			default: {
 				res.statusCode = 404
-				res.end(JSON.stringify({ error: 404, message: 'Wrong url bro' }))
+				res.endJson({ error: 404, message: 'Wrong url bro' })
 			}
 		}
 	}

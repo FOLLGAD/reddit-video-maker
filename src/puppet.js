@@ -28,6 +28,8 @@ module.exports.startInstance = async function startInstance() {
 	return
 }
 
+module.exports.startInstance()
+
 async function launchComment(name, markup) {
 	const page = await browser.newPage()
 	const filename = `${name}.png`
