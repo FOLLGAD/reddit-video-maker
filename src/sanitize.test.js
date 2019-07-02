@@ -43,6 +43,9 @@ let synthTestCases = [
 	}, {
 		in: 'asshole assburgers ass-grass',
 		out: 'a-hole a-burgers ay-grass'
+	}, {
+		in: 'asses assessment asses basses lasses',
+		out: 'a-es assessment a-es basses lasses'
 	},
 ]
 
@@ -93,6 +96,9 @@ let htmlTestCases = [
 	}, {
 		in: 'asshole assburgers ass-grass',
 		out: 'a<span class="blur">ss</span>hole a<span class="blur">ss</span>burgers a<span class="blur">ss</span>-grass'
+	}, {
+		in: 'asses assessment asses basses lasses',
+		out: 'a<span class="blur">ss</span>es assessment a<span class="blur">ss</span>es basses lasses'
 	},
 ]
 

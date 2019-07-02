@@ -57,10 +57,10 @@ const foulDict2 = [{
 	regex: /\.com/,
 	replace: " dot com",
 }, {
-	regex: /(?:\W|^)asses(?!\w)/,
-	replace: "ay",
+	regex: /(\W|^)asses(?!\w)/,
+	replace: "$1a-es",
 }, {
-	regex: /(\W|^)ass(?=\W|$)/,
+	regex: /(\W|^)ass(?!\w)/,
 	replace: "$1ay",
 }, {
 	regex: /ass(hat|face|head|burger|hole)/,
@@ -70,7 +70,7 @@ const foulDict2 = [{
 	replace: "peepee",
 }, {
 	regex: /vagina/,
-	replace: "vajayjay",
+	replace: "lady part",
 }]
 
 // Sanitize tts text.
