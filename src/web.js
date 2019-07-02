@@ -136,10 +136,6 @@ const server = http.createServer(async (req, res) => {
 
 				res.endJson(data)
 			} break
-			case 'get-songs': {
-				let mp3s = fs.readdirSync('../static').filter(d => d.split('.').pop() == 'mp3')
-				res.endJson(mp3s)
-			} break
 			case 'render-video': {
 				let body = await readJsonBody(req)
 				// TODO: Bearbeta innan skicka till render, beroende på options (ta bort edits osv)
