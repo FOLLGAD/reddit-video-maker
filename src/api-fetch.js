@@ -177,21 +177,16 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 	let workLine = []
 	let markup = commentTemplate(rootComment)
 	let $ = cheerio.load(markup)
-	let ln = $('span.hide').length
 
 	$('span.hide').each((i, _) => {
 		let curr = $('.hide#' + i)
 
 		curr.removeClass('hide')
 		curr.parents('.hide-until-active').removeClass('hide-until-active') // Activate parent elements
-
-		if (curr.is(':last-child') && curr.closest('.DIV_29 > *').is(':last-child')) {
-			// Is last segment of comment; display bottom
+		
+		let hiddenRemaining = curr.closest('.DIV_28').find('span.hide').length
+		if (hiddenRemaining === 0) {
 			curr.closest('.DIV_28').siblings('.DIV_31').removeClass('hide-until-active')
-		}
-
-		if (ln == i + 1) {
-			$('.DIV_31.hide-until-active').removeClass('hide-until-active')
 		}
 
 		let html = $.html()
