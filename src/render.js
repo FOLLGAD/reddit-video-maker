@@ -6,7 +6,11 @@ let path = require('path')
 // Put transitions after every comment and add song.
 // add question & outro
 
-module.exports.render = async function (questionData, commentData, options) {
+const defaultOptions = {
+	keepLinks: false,
+}
+
+module.exports.render = async function (questionData, commentData, options = defaultOptions) {
 	let transitionPath = path.join('../themes', options.theme, 'transition.mkv')
 	let outroPath = path.join('../themes', options.theme, 'outro.mkv')
 	let songPath = path.join('../themes', options.theme, options.song)
@@ -18,7 +22,7 @@ module.exports.render = async function (questionData, commentData, options) {
 	console.log('Rendering', commentData.length, commentData.length === 1 ? 'comment' : 'comments')
 	for (let i = 0; i < commentData.length; i++) {
 		try {
-			let commentFile = await renderComment(commentData[i], i)
+			let commentFile = await renderComment(commentData[i], i, options)
 			videolist.push('../video-output/' + commentFile)
 			videolist.push(transitionPath)
 			console.log("Successfully rendered comment", i)

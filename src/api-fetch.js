@@ -8,7 +8,7 @@ const { splitComment, splitQuestion } = require('./split')
 
 let fileExt = 'mkv'
 
-let compileHtml = function (rootComment) {
+let compileHtml = function (rootComment, options) {
 	let id = 0
 	let rec = commentTree => {
 		let $ = cheerio.load(commentTree.body_html)
@@ -19,6 +19,14 @@ let compileHtml = function (rootComment) {
 		// Removes .text class from all <p> with <li> children
 		$('p li').parent('p').removeClass('text')
 		$('p,li,blockquote').parents('p,li,blockquote').removeClass('text')
+
+		if (!options.keepLinks) {
+			// Remove links
+			$('.text a').each(function () {
+				$(this).contents().insertAfter($(this))
+				$(this).remove()
+			})
+		}
 
 		let tts = []
 
@@ -176,9 +184,9 @@ async function sequentialWork(works) {
 }
 
 // Should return the name of video of the created comment
-module.exports.renderComment = async function renderComment(commentData, name) {
+module.exports.renderComment = async function renderComment(commentData, name, options) {
 	let rootComment = hydrate(commentData, 0.1)
-	let tts = compileHtml(rootComment)
+	let tts = compileHtml(rootComment, options)
 	let workLine = []
 	let markup = commentTemplate(rootComment)
 	let $ = cheerio.load(markup)
@@ -188,7 +196,7 @@ module.exports.renderComment = async function renderComment(commentData, name) {
 
 		curr.removeClass('hide')
 		curr.parents('.hide-until-active').removeClass('hide-until-active') // Activate parent elements
-		
+
 		let hiddenRemaining = curr.closest('.DIV_28').find('span.hide').length
 		if (hiddenRemaining === 0) {
 			curr.closest('.DIV_28').siblings('.DIV_31').removeClass('hide-until-active')
