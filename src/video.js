@@ -151,7 +151,6 @@ const scrollAndConcat = module.exports.scrollAndConcat = async function (videoPa
                 }
             ])
             .output(outPath)
-            .on('start', console.log)
             .on('end', res)
             .on('error', console.error)
             .exec()
