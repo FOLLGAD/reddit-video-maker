@@ -43,33 +43,33 @@ module.exports.macTTSToFile = function (name, text) {
 
 
 // Google API
-const textToSpeech = require('@google-cloud/text-to-speech');
-const client = new textToSpeech.TextToSpeechClient();
-const voice = 'en-GB-Wavenet-D'
-const rate = 1.25
+// const textToSpeech = require('@google-cloud/text-to-speech');
+// const client = new textToSpeech.TextToSpeechClient();
+// const voice = 'en-GB-Wavenet-D'
+// const rate = 1.25
 
-module.exports.synthGoogle = function (name, text) {
-    const request = {
-        input: { text: text },
-        voice: { languageCode: 'en-GB', ssmlGender: 'MALE', name: voice },
-        audioConfig: { audioEncoding: 'aiff', speakingRate: rate },
-    }
-    let promise = new Promise((resolve, reject) => {
-        client.synthesizeSpeech(request, (err, response) => {
-            if (err) {
-                return reject(err)
-            }
-            // Write the binary audio content to a local file
-            fs.writeFile(`../audio-output/${name}`, response.audioContent, 'binary', (err) => {
-                if (err) {
-                    return reject(err)
-                }
-                resolve(name)
-            })
-        })
-    })
-    return promise
-}
+// module.exports.synthGoogle = function (name, text) {
+//     const request = {
+//         input: { text: text },
+//         voice: { languageCode: 'en-GB', ssmlGender: 'MALE', name: voice },
+//         audioConfig: { audioEncoding: 'aiff', speakingRate: rate },
+//     }
+//     let promise = new Promise((resolve, reject) => {
+//         client.synthesizeSpeech(request, (err, response) => {
+//             if (err) {
+//                 return reject(err)
+//             }
+//             // Write the binary audio content to a local file
+//             fs.writeFile(`../audio-output/${name}`, response.audioContent, 'binary', (err) => {
+//                 if (err) {
+//                     return reject(err)
+//                 }
+//                 resolve(name)
+//             })
+//         })
+//     })
+//     return promise
+// }
 
 module.exports.synthOddcast = function (name, text) {
     return new Promise((resolve, reject) => {

@@ -40,9 +40,14 @@ let compileHtml = function (rootComment) {
 				} else {
 					// It's a tag
 					lastWasTag = true
-					let text = cheerio.load(h).html()
-					if (text.indexOf('.') !== -1) lastWasTag = false
-					arr[arr.length - 1] += text
+					let $$ = cheerio.load(h)
+					let html = $$.html()
+					if ($$.text().indexOf('.') !== -1) lastWasTag = false
+					if (arr.length > 0) {
+						arr[arr.length - 1] += html
+					} else {
+						arr[0] = html
+					}
 				}
 			}
 		}
