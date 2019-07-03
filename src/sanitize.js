@@ -71,6 +71,12 @@ const foulDict2 = [{
 }, {
 	regex: /vagina/,
 	replace: "lady part",
+}, {
+	regex: /drug/,
+	replace: "dog",
+}, {
+	regex: /masturbat/,
+	replace: "mas bat",
 }]
 
 // Sanitize tts text.
@@ -112,6 +118,8 @@ const foulSpanArray = [
 	/((?:\W|^)a)(n)(al[^y])/,
 	/(pe)(n)(is)/,
 	/(va)(gi)(na)/,
+	/(dr)(u)(gs)/,
+	/(mast)(urb)(at)/,
 ]
 
 module.exports.sanitizeHtml = function (str) {
