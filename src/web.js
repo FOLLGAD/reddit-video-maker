@@ -121,9 +121,9 @@ const server = http.createServer(async (req, res) => {
 				res.endJson(commentData)
 			} break
 			case 'get-themes': {
-				let themes = fs.readdirSync('../themes', { withFileTypes: true })
-					.filter(dirent => dirent.isDirectory())
-					.map(dirent => ({ name: dirent.name }))
+				let themes = fs.readdirSync('../themes')
+					.filter(name => fs.lstatSync('../themes/' + name).isDirectory())
+					.map(name => ({ name: name }))
 
 				let data = themes.map(th => {
 					let mp3s = fs.readdirSync('../themes/' + th.name).filter(d => d.split('.').pop() == 'mp3')
