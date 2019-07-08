@@ -92,7 +92,7 @@ const combineImageAudio = module.exports.combineImageAudio = function (imagePath
 const combineVideoAudio = module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
     return new Promise((res, rej) => {
         ffmpeg(videoPath)
-            .videoCodec('libx264')
+            .videoCodec('copy')
             .input(audioPath)
             .audioCodec('aac')
             .complexFilter([
