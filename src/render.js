@@ -48,7 +48,7 @@ module.exports.render = async function (questionData, commentData, options = def
 		await concatAndReencode([question, soundFile, outroPath], '../video-output/final.mkv')
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
-		console.error("Rendering failed")
 		console.error(e)
+		console.error("Rendering failed")
 	}
 }
