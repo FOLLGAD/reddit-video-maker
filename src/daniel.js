@@ -66,7 +66,7 @@ module.exports.makeCall = async function (text, engine = 4, language = 1, voice 
 			if (err.message == 400) {
 				throw err
 			}
-			console.log("Retrying")
+			console.log("Daniel: Request failed. Retrying...")
 			// else, try again
 		}
 	}

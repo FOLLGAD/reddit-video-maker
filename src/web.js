@@ -140,6 +140,8 @@ const server = http.createServer(async (req, res) => {
 				let body = await readJsonBody(req)
 				// TODO: Bearbeta innan skicka till render, beroende på options (ta bort edits osv)
 
+				fs.writeFile('./render-data.log.json', JSON.stringify(body, null, '\t'), () => { })
+
 				let question = body.questionData
 				let comments = body.commentData
 				let options = body.options

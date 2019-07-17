@@ -77,6 +77,9 @@ const foulDict2 = [{
 }, {
 	regex: /masturbat/,
 	replace: "mas bat",
+}, {
+	regex: /cocaine/,
+	replace: "coke",
 }]
 
 // Sanitize tts text.
@@ -113,7 +116,7 @@ const foulSpanArray = [
 	/(d)(ic)(k)/,
 	/(ret)(ar)(d)/,
 	/(a)(ss)(hat|face|head|burger|hole)/,
-	/((?:\W|^)a)(n)(al[^y])/,
+	/((?:\W|^)a)(n)(al[^oy])/,
 	/(pe)(n)(is)/,
 	/(va)(gi)(na)/,
 	/(dr)(u)(gs)/,

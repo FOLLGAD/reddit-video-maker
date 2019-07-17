@@ -1,6 +1,6 @@
-const env = require('../env.json')
-const fetch = require('node-fetch')
 const querystring = require('querystring')
+const fetch = require('node-fetch')
+const env = require('../env.json')
 
 // Fetch the auth token from reddit using credentials in .env
 async function getAuth() {
@@ -27,6 +27,16 @@ let defaultOpts = {
 	start: 0,
 	end: 100,
 	sortBy: 'best',
+}
+
+async function fetchSubreddit(subreddit) {
+	await fetch(`https://oauth.reddit.com/r/${subreddit}/about`, {
+		headers: {
+			Authorization: `Bearer ${access_token}`,
+		}
+	}).then(r => {
+		return r.json()
+	})
 }
 
 // An array of all comments of which you want data
