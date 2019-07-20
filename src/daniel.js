@@ -44,6 +44,7 @@ function getTextPromise(engine, language, voice, text, acc, checksum) {
 
 // Make call will return a request with the mp3 file
 // "text" cannot include some characters, like [><\n]
+// Usually takes between 2-5 seconds
 module.exports.makeCall = async function (text, engine = 4, language = 1, voice = 5) {
 	text = text
 		.replace(/&/g, ' and ') // '&' doesn't work for Daniel, he says &amp instead
