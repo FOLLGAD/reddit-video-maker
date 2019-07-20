@@ -159,32 +159,36 @@ function hydrate(comment, upvoteProb = 0.1) {
 	return comment
 }
 
-async function sequentialWork(works) {
-	let arr = []
-	for (let i = 0; i < works.length; i++) {
-		let obj = works[i]
+async function sequentialWork(works, tailinator) {
+	let promiseArr = works.map(obj => new Promise(async r => {
 		let imgPromise = launch(obj.name, obj.type, obj.imgObj)
 		let audioPromise = synthSpeech(obj.name + '.aiff', obj.tts)
 		try {
+			let d1 = Date.now()
 			let [img, audio] = await Promise.all([imgPromise, audioPromise])
+			console.log("Img+Audio fetch took", Date.now() - d1 + "ms")
 			let path = `../video-temp/${obj.name}.${fileExt}`
-			await combineImageAudio('../images/' + img, '../audio-output/' + audio, path)
-			arr.push(path)
+			if (tailinator) {
+				tailinator.add(() => combineImageAudio('../images/' + img, '../audio-output/' + audio, path))
+			} else {
+				let d2 = Date.now()
+				await combineImageAudio('../images/' + img, '../audio-output/' + audio, path)
+				console.log("Combining op took", Date.now() - d2 + "ms")
+			}
+			r(path)
 		} catch (e) {
 			// Do nothing, skips frame
 			console.log("Failed frame")
 			console.error(e)
+			r(null)
 		}
-	}
-	if (arr.length === 0) {
-		// Skip this shit
-		throw new Error("Comment render: No segments succeeded.")
-	}
-	return arr
+	}))
+	let ret = await Promise.all(promiseArr)
+	return ret.filter(d => d)
 }
 
 // Should return the name of video of the created comment
-module.exports.renderComment = async function renderComment(commentData, name, options) {
+module.exports.renderComment = async function renderComment(commentData, name, options, tailinator) {
 	let rootComment = hydrate(commentData, 0.1)
 	let tts = compileHtml(rootComment, options)
 	let workLine = []
@@ -214,10 +218,16 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		workLine.push(obj)
 	})
 
-	return await sequentialWork(workLine)
+	return await sequentialWork(workLine, tailinator)
 		.then(async videos => {
 			let path = `../video-output/${name}.${fileExt}`
-			await advancedConcat(videos.filter(v => v != null), path)
+
+			if (tailinator) {
+				tailinator.add(() => advancedConcat(videos.filter(v => v != null), path))
+			} else {
+				await advancedConcat(videos.filter(v => v != null), path)
+			}
+
 			return path
 		})
 }

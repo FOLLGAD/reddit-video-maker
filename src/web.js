@@ -60,6 +60,18 @@ function readJsonBody(req) {
 	})
 }
 
+class Tailinator {
+	constructor() {
+		this.tail = Promise.resolve()
+		this.count = 0
+	}
+	add(func) {
+		this.count++
+		this.tail = this.tail.then(func)
+		this.tail.finally(() => this.count--)
+	}
+}
+
 const server = http.createServer(async (req, res) => {
 	// PREFLIGHT CORS FIX
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -80,6 +92,8 @@ const server = http.createServer(async (req, res) => {
 
 	let parsedUrl = url.parse(req.url)
 	let pathnames = parsedUrl.pathname.split('/').slice(1)
+
+	let queue = new Tailinator()
 
 	if (pathnames[0] !== 'api') {
 		res.setHeader('Content-Type', 'text/html')
@@ -149,7 +163,7 @@ const server = http.createServer(async (req, res) => {
 				if (!options.theme) console.error("No theme selected")
 				if (!options.song) console.error("No song selected")
 
-				render(question, comments, options)
+				queue.add(render(question, comments, options))
 
 				res.statusCode = 201
 				res.endJson({ message: 'Rendering' })

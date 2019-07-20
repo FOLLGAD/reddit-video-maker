@@ -39,15 +39,26 @@ function addTransitions(videolist, options) {
 }
 module.exports.addTransitions = addTransitions
 
+class Tailinator {
+	constructor() {
+		this.tail = Promise.resolve()
+	}
+	add(func) {
+		this.tail = this.tail.then(func)
+	}
+}
+
 module.exports.render = async function (questionData, commentData, options = defaultOptions) {
 	console.log('Started rendering')
 	let start = Date.now()
 	let videolist = []
 
+	let tailinator = new Tailinator()
+
 	console.log('Rendering', commentData.length, commentData.length === 1 ? 'comment' : 'comments')
 	for (let i = 0; i < commentData.length; i++) {
 		try {
-			let commentFile = await renderComment(commentData[i], i, options)
+			let commentFile = await renderComment(commentData[i], i, options, tailinator)
 			videolist.push('../video-output/' + commentFile)
 			console.log("Successfully rendered comment", i)
 		} catch (e) {
@@ -55,6 +66,8 @@ module.exports.render = async function (questionData, commentData, options = def
 			console.log("Comment number", i, "failed to render. It will not be added.")
 		}
 	}
+
+	await tailinator.tail
 
 	videolist = addTransitions(videolist, options)
 

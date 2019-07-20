@@ -9,10 +9,12 @@ let intermediaryFileFormat = 'mkv'
 let tempFolder = '../video-temp/'
 
 function getConcat(videoPaths, outPath) {
-    // ffmpeg(`concat:${videoPaths.join('|')}`)
     let f = ffmpeg()
-    videoPaths.forEach(v => f.input(v))
-    // f.mergeToFile(outPath, tempFolder)
+    videoPaths.forEach(v =>
+        f.input(v)
+            .inputFormat(intermediaryFileFormat)
+            .inputFPS(25)
+    )
     return f
 }
 
@@ -43,7 +45,6 @@ const simpleConcat = module.exports.simpleConcat = function (videoPaths, outPath
         getConcat(videoPaths, outPath)
             .videoCodec('libx264')
             .audioCodec('aac')
-            .inputFPS(25)
             .audioFrequency(24000)
             .audioChannels(1)
             .on('end', res)
@@ -71,6 +72,7 @@ const combineImageAudio = module.exports.combineImageAudio = function (imagePath
             ])
         }
         f.input(audioPath)
+            .inputFormat('mp3')
             .duration(audioInfo.format.duration - 0.15)
             .fps(25)
             .outputOptions([
@@ -92,6 +94,7 @@ const combineImageAudio = module.exports.combineImageAudio = function (imagePath
 const combineVideoAudio = module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
     return new Promise((res, rej) => {
         ffmpeg(videoPath)
+            .inputFormat(intermediaryFileFormat)
             .videoCodec('copy')
             .input(audioPath)
             .audioCodec('aac')
