@@ -100,9 +100,9 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 			author: comm.author,
 			created_utc: comm.created_utc,
 			edited: comm.edited,
-			gildings: comm.gildings,
 			body_html: comm.body_html,
 			id: comm.id,
+			all_awardings: comm.all_awardings,
 
 			replies: comm.replies && comm.replies.data && comm.replies.data.children.slice(0, -1).map(extractComment),
 		}
@@ -114,7 +114,7 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 			author: question.author,
 			created_utc: question.created_utc,
 			num_comments: question.num_comments,
-			gildings: question.gildings,
+			all_awardings: question.all_awardings,
 			title: question.title,
 			id: question.id,
 			nsfw: question.thumbnail === 'nsfw',

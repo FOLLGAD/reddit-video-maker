@@ -36,39 +36,16 @@
 					<div class="DIV_27">
 					</div>
 					<div class="DIV_GILDS">
-						{{#if silvers}}
-						<span class="SPAN_SILVER">
-							<i class="I_SILVER">
-								<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-silver-cartoon.png"
-									class="IMG_SILVER" alt='' />
-							</i>
-							{{#ifgt silvers 1}}
-							{{ silvers }}
-							{{/ ifgt}}
-						</span>
-						{{/if}}
-						{{#if golds}}
-						<span class="SPAN_GOLD">
-							<i class="I_GOLD">
-								<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-gold-cartoon.png"
-									class="IMG_GOLD" alt='' />
-							</i>
-							{{#ifgt golds 1}}
-							{{ golds }}
-							{{/ ifgt}}
-						</span>
-						{{/if}}
-						{{#if platina}}
-						<span class="SPAN_GOLD">
-							<i class="I_GOLD">
-								<img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-platinum-cartoon.png"
-									class="IMG_GOLD" alt='' />
-							</i>
-							{{#ifgt platina 1}}
-							{{ golds }}
-							{{/ ifgt}}
-						</span>
-						{{/if}}
+						{{#each all_awardings}}
+							<!-- Print all Awards -->
+							{{#if is_enabled}}
+								<span class="SPAN_SILVER">
+									<i class="I_SILVER">
+										<img src="{{icon_url}}"
+											class="IMG_SILVER" alt='' /></i>{{#ifgt count 1}}{{count}}{{/ifgt}}
+								</span>
+							{{/if}}
+						{{/each}}
 					</div>
 				</div>
 				<div class="DIV_28">
@@ -98,7 +75,7 @@
 					</button>
 				</div>
 				{{#each replies as |reply|}}
-				{{> comment reply}}
+					{{> comment reply}} <!-- Recursively create all child-comments under this one -->
 				{{/ each}}
 			</div>
 		</div>

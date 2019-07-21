@@ -720,27 +720,16 @@
                             id="A_19" rel="nofollow noopener">{{created}}</a>
                     </div>
                     <div id="DIV_GILDS">
-                        {{#if platina}}
-                        <span id="SPAN_GOLD">
-                            <i id="I_GOLD">
-                                <img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-platinum-cartoon.png"
-                                    id="IMG_GOLD" alt='' /></i>{{#ifgt platina 1}}{{platina}}{{/ifgt}}
-                        </span>
-                        {{/if}}
-                        {{#if golds}}
-                        <span id="SPAN_GOLD">
-                            <i id="I_GOLD">
-                                <img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-gold-cartoon.png"
-                                    id="IMG_GOLD" alt='' /></i>{{#ifgt golds 1}}{{golds}}{{/ifgt}}
-                        </span>
-                        {{/if}}
-                        {{#if silvers}}
-                        <span id="SPAN_SILVER">
-                            <i id="I_SILVER">
-                                <img src="https://www.redditstatic.com/desktop2x/img/gold/badges/award-silver-cartoon.png"
-                                    id="IMG_SILVER" alt='' /></i>{{#ifgt silvers 1}}{{silvers}}{{/ifgt}}
-                        </span>
-                        {{/if}}
+                        {{#each all_awardings}}
+                            <!-- Print all Awards -->
+                            {{#if is_enabled}}
+                                <span id="SPAN_GOLD">
+                                    <i id="I_GOLD">
+                                        <img src="{{icon_url}}"
+                                            id="IMG_GOLD" alt='' /></i>{{#ifgt count 1}}{{count}}{{/ifgt}}
+                                </span>
+                            {{/if}}
+                        {{/each}}
                     </div>
                 </div>
             </div>

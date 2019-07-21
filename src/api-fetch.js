@@ -146,12 +146,14 @@ function hydrate(comment, upvoteProb = 0.1) {
 	if (comment.num_comments) {
 		comment.num_comments = formatNum(comment.num_comments)
 	}
-	comment.silvers = comment.gildings.gid_1
-	comment.golds = comment.gildings.gid_2
-	comment.platina = comment.gildings.gid_3
 	if (comment.replies) {
 		comment.replies = comment.replies.map(hydrate)
 	}
+	comment.all_awardings = comment.all_awardings.map(d => ({
+		is_enabled: d.is_enabled,
+		count: d.count,
+		icon_url: d.resized_icons[1].url, // Pick the 32x32 image
+	}))
 	comment.showBottom = true
 	comment.upvoted = Math.random() < upvoteProb // Some of the posts will randomly be seen as upvoted
 	comment.authorHtml = sanitizeUsername(comment.author)
