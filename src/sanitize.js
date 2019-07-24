@@ -105,7 +105,7 @@ const foulSpanArray = [
 	/((?:\W|^)d)(ic)(k)/,
 	/((?:\W|^)a)(ss)(es)(?!\w)/,
 	/((?:\W|^)a)(ss)(\W|$)/,
-	/((?:\W|^)r)(ap)(e|ist)/,
+	/((?:\W|^)r)(ap)(e|ist|ing)/,
 	/((?:\W|^)c)(u)(m)/,
 	/((?:\W|^)t)(i)(ts)/,
 	/(t)(it)(ties)/,
@@ -121,14 +121,19 @@ const foulSpanArray = [
 	/(va)(gi)(na)/,
 	/(dr)(u)(gs)/,
 	/(mast)(urb)(at)/,
+	/(dr)(u)(gs)/,
 ]
 
 // These will replace the html with another word in full
 const foulReplace = [
 	{
 		regex: /(\W|^)raping/,
-		replace: "$1violating"
+		replace: "$1violating",
 	},
+	{
+		regex: /drugs/,
+		replace: "substances",
+	}
 ]
 
 module.exports.sanitizeHtml = function (str) {
@@ -146,7 +151,7 @@ const sanitizeUsenameArray = [
 	/(a)(ss)()/, // HAS TO BE FIRST
 	...foulSpanArray,
 	/(d)(ic)(k)/,
-	/(r)(ap)(e|ist)/,
+	/(r)(ap)(e|ist|ing)/,
 	/(c)(u)(m)/,
 	/(t)(i)(ts)/,
 	/(a)(n)(al)/,
