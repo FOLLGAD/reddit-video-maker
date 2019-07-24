@@ -5,6 +5,7 @@ const { launch, commentTemplate } = require('./puppet')
 const { combineImageAudio, padAndConcat } = require('./video')
 const { sanitizeHtml, sanitizeUsername } = require('./sanitize')
 const { splitComment, splitQuestion } = require('./split')
+const tmp = require('tmp')
 
 let fileExt = 'mkv'
 
@@ -168,9 +169,10 @@ async function sequentialWork(works) {
 		let imgPromise = launch(obj.name, obj.type, obj.imgObj)
 		let audioPromise = synthSpeech(obj.name + '.aiff', obj.tts)
 		try {
-			let [img, audio] = await Promise.all([imgPromise, audioPromise])
-			let path = `../video-temp/${obj.name}.${fileExt}`
-			await combineImageAudio('../images/' + img, '../audio-output/' + audio, path)
+			let [imgPath, audioPath] = await Promise.all([imgPromise, audioPromise])
+			let file = tmp.fileSync({ postfix: '.mkv' })
+			let path = file.name
+			await combineImageAudio(imgPath, audioPath, path)
 			arr.push(path)
 		} catch (e) {
 			// Do nothing, skips frame
@@ -198,12 +200,12 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 
 		curr.removeClass('hide')
 		curr.parents('.hide-until-active').removeClass('hide-until-active') // Activate parent elements
-		
+
 		let hiddenRemaining = curr.closest('.DIV_28').find('span.hide').length
 		if (hiddenRemaining === 0) {
 			curr.closest('.DIV_28').siblings('.DIV_31').removeClass('hide-until-active')
 		}
-		
+
 		curr.addClass('center-elem')
 		let html = $.html()
 		curr.removeClass('center-elem')
@@ -220,7 +222,8 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 
 	return await sequentialWork(workLine)
 		.then(async videos => {
-			let path = `../video-output/${name}.${fileExt}`
+			let file = tmp.fileSync({ postfix: '.mkv' })
+			let path = file.name
 			await padAndConcat(videos.filter(v => v != null), path)
 			return path
 		})
@@ -255,7 +258,8 @@ module.exports.renderQuestion = function renderQuestion(questionData) {
 
 	return sequentialWork(workLine)
 		.then(async videos => {
-			let path = `../video-output/${name}.${fileExt}`
+			let file = tmp.fileSync({ postfix: '.mkv' })
+			let path = file.name
 			await padAndConcat(videos.filter(v => v != null), path)
 			return path
 		})

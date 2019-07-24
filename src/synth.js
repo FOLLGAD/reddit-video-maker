@@ -2,12 +2,13 @@ const fs = require('fs')
 const { makeCall } = require('./daniel')
 const { sanitizeSynth } = require('./sanitize')
 const { spawn } = require('child_process')
+const tmp = require('tmp')
 
 module.exports.synthSpeech = function (name, text) {
     let sanText = sanitizeSynth(text)
 
     if (!/[\d\w]/.test(sanText)) { // If no letter or number is in text, don't produce it
-        return Promise.reject("Error: TTS is empty")
+        return Promise.reject("Warning: TTS for current frame is empty")
     }
 
     return module.exports.synthOddcast(name, sanText)
@@ -73,11 +74,14 @@ module.exports.macTTSToFile = function (name, text) {
 
 module.exports.synthOddcast = function (name, text) {
     return new Promise((resolve, reject) => {
+
         makeCall(text)
             .then(res => res.buffer())
             .then(buffer => {
-                fs.writeFileSync(`../audio-output/${name}`, buffer)
-                resolve(name)
+                let file = tmp.fileSync()
+                let filepath = file.name
+                fs.writeFileSync(filepath, buffer)
+                resolve(filepath)
             })
             .catch(() => {
                 reject()

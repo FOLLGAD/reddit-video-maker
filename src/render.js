@@ -1,29 +1,26 @@
 let { renderComment, renderQuestion } = require('./api-fetch')
 let { combineVideoAudio, concatAndReencode, simpleConcat } = require('./video')
 let path = require('path')
+let tmp = require('tmp')
 
 // Input: thread; array of comment ID:s
 // Put transitions after every comment and add song.
 // add question & outro
 
-const defaultOptions = {
-	keepLinks: false,
-}
-
-async function renderFromComments(question, videolist, options) {
+async function renderFromComments(question, videolist, options, inputPath) {
 	let outroPath = path.join('../themes', options.theme, 'outro.mkv')
 	let songPath = path.join('../themes', options.theme, options.song)
 
 	console.log("Adding transitions...")
-	let nosoundFile = '../video-output/no-sound.mkv'
-	await simpleConcat(videolist, nosoundFile)
+	let nosoundFile = tmp.fileSync({ postfix: '.mkv' })
+	await simpleConcat(videolist, nosoundFile.name)
 
 	console.log("Adding sound...")
-	let soundFile = '../video-output/with-sound.mkv'
-	await combineVideoAudio(nosoundFile, songPath, soundFile)
+	let soundFile = tmp.fileSync({ postfix: '.mkv' })
+	await combineVideoAudio(nosoundFile.name, songPath, soundFile.name)
 
 	console.log("Rendering final...")
-	await concatAndReencode([question, soundFile, outroPath], '../video-output/final.mkv')
+	await concatAndReencode([question, soundFile.name, outroPath], inputPath)
 }
 module.exports.renderFromComments = renderFromComments
 
@@ -39,6 +36,11 @@ function addTransitions(videolist, options) {
 }
 module.exports.addTransitions = addTransitions
 
+const defaultOptions = {
+	keepLinks: false,
+	outputName: 'final'
+}
+
 module.exports.render = async function (questionData, commentData, options = defaultOptions) {
 	console.log('Started rendering')
 	let start = Date.now()
@@ -47,8 +49,8 @@ module.exports.render = async function (questionData, commentData, options = def
 	console.log('Rendering', commentData.length, commentData.length === 1 ? 'comment' : 'comments')
 	for (let i = 0; i < commentData.length; i++) {
 		try {
-			let commentFile = await renderComment(commentData[i], i, options)
-			videolist.push('../video-output/' + commentFile)
+			let commentPath = await renderComment(commentData[i], i, options)
+			videolist.push(commentPath)
 			console.log("Successfully rendered comment", i)
 		} catch (e) {
 			console.error(e)
@@ -62,7 +64,7 @@ module.exports.render = async function (questionData, commentData, options = def
 		console.log("Rendering question...")
 		let question = await renderQuestion(questionData)
 
-		await renderFromComments(question, videolist, options)
+		await renderFromComments(question, videolist, options, `../video-output/${options.outputName}.mkv`)
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
 		console.error(e)

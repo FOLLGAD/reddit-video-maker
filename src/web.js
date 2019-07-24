@@ -149,6 +149,8 @@ const server = http.createServer(async (req, res) => {
 				if (!options.theme) console.error("No theme selected")
 				if (!options.song) console.error("No song selected")
 
+				options.outputName = question.id
+
 				render(question, comments, options)
 
 				res.statusCode = 201

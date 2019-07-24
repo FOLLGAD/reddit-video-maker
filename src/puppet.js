@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer'),
 	handles = require('handlebars'),
-	fs = require('fs')
+	fs = require('fs'),
+	tmp = require('tmp')
 
 // Handlebar helper needed for inline comparisons in templates
 handles.registerHelper('ifgt', function (val1, val2, options) {
@@ -33,28 +34,30 @@ module.exports.startInstance()
 
 async function launchComment(name, markup) {
 	const page = await browser.newPage()
-	const filename = `${name}.png`
-	
+
 	await page.setContent(markup)
-	
+
 	let dsf = 2.4,
-	pageWidth = 1920 / dsf,
-	pageHeight = 1080 / dsf
-	
+		pageWidth = 1920 / dsf,
+		pageHeight = 1080 / dsf
+
 	await page.setViewport({
 		width: pageWidth,
 		height: pageHeight,
 		deviceScaleFactor: dsf,
 	})
-	
+
 	let height = await page.$eval('.DIV_1', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
-	
+
 	await page.setViewport({
 		width: pageWidth,
 		height: height,
 		deviceScaleFactor: dsf,
 	})
-	
+
+	let file = tmp.fileSync()
+	let filepath = file.name
+
 	if (height * dsf > 1080) {
 		// Expects there to be an element with class "center-elem", which is where it will put focus.
 		let focus = await page.$eval('.center-elem', e => {
@@ -72,7 +75,9 @@ async function launchComment(name, markup) {
 		let y = Math.max(Math.min(terracedTopPadding, height - pageHeight), 0)
 
 		await page.screenshot({
-			encoding: 'binary', path: `../images/${filename}`,
+			encoding: 'binary',
+			path: filepath,
+			type: 'png',
 			clip: {
 				x: 0,
 				y: y,
@@ -82,18 +87,21 @@ async function launchComment(name, markup) {
 		})
 	} else {
 		await page.screenshot({
-			encoding: 'binary', path: `../images/${filename}`,
+			encoding: 'binary',
+			path: filepath,
+			type: 'png',
 		})
 	}
 
 	page.close()
 
-	return filename
+	return filepath
 }
 
 async function launchQuestion(name, context) {
 	const page = await browser.newPage()
-	const filename = `${name}.png`
+	let file = tmp.fileSync()
+	let filepath = file.name
 
 	let markup = questionTemplate(context)
 
@@ -113,10 +121,10 @@ async function launchQuestion(name, context) {
 		deviceScaleFactor: 3,
 	})
 
-	await page.screenshot({ encoding: 'binary', path: `../images/${filename}` })
+	await page.screenshot({ encoding: 'binary', path: filepath, type: 'png' })
 	page.close()
 
-	return filename
+	return filepath
 }
 
 module.exports.launch = function launch(name, type, context) {

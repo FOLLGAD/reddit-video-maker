@@ -1,4 +1,7 @@
-const ffmpeg = require('fluent-ffmpeg')
+const ffmpeg = require('fluent-ffmpeg'),
+    tmp = require('tmp')
+
+tmp.setGracefulCleanup() // Enforce graceful file cleanup
 
 let color = '#19191a' // Dark mode
 // let color = '#ffffff' // Light mode
@@ -7,9 +10,11 @@ let color = '#19191a' // Dark mode
 
 let intermediaryFileFormat = 'mkv'
 let inputFormat = 'matroska'
-let tempFolder = '../video-temp/'
 
-function getConcat(videoPaths, outPath) {
+let tempFolderInfo = tmp.dirSync()
+let tempFolder = tempFolderInfo.name
+
+function getConcat(videoPaths) {
     // ffmpeg(`concat:${videoPaths.join('|')}`)
     let f = ffmpeg()
     videoPaths.forEach(v =>
@@ -31,7 +36,7 @@ const probe = module.exports.probe = function (path) {
 
 const concatAndReencode = module.exports.concatAndReencode = function (videoPaths, outPath) {
     return new Promise((res, rej) => {
-        getConcat(videoPaths, outPath)
+        getConcat(videoPaths)
             .videoCodec('libx264')
             .audioCodec('aac')
             .audioFrequency(24000)
@@ -44,7 +49,7 @@ const concatAndReencode = module.exports.concatAndReencode = function (videoPath
 
 const simpleConcat = module.exports.simpleConcat = function (videoPaths, outPath) {
     return new Promise((res, rej) => {
-        getConcat(videoPaths, outPath)
+        getConcat(videoPaths)
             .videoCodec('libx264')
             .audioCodec('aac')
             .inputFPS(25)
@@ -58,23 +63,16 @@ const simpleConcat = module.exports.simpleConcat = function (videoPaths, outPath
 
 const combineImageAudio = module.exports.combineImageAudio = function (imagePath, audioPath, outPath) {
     return new Promise(async (res, rej) => {
-        let [imageInfo, audioInfo] = await Promise.all([probe(imagePath), probe(audioPath)])
+        let audioInfo = await probe(audioPath)
         let f = ffmpeg(imagePath)
             .inputOptions([
                 '-loop 1',
             ])
             .videoCodec('libx264')
-
-        if (imageInfo.streams[0].height > 1080) {
-            f.videoFilters([
-                `pad=height=ceil(ih/2)*2:color=${color}`,
-            ])
-        } else {
-            f.videoFilters([
+            .videoFilters([
                 `pad=1920:1080:(ow-iw)/2:(oh-ih)/2:${color}`
             ])
-        }
-        f.input(audioPath)
+            .input(audioPath)
             .duration(audioInfo.format.duration - 0.15)
             .fps(25)
             .outputOptions([
@@ -119,7 +117,7 @@ const combineVideoAudio = module.exports.combineVideoAudio = function (videoPath
 
 const padAndConcat = module.exports.padAndConcat = function (videoPaths, outPath) {
     return new Promise((res, rej) => {
-        getConcat(videoPaths, outPath)
+        getConcat(videoPaths)
             .videoCodec('libx264')
             .audioCodec('aac')
             .audioFrequency(24000)
