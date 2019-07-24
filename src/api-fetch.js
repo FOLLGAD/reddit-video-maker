@@ -2,7 +2,7 @@ const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
-const { advancedConcat, combineImageAudio, padAndConcat } = require('./video')
+const { combineImageAudio, padAndConcat } = require('./video')
 const { sanitizeHtml, sanitizeUsername } = require('./sanitize')
 const { splitComment, splitQuestion } = require('./split')
 
@@ -198,13 +198,15 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 
 		curr.removeClass('hide')
 		curr.parents('.hide-until-active').removeClass('hide-until-active') // Activate parent elements
-
+		
 		let hiddenRemaining = curr.closest('.DIV_28').find('span.hide').length
 		if (hiddenRemaining === 0) {
 			curr.closest('.DIV_28').siblings('.DIV_31').removeClass('hide-until-active')
 		}
-
+		
+		curr.addClass('center-elem')
 		let html = $.html()
+		curr.removeClass('center-elem')
 
 		let obj = {
 			name: name + '-' + i,
@@ -219,7 +221,7 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 	return await sequentialWork(workLine)
 		.then(async videos => {
 			let path = `../video-output/${name}.${fileExt}`
-			await advancedConcat(videos.filter(v => v != null), path)
+			await padAndConcat(videos.filter(v => v != null), path)
 			return path
 		})
 }

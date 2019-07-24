@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer'),
 	handles = require('handlebars'),
 	fs = require('fs')
 
+// Handlebar helper needed for inline comparisons in templates
 handles.registerHelper('ifgt', function (val1, val2, options) {
 	if (val1 > val2) {
 		return options.fn(this);
@@ -24,7 +25,7 @@ module.exports.startInstance = async function startInstance() {
 			'font-render-hinting=none'
 		]
 	})
-	
+
 	return
 }
 
@@ -33,27 +34,58 @@ module.exports.startInstance()
 async function launchComment(name, markup) {
 	const page = await browser.newPage()
 	const filename = `${name}.png`
-
-	await page.setContent(markup);
-
-	let dsf = 2.4
-	page.setViewport({
-		width: 1920 / dsf,
-		height: 1080 / dsf,
+	
+	await page.setContent(markup)
+	
+	let dsf = 2.4,
+	pageWidth = 1920 / dsf,
+	pageHeight = 1080 / dsf
+	
+	await page.setViewport({
+		width: pageWidth,
+		height: pageHeight,
 		deviceScaleFactor: dsf,
 	})
-
+	
 	let height = await page.$eval('.DIV_1', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
-
-	page.setViewport({
-		width: 1920 / dsf,
+	
+	await page.setViewport({
+		width: pageWidth,
 		height: height,
 		deviceScaleFactor: dsf,
 	})
+	
+	if (height * dsf > 1080) {
+		// Expects there to be an element with class "center-elem", which is where it will put focus.
+		let focus = await page.$eval('.center-elem', e => {
+			let rect = e.getBoundingClientRect()
+			return {
+				y: rect.y,
+				height: rect.height,
+			}
+		})
 
-	await page.screenshot({
-		encoding: 'binary', path: `../images/${filename}`,
-	})
+		let topPadding = focus.y + focus.height // top padding required to focus the current element
+
+		let terracedTopPadding = topPadding - topPadding % (pageHeight * 0.8) - pageHeight * 0.1 // "Terrace" the top padding, causing it to only move when it needs to
+
+		let y = Math.max(Math.min(terracedTopPadding, height - pageHeight), 0)
+
+		await page.screenshot({
+			encoding: 'binary', path: `../images/${filename}`,
+			clip: {
+				x: 0,
+				y: y,
+				width: pageWidth,
+				height: pageHeight,
+			},
+		})
+	} else {
+		await page.screenshot({
+			encoding: 'binary', path: `../images/${filename}`,
+		})
+	}
+
 	page.close()
 
 	return filename

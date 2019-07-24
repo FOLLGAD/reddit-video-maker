@@ -6,12 +6,16 @@ let color = '#19191a' // Dark mode
 // ffmpeg -i transition_new_dark.mp4 -c:a aac -c:v libx264 -r 25 -ac 2 -ar 24000 transition_dark.mkv
 
 let intermediaryFileFormat = 'mkv'
+let inputFormat = 'matroska'
 let tempFolder = '../video-temp/'
 
 function getConcat(videoPaths, outPath) {
     // ffmpeg(`concat:${videoPaths.join('|')}`)
     let f = ffmpeg()
-    videoPaths.forEach(v => f.input(v))
+    videoPaths.forEach(v =>
+        f.input(v)
+            .inputFormat(inputFormat)
+    )
     // f.mergeToFile(outPath, tempFolder)
     return f
 }
@@ -92,6 +96,7 @@ const combineImageAudio = module.exports.combineImageAudio = function (imagePath
 const combineVideoAudio = module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
     return new Promise((res, rej) => {
         ffmpeg(videoPath)
+            .inputFormat(inputFormat)
             .videoCodec('copy')
             .input(audioPath)
             .audioCodec('aac')
@@ -123,46 +128,4 @@ const padAndConcat = module.exports.padAndConcat = function (videoPaths, outPath
             .on('error', console.error)
             .mergeToFile(outPath, tempFolder)
     })
-}
-
-const scrollAndConcat = module.exports.scrollAndConcat = async function (videoPaths, outPath) {
-    let temp = tempFolder + 'scroll-temp.' + intermediaryFileFormat
-    await simpleConcat(videoPaths, temp)
-
-    let info = await probe(temp)
-    let duration = info.format.duration
-    let margin = 6
-
-    return await new Promise(res => {
-        ffmpeg(`color=c=${color}:s=1920x1080`)
-            .inputFormat('lavfi')
-            .input(temp)
-            .videoCodec('libx264')
-            .audioCodec('aac')
-            .audioFrequency(24000)
-            .duration(duration)
-            .complexFilter([
-                // `[0]overlay=y=if(gte(t\\, ${margin})\\, if(gte(t\\, ${duration} - ${margin})\\, H - h\\, (H - h) * (t - ${margin}) / (${duration} - ${margin} * 2))\\, 0)`,
-                {
-                    inputs: '0', filter: 'overlay',
-                    options: {
-                        y: `if(gte(t, ${duration / 2}), H - h, 0)` // Simple up/down
-                    }
-                }
-            ])
-            .output(outPath)
-            .on('end', res)
-            .on('error', console.error)
-            .exec()
-    })
-}
-
-const advancedConcat = module.exports.advancedConcat = async function (videoPaths, outPath) {
-    let info = await probe(videoPaths[0])
-    let { height } = info.streams.find(obj => obj.codec_type === 'video')
-    if (height > 1080) {
-        return await scrollAndConcat(videoPaths, outPath)
-    } else {
-        return await padAndConcat(videoPaths, outPath)
-    }
 }
