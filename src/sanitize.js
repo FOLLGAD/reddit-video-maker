@@ -134,7 +134,7 @@ const foulReplace = [
 module.exports.sanitizeHtml = function (str) {
 	foulReplace.forEach(elem => {
 		// Replaces every occurance with the the corresponding value in the dictionary
-		str = text.replace(new RegExp(elem.regex, 'gmi'), elem.replace)
+		str = str.replace(new RegExp(elem.regex, 'gmi'), elem.replace)
 	})
 	foulSpanArray.forEach(reg => {
 		str = str.replace(new RegExp(reg, 'gmi'), '$1<span class="blur">$2</span>$3')
