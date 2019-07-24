@@ -93,7 +93,7 @@ module.exports.sanitizeSynth = function (text) {
 	return text
 }
 
-// What the html will display instead
+// These will hide the middle of the three regex groups
 const foulSpanArray = [
 	/(f)(uck)()/,
 	/(sh)(it)()/,
@@ -123,7 +123,19 @@ const foulSpanArray = [
 	/(mast)(urb)(at)/,
 ]
 
+// These will replace the html with another word in full
+const foulReplace = [
+	{
+		regex: /(\W|^)raping/,
+		replace: "$1violating"
+	},
+]
+
 module.exports.sanitizeHtml = function (str) {
+	foulReplace.forEach(elem => {
+		// Replaces every occurance with the the corresponding value in the dictionary
+		str = text.replace(new RegExp(elem.regex, 'gmi'), elem.replace)
+	})
 	foulSpanArray.forEach(reg => {
 		str = str.replace(new RegExp(reg, 'gmi'), '$1<span class="blur">$2</span>$3')
 	})
