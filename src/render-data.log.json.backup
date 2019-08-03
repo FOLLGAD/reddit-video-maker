@@ -1,0 +1,1074 @@
+{
+	"questionData": {
+		"score": 34369,
+		"author": "valerian217",
+		"created_utc": 1564657564,
+		"num_comments": 8485,
+		"all_awardings": [
+			{
+				"is_enabled": true,
+				"count": 2,
+				"subreddit_id": null,
+				"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+				"name": "Gold",
+				"icon_width": 512,
+				"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+				"days_of_premium": 7,
+				"subreddit_coin_reward": 0,
+				"icon_height": 512,
+				"resized_icons": [
+					{
+						"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+						"width": 16,
+						"height": 16
+					},
+					{
+						"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+						"width": 32,
+						"height": 32
+					},
+					{
+						"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+						"width": 48,
+						"height": 48
+					},
+					{
+						"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+						"width": 64,
+						"height": 64
+					},
+					{
+						"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+						"width": 128,
+						"height": 128
+					}
+				],
+				"days_of_drip_extension": 0,
+				"award_type": "global",
+				"coin_price": 500,
+				"id": "gid_2",
+				"coin_reward": 100
+			}
+		],
+		"title": "What is your \"guess I can't go into that store ever again\" story?",
+		"id": "ckmwrg",
+		"nsfw": false,
+		"flair": {
+			"text": null,
+			"bgColor": ""
+		}
+	},
+	"commentData": [
+		{
+			"score": 24376,
+			"author": "brp",
+			"created_utc": 1564658722,
+			"edited": 1564677463,
+			"body_html": "<p>When I was a kid, my family went to a Pizzeria Uno and before the food came I went to \"inspect the plumbing\".</p>\n<p>They had those sinks where you press down on the knob and the water would flow, with the knob slowly raising back up before it would turn off after 20 seconds.</p>\n<p>I used my fist and hit the top of the knob and the thing just popped off and a huge geyser of water was erupting nonstop. &nbsp;Me and another kid were in there, we looked at each other and just bolted from the bathroom.</p>\n<p>I got back to my seat and just sat there silent. &nbsp;Then my mom went to use the bathroom, and when she came back she told us this story of how there was a pool in the bathroom hallway and the manager and an employee were in the men's room slipping and sliding trying to shutoff the water.</p>\n<p>My whole family was laughing at the story, but I just sat there silent. &nbsp;They asked me what's wrong and I told them it was me that did it.</p>\n<p>They never fail to mention it every time we drive past a Pizzeria Uno, even now 20 years later. &nbsp;I've never stepped foot in one since then.</p>",
+			"id": "evouyyc",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 349,
+					"author": "Hurray_for_Candy",
+					"created_utc": 1564663627,
+					"edited": false,
+					"body_html": "<p>So did the plumbing pass inspection, or no?</p>",
+					"id": "evp15yy",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 24155,
+			"author": "kevn3000",
+			"created_utc": 1564660053,
+			"edited": false,
+			"body_html": "<p>Do barbershops count?&nbsp;</p>\n<p>Decided to get a haircut whilst having a cold. Sneeze and farted at the same time. Never went back.</p>",
+			"id": "evowisc",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+					"days_of_premium": 7,
+					"id": "gid_2",
+					"coin_reward": 100,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 500,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Gold"
+				},
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 23432,
+					"author": "T-R-Y",
+					"created_utc": 1564673584,
+					"edited": false,
+					"body_html": "<p>Oh god, I finally have a reason to share this story. One of the first jobs I had, I approached my boss in his office to discuss a report. As I was standing near him (he was sitting in his chair reading the file on his desk), I felt a sneeze come on. Knowing that I didn’t have time to grab a tissue, I just turned away from him. However, the sneeze held off but the gas in my stomach did not. I crop dusted the poor man. Embarrassed, I whipped my body back around to face him and the centripetal force of my motion must have knocked my sinuses loose. I sneezed upon completing the spin but was in too much shock to cover my face. I gave my boss both an aura of noxious odor and mucus spewed across his face.</p>",
+					"id": "evphfio",
+					"all_awardings": [
+						{
+							"is_enabled": true,
+							"count": 1,
+							"subreddit_id": null,
+							"description": "Gives the author a month of Reddit Premium, which includes %%{coin_symbol}700 Coins for that month, and shows a Platinum Award on the post.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/platinum_512.png",
+							"days_of_premium": 31,
+							"id": "gid_3",
+							"coin_reward": 0,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 31,
+							"award_type": "global",
+							"coin_price": 1800,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Platinum"
+						},
+						{
+							"is_enabled": true,
+							"count": 3,
+							"subreddit_id": null,
+							"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+							"days_of_premium": 7,
+							"id": "gid_2",
+							"coin_reward": 100,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 0,
+							"award_type": "global",
+							"coin_price": 500,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Gold"
+						},
+						{
+							"is_enabled": true,
+							"count": 11,
+							"subreddit_id": null,
+							"description": "Shows the Silver Award on the post... and that's it.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+							"days_of_premium": 0,
+							"id": "gid_1",
+							"coin_reward": 0,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 0,
+							"award_type": "global",
+							"coin_price": 100,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Silver"
+						}
+					],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 19774,
+			"author": "Col_Walter_Tits",
+			"created_utc": 1564660097,
+			"edited": false,
+			"body_html": "<p>Went on a first date with this girl to a new restaurant in town. She proceeded to get sloppy drunk and made a huge scene. From the classic could not control the volume of her voice to insisting on trying to show me and some other gentleman nearby what kind of underwear she had on while loudly insisting that’s she’s a “good girl” though. The server we had seemed to get that I was not a willing part of this but I was so mortified there’s no way I’d ever go back.</p>",
+			"id": "evowkpd",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 19622,
+			"author": "internetmexican",
+			"created_utc": 1564659285,
+			"edited": false,
+			"body_html": "<p>I'm at a coffee shop, have a glass of coffee in front of me, filled to the top. It is almost over flowing. I raise my hand to get the waitress' attention because I want to order something else. I accidentally wack the shit out of the glass, this sends it flying across the room where it hits the waitress on the thigh and gets coffee fucking everywhere. felt bad, so I left and never went back.</p>",
+			"id": "evovm9q",
+			"all_awardings": [],
+			"replies": [
+				{
+					"score": 7380,
+					"author": "ButtholeSpiders",
+					"created_utc": 1564660820,
+					"edited": false,
+					"body_html": "<p><em>Nice shot!</em></p>",
+					"id": "evoxgp8",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 18787,
+			"author": "Batkratos",
+			"created_utc": 1564664943,
+			"edited": false,
+			"body_html": "<p>My girlfriend fist bumped the clerk when he was actually reaching to grab a paper we had just signed.</p>\n<p>Anyway, we dont go to that Tire Kingdom anymore.</p>",
+			"id": "evp31qg",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 7727,
+					"author": "piss_off_ghost",
+					"created_utc": 1564675385,
+					"edited": false,
+					"body_html": "<p>I fist bumped a cashier at a grocery store a couple days ago, he was just handing me my change. &nbsp;Never buying groceries again, it brings up dark memories</p>",
+					"id": "evpkouc",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 14518,
+			"author": "wxwhybother",
+			"created_utc": 1564663015,
+			"edited": false,
+			"body_html": "<p>This is a fond memory.</p>\n<p>Moved downtown to our \"University\" area. Got myself a sweet deal on a cheap, ghetto as hell studio. The kind that get rented out to poor students next to the area homeless shelter. 2006, rent is only 300 a month, and im not in school... Too busy being \"punk rock\" and making just enough for a roof and partying. Paradise.</p>\n<p>One week in, I go to a show, get completely shithoused, and stumble back up the hill to either get more fucked up, or pass out at home. I decide to stop at the 7-11 directly across from my building, ya know.. Snacks. I grab everything my impulses and lack of inhibition tells me to and im about to pay for this garbage and be on my way. Set my things on the counter and politely introduce myself to the cashier, as she is ringing up my last couple things, without any kind of warning or rumbling before hand, i am in excruciating pain, right in my gut. A split second flashes by, I clutch and clench my legs together. I gasped \"bathroom\"? To her. It was too late 5 seconds ago.. I try to take a step and bam! My bowels unleash with not only an ungodly sound from my ass, but a simultaneous yelp as if I were a chihuahua that had just been stomped on. I swear I have never been so suddenly sober without a cop being involved. I have shorts on, i look down, and just liquid shit down the back of my leg, into my boots, and starting to puddle on the floor.</p>\n<p>I just ran. No change. No Snacks. No words. I lived at that spot for almost 2 years. Never went back, and never even walked across their lot to get anywhere. I would walk the same way around that place to avoid it every day.</p>\n<p>I feel terrible.</p>",
+			"id": "evp0brx",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 2,
+					"subreddit_id": null,
+					"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+					"days_of_premium": 7,
+					"id": "gid_2",
+					"coin_reward": 100,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 500,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Gold"
+				},
+				{
+					"is_enabled": true,
+					"count": 3,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 5941,
+					"author": "pragmaticlysarcastic",
+					"created_utc": 1564663287,
+					"edited": false,
+					"body_html": "<p>Don't feel bad dude. Shit happens...</p>",
+					"id": "evp0p8p",
+					"all_awardings": [
+						{
+							"is_enabled": true,
+							"count": 1,
+							"subreddit_id": null,
+							"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+							"days_of_premium": 7,
+							"id": "gid_2",
+							"coin_reward": 100,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 0,
+							"award_type": "global",
+							"coin_price": 500,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Gold"
+						},
+						{
+							"is_enabled": true,
+							"count": 1,
+							"subreddit_id": null,
+							"description": "Shows the Silver Award on the post... and that's it.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+							"days_of_premium": 0,
+							"id": "gid_1",
+							"coin_reward": 0,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 0,
+							"award_type": "global",
+							"coin_price": 100,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Silver"
+						}
+					],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 11113,
+			"author": "YoungConor",
+			"created_utc": 1564660106,
+			"edited": 1564743148,
+			"body_html": "<p>I sat on a target shelf and the entire row of shelves crashed down onto the ground</p>",
+			"id": "evowl3r",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 8355,
+			"author": "JWo1f28",
+			"created_utc": 1564658145,
+			"edited": 1564694837,
+			"body_html": "<p>I tripped up over my shoelace and crashed into a shelf and broke it... the manager chased me out of the store</p>",
+			"id": "evoubya",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": []
+		},
+		{
+			"score": 4284,
+			"author": "sugarcuberyan",
+			"created_utc": 1564660138,
+			"edited": 1564688748,
+			"body_html": "<p>When I was much younger, about 9-10, I went to a large PC store with my Dad, who wanted to ask a technician about an upgrade. Before we left the house my Dad asked if I needed the toilet first, which I said no to. Predictably, on the way I started feeling like I needed to pee, but knowing that I had only 5 minutes earlier told my Dad I didn’t need to go, I said nothing.&nbsp;</p>\n<p>We got stuck in traffic for about 30 minutes and the need was becoming urgent. But I thought to myself I’m a big boy now, I can handle this, I’ll just go behind the store when we get there.</p>\n<p>Nope.</p>\n<p>So when we pull up I pretend to my Dad that I’m going to look at the games at the front of the store and he could find me there when he was done, so he walked off to the back of the store where the technicians desk was. I took my chance and snuck out to execute my master plan. Little did I know that the rear car park of the retail centre was being used for some sort of event, I don’t recall what it was but I just remember a lot of people standing around talking and singing. So I abandoned my attempt and returned to the store. I was at the point of bouncing on the spot to keep it in. One lapse in concentration and it was game over.&nbsp;</p>\n<p>I returned to the games section and was walking up and down frantically, pretending to browse when all I was really doing was trying not to piss myself. Clearly I was acting strangely, and this lead to the security guard coming over to see if I was ok. Except when he arrived he turned the corner just as I was coming to the end of the aisle, and we basically ran straight into each other. The brief moment of shock was all it took to break my piss holding-zen.</p>\n<p>It started as a couple of hot drips that just soaked the front of my underwear, but the seal was now broken, and no matter what I did, there was nothing that could stop the tsunami of warm amber that was now streaming down both of my legs. I could do nothing but stand there, and started crying hysterically.&nbsp;</p>\n<p>Safe to say that when my Dad heard this and came running, he decided that he would not be making a purchase that day, and to this day I have never set foot in that store again.</p>\n<p>TL:DR. Pissed myself in the middle of a store in front of the security guard. Dad did not buy a new PC.</p>",
+			"id": "evowmjf",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+					"days_of_premium": 7,
+					"id": "gid_2",
+					"coin_reward": 100,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 500,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Gold"
+				}
+			],
+			"replies": []
+		},
+		{
+			"score": 8016,
+			"author": "greenlavitz",
+			"created_utc": 1564663737,
+			"edited": 1564664004,
+			"body_html": "<p>I used to go to the same haircut place since I was in kindergarten until I was in my teens.. One day I go for a haircut and get this new, fairly attractive woman. As she's starting I start to sweat. Now sometimes when I was younger my head would get really hot and my head would sweat when I was in put on the spot sometimes (anxiety I guess, no idea, but it's mostly gone away thankfully). Usually a few drops of sweat will roll down my face when this happens, but not today.<br>\n It was like someone was standing over me slowly pouring a bottle of water slowly over my head. &nbsp;It just kept going and going. Eventually the girl mentions \"wow, you must be really hot\". I'm already very nervous, and blurt out the first thing that pops into my head, \"ya, it must be because you're pretty. I'm not sure why this is happening, you're pretty but it's not like you're <em>that</em> pretty\".<br>\n So pretty much as soon as the last words are leaving my mouth I start asking myself, why in gods name would you say that. Now I'm even more embarrassed and I have to sit through a haircut feeling like an idiot, a drippy wet idiot.<br>\n I spent the rest of the haircut praying for it to be done quickly or for a meteor to come through the ceiling and put me out of my misery. &nbsp;The girl handled the rest of the haircut like a god damn pro, no idea why she didn't just kick me out. She finished, I paid, gave her a huge tip, and now I drive farther to get my haircut done somewhere else.</p>",
+			"id": "evp1bk9",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Gives the author a month of Reddit Premium, which includes %%{coin_symbol}700 Coins for that month, and shows a Platinum Award on the post.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/platinum_512.png",
+					"days_of_premium": 31,
+					"id": "gid_3",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/platinum_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/platinum_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/platinum_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/platinum_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/platinum_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 31,
+					"award_type": "global",
+					"coin_price": 1800,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Platinum"
+				},
+				{
+					"is_enabled": true,
+					"count": 2,
+					"subreddit_id": null,
+					"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+					"days_of_premium": 7,
+					"id": "gid_2",
+					"coin_reward": 100,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 500,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Gold"
+				},
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 1355,
+					"author": "mmmolives",
+					"created_utc": 1564670483,
+					"edited": false,
+					"body_html": "<p>This is the most painfully awkward thing ever &amp; I love it.</p>",
+					"id": "evpc0q7",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 7794,
+			"author": "SendEldritchHorrors",
+			"created_utc": 1564659620,
+			"edited": 1564701964,
+			"body_html": "<p>I pissed all over the floor of a toy store when I was a toddler. My poor dad was mortified, but the staff were very nice about it.</p>\n<p>The store's closed now, which really sucks. I don't think &nbsp;I actually remember the name of the place.</p>",
+			"id": "evow0ni",
+			"all_awardings": [],
+			"replies": [
+				{
+					"score": 1157,
+					"author": "SadSnubNosedMonkey",
+					"created_utc": 1564669767,
+					"edited": false,
+					"body_html": "<p>I wouldn't be to worried man, I used to work in a toy store and you would be surprised by the amount of kids who vomit and pee out of excitement from going to a toy store.</p>",
+					"id": "evpas25",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 6755,
+			"author": "Dickcheese_McDoogles",
+			"created_utc": 1564661082,
+			"edited": 1564694276,
+			"body_html": "<p>Not a store, but a public library.</p>\n<p>We're at the counter, and the librarian is scanning the books we've selected. She was… generously sized.</p>\n<p>My little brother, 4 or 5 at the time, tugs my mom down to whisper something in her ear. He was rather new to the concept of whispering</p>\n<p>He put his hand up to shield his lips from the librarian. Despite all this, he says -- about the librarian -- at standard speaking volume:</p>\n<h2><em>\"Hey mom, y'ever notice how </em><em><strong>FAT</strong></em><em> that lady is?\"</em></h2>\n<p>Mom tried to play it off by saying something akin to <em>\"he thinks it's okay to say it to others 'cause he says it to me\"</em>.&nbsp;</p>\n<p>But my mom's not fat.&nbsp;</p>\n<p>It did not work.</p>\n<p>We used to go there every day when my mom didn't want to have to hire a babysitter to watch us during the summer. She'd bring us to her office, and let us walk across the street to the public library to play games on their Windows-Vista PCs, or just read books. She'd always come to pick us up when she was done with work.</p>\n<p>She started looking for babysitters soon after.</p>",
+			"id": "evoxscd",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 6547,
+			"author": "BattlemageBobba",
+			"created_utc": 1564667098,
+			"edited": false,
+			"body_html": "<p>while at the till at the convenience store paying for my lunch the girl behind the counter asked if I wanted to go for a drink. Being married I made my apologies hastily pointing to the ring on my fingers, to which she replied, that my lunch was a meal deal and would be cheaper with the drink...</p>",
+			"id": "evp6crx",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 2,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 2808,
+					"author": "GunnyH1GHway",
+					"created_utc": 1564688126,
+					"edited": false,
+					"body_html": "<p>She never used the phrase \"go for\" again.</p>",
+					"id": "evq7tek",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 5990,
+			"author": "PmMeYourTinyTitsPls",
+			"created_utc": 1564659572,
+			"edited": false,
+			"body_html": "<p>I went to buy groceries almost daily, always in the same store. Most of the time only one checkout lane was open and there was always this really friendly older Lady there. She would always make Smalltalk with me and compare me to her son. After a few years of this I moved a bit farther away, but never told her. So I just didn't show up anymore. Now I won't ever go back there because I feel ashamed I didn't tell her and just abandoned her.</p>",
+			"id": "evovyii",
+			"all_awardings": [],
+			"replies": [
+				{
+					"score": 1050,
+					"author": "Hurray_for_Candy",
+					"created_utc": 1564664459,
+					"edited": false,
+					"body_html": "<p>I used to work at a video store and this kid would come in every day and hang out with me over the summer and on weekends. We got really close, and one day he just didn't show up and I never saw him again. It still makes me sad to think about. Always say goodbye to your clerks when you move away please.</p>",
+					"id": "evp2cq1",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 4701,
+			"author": "old---woman---help",
+			"created_utc": 1564660660,
+			"edited": false,
+			"body_html": "<p>In 1983 at age 17 I went into a pharmacy. I bought something and somehow I was given 50p too much change. I didn't say anything and left. To this day I've still not gone back. I have felt guilty ever since.</p>",
+			"id": "evox9b0",
+			"all_awardings": [],
+			"replies": []
+		}
+	],
+	"options": {
+		"song": "NORMAL.mp3",
+		"theme": "redditors"
+	}
+}

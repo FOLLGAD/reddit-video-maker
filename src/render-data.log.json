@@ -1,12 +1,12 @@
 {
 	"questionData": {
-		"score": 2690,
-		"author": "free__soul",
-		"created_utc": 1559761356,
-		"num_comments": 1414,
-		"gildings": {},
-		"title": "People who were the reasons for certain rules what is your story?",
-		"id": "bx6fpf",
+		"score": 20551,
+		"author": "OlFashionedHandy",
+		"created_utc": 1564699631,
+		"num_comments": 6780,
+		"all_awardings": [],
+		"title": "What screams “I peaked in high school”?",
+		"id": "ckvlk5",
 		"nsfw": false,
 		"flair": {
 			"text": null,
@@ -15,243 +15,938 @@
 	},
 	"commentData": [
 		{
-			"score": 1939,
-			"author": "Yserbius",
-			"created_utc": 1559765192,
+			"score": 9230,
+			"author": "BigGrombus03",
+			"created_utc": 1564718214,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>Former co-workers of mine. Contracted employees have a maximum amount of time they can work each week.&nbsp;</p>\n<p>Company pushed a lot of 60+ year old employees into retirement via a benefits change. A bunch of those who retired re-signed on as contracted hourly workers and started making more money than they had before they retired.</p>",
-			"id": "eq3xyr7",
+			"body_html": "<p>Still bullying the \"nerds\" at your 10 year reunion.</p>",
+			"id": "evrtpq5",
+			"all_awardings": [],
 			"replies": [
 				{
-					"score": 401,
-					"author": "igotmyliverpierced",
-					"created_utc": 1559791771,
+					"score": 5202,
+					"author": "Agnol117",
+					"created_utc": 1564728664,
 					"edited": false,
-					"gildings": {},
-					"body_html": "<p>My dad did that. Retired with pension and full benefits after 35 years. Then they realized they still needed him and asked him to come back. He told them he would help them but only as a contractor at some absurd hourly rate and they had to keep paying his retirement benefits. They agreed because they needed to finish the project.and he doubled up for awhile. When he finally left again he still had his same benefits rolling (which was enough to retire comfortably on) but he also had made 6 figures (less taxes) working 25 hours a week in his one year as a contractor.</p>\n<p>Now they don't do contracting. They've brought a couple people back in similar fashion but as part time employees and the retirement benefits get put on hold.</p>",
-					"id": "eq52w5o",
+					"body_html": "<p>Or worse, in real life. I briefly worked with a guy I went to high school with, and like ninety percent of our not work related conversations were him reminiscing about how much he'd bullied me in high school (and acting like it was all a big joke).</p>",
+					"id": "evs3s7j",
+					"all_awardings": [],
 					"replies": []
 				}
 			]
 		},
 		{
-			"score": 661,
-			"author": "Amazingawesomator",
-			"created_utc": 1559768872,
+			"score": 22549,
+			"author": "gil_beard",
+			"created_utc": 1564717729,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>Checking ID at work when we have parties that contain alcohol. Used to be honor system until a newly hired person under 21 drank too much and vomited in the hallway.</p>",
-			"id": "eq447n3",
+			"body_html": "<p>A guy who graduated from my high school back in 2003 was arrested a few years ago for his 2nd DUI. He was wearing his Letterman jacket in his mugshot.</p>",
+			"id": "evrt5rt",
+			"all_awardings": [],
 			"replies": [
 				{
-					"score": 344,
-					"author": "kitty_logan",
-					"created_utc": 1559780385,
+					"score": 17911,
+					"author": "DaemonTm",
+					"created_utc": 1564726065,
 					"edited": false,
-					"gildings": {},
-					"body_html": "<p>Our CFO’s 16 year old daughter worked for us for one summer and we did a booze cruise. She was doing shots on the boat with her department. Her dad didn’t even get mad when he had to practically carry her to a cab. Weird dynamic.</p>",
-					"id": "eq4mt9q",
+					"body_html": "<p>I picked up some stuff at my parents house when I was 25, one of those things is my Letterman's jacket. Put it on got in the car had to stop for gas. who happens to be filling their car next to mine? My high school wrestling coach. I wonder how much of a loser he thought I was, I wasn't even that good.</p>",
+					"id": "evs1lcz",
+					"all_awardings": [
+						{
+							"is_enabled": true,
+							"count": 1,
+							"subreddit_id": null,
+							"description": "Gives the author a month of Reddit Premium, which includes %%{coin_symbol}700 Coins for that month, and shows a Platinum Award on the post.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/platinum_512.png",
+							"days_of_premium": 31,
+							"id": "gid_3",
+							"coin_reward": 0,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/platinum_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 31,
+							"award_type": "global",
+							"coin_price": 1800,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Platinum"
+						},
+						{
+							"is_enabled": true,
+							"count": 1,
+							"subreddit_id": null,
+							"description": "Shows the Silver Award on the post... and that's it.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+							"days_of_premium": 0,
+							"id": "gid_1",
+							"coin_reward": 0,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 0,
+							"award_type": "global",
+							"coin_price": 100,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Silver"
+						}
+					],
 					"replies": []
 				}
 			]
 		},
 		{
-			"score": 1387,
-			"author": "iszy201",
-			"created_utc": 1559764121,
+			"score": 12543,
+			"author": "WillFlash4DoggoPics",
+			"created_utc": 1564719436,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>they banned doing handstands at my primary school because we used to play the game where you’d sing a song and go up into a handstand and when I went up, for some reason my arm just gave way and I landed on my shoulder and broke my collarbone, I saw my old teacher a few weeks ago and apparently that’s the handstand story equivalent of the boy who swung back on his chair and cracked his head open</p>",
-			"id": "eq3w0c7",
+			"body_html": "<p>Sharing EVERY memory from Facebook talking about the “good ol days” and “wish we could go back” when it’s only been a few years since graduation</p>",
+			"id": "evrv33u",
+			"all_awardings": [],
 			"replies": []
 		},
 		{
-			"score": 1372,
-			"author": "scrooplynooples",
-			"created_utc": 1559773396,
+			"score": 10314,
+			"author": "Jaeburwahkei",
+			"created_utc": 1564719535,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>When I was going into 6th grade, my family was moving to a new town. In order to prevent myself and my brother from having to go through the hassle of moving and to alleviate some of their stress, my parents decided to send us to sleep away camp for 6 weeks.&nbsp;</p>\n<p>My brother, 2 years older, proceeded to get extremely sick within the first week or so that we were at camp. He was on bed rest and at more than one point the staff had to bring him into the small town nearby to go to the hospital.&nbsp;</p>\n<p>My mother had a tendency to overreact and make mountains out of molehills. She was extremely unhappy with the staff and thought it was outrageous that my brother got that sick that quickly, assuming that someone must have showed up to camp on the first day knowing they were sick and spread the germ to my brother.&nbsp;</p>\n<p>Luckily, he recovered after the first week and was able to enjoy the rest of the summer. When the term was over we left camp, excited to see our new house and meet the people at our new school.&nbsp;</p>\n<p>Fast forwarding to the next summer, our parents saw how much we enjoyed camp, and decided that having us out of the house for a month wasn’t so bad for themselves either. Instead of driving us this summer, they decided to send us on the buses the camp ran to different counties and states. The total ride was about 4 hours, an eternity for a middle schooler with a surplus of energy.&nbsp;</p>\n<p>Once we arrived at camp, the buses all line up and there’s an in-processing tent set up where all the kids had to walk through before they could get their bags and go to their cabins. It was taking forever. I started to get irritated; I had waited all year for this and now I have to wait more! I finally get off the bus and into the tent and see what they are doing. Each camper is getting asked a series of questions about their current health- are they feeling sick, so they have any allergies, do they have any prescriptions, etc. They would then get their temperature taken by the nurse to confirm they did not have a fever, and were sent with a counselor to their cabin.&nbsp;</p>\n<p>I get to the end of the line, and ask the nurse why they are doing all of this because it is taking so long and I was being an impatient child.&nbsp;</p>\n<p>Her response: “A parent was very upset last summer that their camper got sick, so now we are screening everyone and quarantine them if they show any signs or symptoms of being ill”</p>\n<p>I look at my brother, who was standing behind me, and yelled “THANKS A LOT”.</p>",
-			"id": "eq4bhl5",
-			"replies": []
-		},
-		{
-			"score": 589,
-			"author": "nobonkyourmom",
-			"created_utc": 1559776058,
-			"edited": false,
-			"gildings": {},
-			"body_html": "<p>In third grade I jumped off of a very tall piece of playground equipment, smacked my chin on my knee and bit my tongue. It was a blood bath and the teacher passed out and hit her head off of the pavement... resulting in another blood bath. Welp, the next morning there was an announcement stating no more jumping of off the \"tower\" on the playground. The next day the teachers son tried jumping off of a rope swing over the school yard fence and broke both of his arms. The school removed all of the fun stuff off of the playground that summer.</p>",
-			"id": "eq4g0re",
-			"replies": []
-		},
-		{
-			"score": 1619,
-			"author": "sable_xo",
-			"created_utc": 1559761949,
-			"edited": false,
-			"gildings": {},
-			"body_html": "<p>When i was younger (3 or 4) my school had a large field near the entrance where we'd walk across to get to class from our drop off room. I decided it would be funny to try and run away. My brother did the same thing a year later in the same year, and that's when they introduced a fun coloured rope everyone had to hold onto when going to and from classes</p>",
-			"id": "eq3s3el",
-			"replies": []
-		},
-		{
-			"score": 479,
-			"author": "A1hugx",
-			"created_utc": 1559776425,
-			"edited": false,
-			"gildings": {},
-			"body_html": "<p>At my school, it was a rule to not act like a ninja. When I was young, I got interested into Naruto so I started acting like a ninja. 3 people saw me and started to act like a ninja as well. The teacher noticed so she told us to stop. We stopped for the day but the next day, we did it again. Our teacher was getting annoyed so she gave us a bad star(a red star that meant you we bad. At the end of the week, you had to take the bad stars home for your parents to see) we got mad at the teacher so when she wasn’t looking, one of the ninjas stood up and walked slowly. He plopped the red stars from each of the ninjas star sheet. Teacher noticed and &nbsp;had enough. She sent us to the principals office. He was laughing but told us to stop. Next day, there was a rule. Don’t act like ninjas.</p>",
-			"id": "eq4glop",
-			"replies": []
-		},
-		{
-			"score": 2951,
-			"author": "cerealbro1",
-			"created_utc": 1559761767,
-			"edited": false,
-			"gildings": {},
-			"body_html": "<p>So, in my high school there is a rule that was added my junior year and is even in bold in the student/parent handbook. This rule was that students are not allowed off campus during the 10-minute passing period at all. The reason that this rule exists is that my sophomore year I was really craving a Starbucks during my first period so in the last few minutes of the period I mobile ordered a coffee and then during break ran half a mile to pick up my coffee and walk back. I made it back to my class on time, but the school still tried to get me in trouble until I said \"show me where it says I cant leave campus during the passing period in the handbook and I will accept any punishment, otherwise you have no grounds to punish me\" and after 20 minutes of sitting in the office I got out with no punishment. Then my junior year that rule was added to the handbook. To this day its one of my best (worst) accomplishments</p>",
-			"id": "eq3rrqm",
-			"replies": []
-		},
-		{
-			"score": 417,
-			"author": "PrettyFarAwayNow",
-			"created_utc": 1559779172,
-			"edited": false,
-			"gildings": {},
-			"body_html": "<p>My high school had a policy that any student who passed an A.P. exam with a score or 3 or above would receive an automatic 'A' in the corresponding class.&nbsp;</p>\n<p>I failed A.P. Government--I never did my homework--and got a 4 or 5 on the exam.&nbsp;</p>\n<p>They changed the policy the next year.</p>",
-			"id": "eq4kyih",
+			"body_html": "<p>Me, in a horrid realization, in the back of my 92 Camaro, while icing that knee I blew out at the championship game senior year, reading through the divorce papers.</p>",
+			"id": "evrv71t",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 2,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
 			"replies": [
 				{
-					"score": 146,
-					"author": "Linc3000",
-					"created_utc": 1559794534,
+					"score": 4847,
+					"author": "MrPsychoanalyst",
+					"created_utc": 1564726452,
 					"edited": false,
-					"gildings": {},
-					"body_html": "<p>I was in debate with a guy who did this for like all of his AP classes. Super smart but Holy shit was he lazy.</p>",
-					"id": "eq57nwq",
+					"body_html": "<p>Sounds like a Mat Damon movie produced by Adam Sandler and the mom from gilmore girls is the ex wife</p>",
+					"id": "evs1xjn",
+					"all_awardings": [
+						{
+							"is_enabled": true,
+							"count": 1,
+							"subreddit_id": null,
+							"description": "Shows the Silver Award on the post... and that's it.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+							"days_of_premium": 0,
+							"id": "gid_1",
+							"coin_reward": 0,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 0,
+							"award_type": "global",
+							"coin_price": 100,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Silver"
+						}
+					],
 					"replies": []
 				}
 			]
 		},
 		{
-			"score": 1029,
-			"author": "RonSwansonsOldMan",
-			"created_utc": 1559772794,
+			"score": 13596,
+			"author": "tobraham",
+			"created_utc": 1564704515,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>I moved from the Midwest to Texas to attend college. &nbsp;It was the first the time I tasted deep fried okra. &nbsp;The cafeteria was all you could eat. &nbsp;The okra was like crack to me and I ate plateful after plateful. &nbsp;Pretty soon the rule was two servings per meal.</p>",
-			"id": "eq4ags5",
-			"replies": []
-		},
-		{
-			"score": 186,
-			"author": "user156427",
-			"created_utc": 1559775992,
-			"edited": false,
-			"gildings": {},
-			"body_html": "<p>my primary school had to ban human pyramids bc we would get like 12-16 people involved and we weren’t very good at making pyramids so our uniforms would constantly be covered in mud from us falling onto the grass, plus they were afraid we would crush each other</p>",
-			"id": "eq4fx0w",
-			"replies": []
-		},
-		{
-			"score": 1265,
-			"author": "AverageCartPusher",
-			"created_utc": 1559768239,
-			"edited": 1559827575,
-			"gildings": {},
-			"body_html": "<p>I got beyblades banned in 4th grade. Circa like 2002. My mom had cheaped out and bought me an off brand beyblade that was heavier and I think made out of metal or something dense.&nbsp;</p>\n<p>Anyways we had this one kid who would bring in the like battle dome or whatever they had. My beyblade would collide with theirs and theirs would just go flying out of the dome at unsuspecting victims.</p>",
-			"id": "eq4353u",
+			"body_html": "<p>Partying with high schoolers when you're 30.</p>",
+			"id": "evravs8",
+			"all_awardings": [],
 			"replies": [
 				{
-					"score": 170,
-					"author": "kg1206",
-					"created_utc": 1559786932,
+					"score": 7475,
+					"author": "CursesandMutterings",
+					"created_utc": 1564722092,
 					"edited": false,
-					"gildings": {},
-					"body_html": "<p>Someone at my elementary school lost a finger to one of those metal beyblades because he tried to pick it up while it was still spinning which you can do quite easily with a normal one.</p>\n<p>Granted the thing didn’t completely take his finger off right away it just severed it enough that the hospital couldn’t effectively re attach it and just took it the rest of the way off. From what I heard the cut was similar to what a chainsaw would do, shred the flesh instead of cleanly cut it like a knife and that’s why they couldn’t do anything about it.</p>",
-					"id": "eq4vint",
+					"body_html": "<p>Fuck, I can't imagine this. I'm 32, and high schoolers seemed ridiculously young to me after about 23.</p>",
+					"id": "evrxwba",
+					"all_awardings": [],
 					"replies": []
 				}
 			]
 		},
 		{
-			"score": 1165,
-			"author": "HighBiAndReadyToDie",
-			"created_utc": 1559762011,
+			"score": 14713,
+			"author": "ChunderForce",
+			"created_utc": 1564699804,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>At school there's now a rule that nothing can be mass printed (even though we have a set amount of printing credit) because I blocked up the printer while printing tiled fat yoshi and fat skipper</p>",
-			"id": "eq3s7gl",
-			"replies": []
-		},
-		{
-			"score": 678,
-			"author": "theheartsanddaggers",
-			"created_utc": 1559763647,
-			"edited": false,
-			"gildings": {},
-			"body_html": "<p>Back in the day, on neopets, there was this rule that you couldn't make posts titled things like \"GiRlS oNlY PARTY!!\" but the rule was never enforced.</p>\n<p>So, one day, when I was 12 (and on my mother's neopets account, since I was too young to use the neoboards), I made one of these boards. &nbsp;And everything was fine for the first 10-15 pages. &nbsp;Everyone was staying within the rules on the rule-breaking post, so TNT (The Neopets Team, basically the mods and developers and stuff) left us alone. &nbsp;And then, someone decided to RP going swimming. &nbsp;Which was kinda risky and I warned against it. &nbsp;Shortly thereafter, someone made a post that was pretty similar to the following:</p>\n<pre><code>Oh, okay.<br>\n*gets out of water*<br>\n*bikini falls off*<br>\nOops.<br>\n</code></pre>\n<p>The board was instantly deleted, my mother's account was permanently frozen, and from that day forward, when someone used the word \"bikini\" on the neoboards, a filter changed the word to \"cardigan.\"</p>",
-			"id": "eq3v5oi",
-			"replies": []
-		},
-		{
-			"score": 148,
-			"author": "MC-NIGLET",
-			"created_utc": 1559772620,
-			"edited": 1559773084,
-			"gildings": {},
-			"body_html": "<p>“No tea on campus”</p>\n<p>Basically in like 7-8th grade I ran a chicken express sweet tea empire</p>",
-			"id": "eq4a6ly",
+			"body_html": "<p>Selling pot to teenagers and then trying to get them to stay and smoke with you.</p>",
+			"id": "evr098t",
+			"all_awardings": [],
 			"replies": [
 				{
-					"score": 45,
-					"author": "spiders138",
-					"created_utc": 1559784225,
+					"score": 3547,
+					"author": "Choadis",
+					"created_utc": 1564715889,
 					"edited": false,
-					"gildings": {},
-					"body_html": "<p>We weren't even allowed to have water in school. I'm amazed at how lax the rules were at some of the schools in this thread.</p>",
-					"id": "eq4rvn5",
+					"body_html": "<p>I mean, I met someone who's going to be one of my groomsman like this. Sold the kid weed and he seemed pretty cool, so we ended up smoking and playing fighting games for most of the afternoon. Still one of my best friends, almost a decade later</p>",
+					"id": "evrqzrs",
+					"all_awardings": [],
 					"replies": []
 				}
 			]
 		},
 		{
-			"score": 422,
-			"author": "justazag",
-			"created_utc": 1559769707,
+			"score": 2728,
+			"author": "shugerbooger",
+			"created_utc": 1564712817,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>No Selling things out of your locker.</p>\n<p>Ran quite the business back in Jr. High. Pens, pencils, sticky notes, Pokemon Cards, Random Toys like Beyblade Pats, special milk straws that had the flavor in the straws so whatever you were drinking changed flavor, and a few other random things I'd find or people would trade me for things instead of using money. Made maybe around $300.</p>\n<p>I wish they had just let me do what I was doing, my work was honest, after I got shut down all the kids selling things went underground. Now instead of instant-Chocolate milk straws the kids were buying weed from the quite kid in the bathroom.</p>",
-			"id": "eq45lee",
+			"body_html": "<p>Billy Joel feels compelled to write a ballad about how you and your ex were the king and the queen of the prom, how the two of you married right after high school, and how it all went to hell from there. &nbsp;Bonus points if your names happen to be Brenda and Eddie.</p>",
+			"id": "evrn6o0",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
 			"replies": []
 		},
 		{
-			"score": 136,
-			"author": "Thevoiceofreason420",
-			"created_utc": 1559770847,
+			"score": 1130,
+			"author": "CK4z",
+			"created_utc": 1564713019,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>When I worked at Whole Foods in the prepared foods section I use to make myself a burrito for dinner. I would load that fucker as full with beans, rice, and meat as possible I usually ended up with something that was about the size of a fat baby's arm. Yeah that all came to a stop when one of the store managers saw me making my own burrito. After that we would get written up if they caught us making our own food like burritos and what not.</p>",
-			"id": "eq47f0s",
+			"body_html": "<p>We used to play indoor floor hockey in a loft room in the big gym of my middle school. &nbsp;One game I scored three goals, one of them being a bank shot off the wall. The next year I wrote about the game for an assignment in English class and the teacher read it to the class the next day. I'm not sure which one was my peak.</p>",
+			"id": "evrnfuv",
+			"all_awardings": [],
 			"replies": []
 		},
 		{
-			"score": 292,
-			"author": "bad_luck_dragon",
-			"created_utc": 1559765131,
+			"score": 12730,
+			"author": "MasterTeacher123",
+			"created_utc": 1564699730,
 			"edited": false,
-			"gildings": {},
-			"body_html": "<p>Oh, I'm the reason for several safety rules at a local warehouse.&nbsp;</p>\n<p>We switched from heavy, grease covered king pin locks for trailers after I dropped one of the king pin locks on my head.&nbsp;</p>\n<p>Rain boots are required when dealing with trailers after I developed trench foot after working in the rain for 4 days straight in water logged shoes.&nbsp;</p>\n<p>Nothing heavier than 50lbs on the conveyer belt after I hurt my back trying to lift an 80lb box off a line 20' up.&nbsp;</p>\n<p>Everyone in the shipping department rotates through the fastest line after me and someone who was under got into a verbal fight over it.&nbsp;</p>\n<p>No one straight out said it, but I'm fairly certain the attendance policy got changed 3 times because of me.</p>",
-			"id": "eq3xuot",
+			"body_html": "<p>Still bragging about high school basketball games from 10 years ago.</p>",
+			"id": "evr024e",
+			"all_awardings": [],
+			"replies": [
+				{
+					"score": 6004,
+					"author": "ThrowMeAKnife2",
+					"created_utc": 1564710772,
+					"edited": false,
+					"body_html": "<p>But what if you score 4 touchdowns in a single game?</p>",
+					"id": "evrkiw0",
+					"all_awardings": [],
+					"replies": []
+				},
+				{
+					"score": 912,
+					"author": "Protahgonist",
+					"created_utc": 1564709397,
+					"edited": false,
+					"body_html": "<p>I know a guy who still brags about middle school select soccer games... He doesn't appear to have so much as jogged since then.</p>\n<p>He's 30.</p>",
+					"id": "evrip9a",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 9848,
+			"author": "Hbmc1123",
+			"created_utc": 1564711064,
+			"edited": false,
+			"body_html": "<p>Selling your pyramid scheme essential oils on Facebook</p>",
+			"id": "evrkwun",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 2268,
+					"author": "Strange_Vagrant",
+					"created_utc": 1564716268,
+					"edited": false,
+					"body_html": "<p>My cousin uses her daughter's birthday party to sell my grandma and aunts shitty purses.</p>",
+					"id": "evrrg7p",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 3352,
+			"author": "homestuckintraffic",
+			"created_utc": 1564716004,
+			"edited": false,
+			"body_html": "<p>Teachers who suck up to the athletes and other popular kids and ignore the less popular kids. My freshman year Spanish teacher was like that.</p>",
+			"id": "evrr4r0",
+			"all_awardings": [],
+			"replies": [
+				{
+					"score": 1549,
+					"author": "nightmaremain",
+					"created_utc": 1564721235,
+					"edited": false,
+					"body_html": "<p>At my high school a coach was worshiped by the girls basketball team.&nbsp;</p>\n<p>My first year of college it came out he had been grooming the girls since middle school (2012)</p>\n<p>Suddenly a lot of petty fights between the girls made so much sense.</p>",
+					"id": "evrx0zd",
+					"all_awardings": [],
+					"replies": []
+				},
+				{
+					"score": 543,
+					"author": "n00by97",
+					"created_utc": 1564720608,
+					"edited": false,
+					"body_html": "<p>As was my junior history teacher. Hated ABSOLUTELY ANYONE who wasn’t a student athlete or part of the student gov. He made this no secret. I was a nerd; was on the receiving end of that hatred. Looking back, I actually feel legitimately sorry for him now.</p>",
+					"id": "evrwd9m",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 7034,
+			"author": "bbyriss97",
+			"created_utc": 1564717224,
+			"edited": false,
+			"body_html": "<p>I went to school with a girl whose parents graduated from our high school 20 years prior. All 4 members of their family got the school’s logo tattooed. Her boyfriend still goes to the football games and reposts his game highlights on Instagram. We’re all 21-22.</p>",
+			"id": "evrsks9",
+			"all_awardings": [],
+			"replies": [
+				{
+					"score": 3306,
+					"author": "leadabae",
+					"created_utc": 1564722319,
+					"edited": false,
+					"body_html": "<p>I'll take big yikes for $200, Alex</p>",
+					"id": "evry4g7",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 2191,
+			"author": "adumbcollegestudent3",
+			"created_utc": 1564716056,
+			"edited": false,
+			"body_html": "<p>As someone who recently graduated, the students who returned to the school every time they came home from school just so people would pay attention to them. Also not sure how to explain it but the people who now posts blank screens and just text on their snapchat stories that just say things like \"always crazy to see who you can really trust when xyz happens\" or \"surprising to see who really cares about you when you need friends the most\" Like I said I dont know how to explain it but there's definitely a correlation</p>",
+			"id": "evrr74i",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 4667,
+			"author": "karnim",
+			"created_utc": 1564706838,
+			"edited": false,
+			"body_html": "<p>Making any mention of SAT or ACT scores. Bonus points for that IQ test you took when you were a kid online.</p>",
+			"id": "evreuzz",
+			"all_awardings": [],
+			"replies": [
+				{
+					"score": 826,
+					"author": "KatieCashew",
+					"created_utc": 1564714405,
+					"edited": false,
+					"body_html": "<p>One summer I was doing an internship, and introduced myself to a fellow intern. He told me his name and SAT score then asked me what my score had been. He seemed shocked when I said I couldn't remember anymore. I was like, dude, we're in grad school...</p>",
+					"id": "evrp6v7",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 1634,
+			"author": "sai_gunslinger",
+			"created_utc": 1564719225,
+			"edited": false,
+			"body_html": "<p>I have a good one for this.</p>\n<p>My cousin once dragged me out to a local bar that I don't particularly care for due to its reputation. But I was going through a separation and figured I could use a night out. A guy comes up to me, clearly already drunk, and belligerently declares \"I've never seen you in here before.\"&nbsp;</p>\n<p>I replied \"that's because I've never been in here before.\"&nbsp;</p>\n<p>Him: \"Well I'm just saying I've never seen you here before.\"</p>\n<p>Me: \"Ok\"</p>\n<p>Him: \"I'm John. I used to play football at the school up the road. You know the school just up the road? Up on the hill?\"</p>\n<p>Me: \"Yes, I know the school. I went to the same school.\"</p>\n<p>Him: \"Yeah, I played football there.\"</p>\n<p>Me: \"Good for you?\"</p>\n<p>Him: \"I don't remember you from school.\"</p>\n<p>Me: \"I don't imagine you do.\"</p>\n<p>Him: \"Well, I'm just saying, I played football there and I dont remember you.\"</p>\n<p>Me: \"Ok.\"</p>\n<p>Finally he walked away. More like stumbled away. This was back in around 2013. I graduated in '04, he was 1 or 2 years ahead of me. So it had been over a decade since he graduated, and he was using his <em>high school football</em> to hit on chicks at the bar. He moved on to hit on my cousin so I pretended to be her lesbian lover to chase him off lol. She thanked me for it, guy is a total tool and always was.</p>",
+			"id": "evruuro",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 7112,
+			"author": "Matcha_Mochii",
+			"created_utc": 1564716670,
+			"edited": 1564746709,
+			"body_html": "<p>High school? I peaked in elementary school and it was downhill from there.</p>",
+			"id": "evrrxg0",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+					"days_of_premium": 7,
+					"id": "gid_2",
+					"coin_reward": 100,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 500,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Gold"
+				},
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 2984,
+					"author": "MelAlton",
+					"created_utc": 1564726396,
+					"edited": 1564745610,
+					"body_html": "<p>\"There I was, on stage in front of the whole elementary school, and I'd just won the Spelling Bee. I felt like it was the start of something great!\"</p>\n<p>Narrator: It wasn't.</p>",
+					"id": "evs1vr8",
+					"all_awardings": [
+						{
+							"is_enabled": true,
+							"count": 1,
+							"subreddit_id": null,
+							"description": "Shows the Silver Award on the post... and that's it.",
+							"icon_height": 512,
+							"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+							"days_of_premium": 0,
+							"id": "gid_1",
+							"coin_reward": 0,
+							"resized_icons": [
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+									"width": 16,
+									"height": 16
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+									"width": 32,
+									"height": 32
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+									"width": 48,
+									"height": 48
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+									"width": 64,
+									"height": 64
+								},
+								{
+									"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+									"width": 128,
+									"height": 128
+								}
+							],
+							"days_of_drip_extension": 0,
+							"award_type": "global",
+							"coin_price": 100,
+							"icon_width": 512,
+							"subreddit_coin_reward": 0,
+							"name": "Silver"
+						}
+					],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 9809,
+			"author": "EdibleScissors",
+			"created_utc": 1564701970,
+			"edited": false,
+			"body_html": "<p>Dying before graduation</p>",
+			"id": "evr5jt1",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Gives the author a week of Reddit Premium, %%{coin_symbol}100 Coins to do with as they please, and shows a Gold Award on the post.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/gold_512.png",
+					"days_of_premium": 7,
+					"id": "gid_2",
+					"coin_reward": 100,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/gold_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 500,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Gold"
+				},
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 1719,
+					"author": "prince_thunderflare",
+					"created_utc": 1564714162,
+					"edited": false,
+					"body_html": "<p>Dark</p>",
+					"id": "evrovyd",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 283,
+			"author": "GeddyLeesThumb",
+			"created_utc": 1564727502,
+			"edited": 1564727691,
+			"body_html": "<p>One of the few good things - maybe the only good thing - about the UK's usually fucked education system is that hardly anyone, except those who have had an expensive private education, gives a fuck about their old school.&nbsp;</p>\n<p>No loyalty to the old school. Sports loyalty when at school was practically non existent, no one, apart from those on the teams, usually gave a shit about how the sports teams did. No yearbooks. No jackets. No proms - at least when I went to school, that aberration seems to be creeping in now - no one gives a fuck. School reunions are rare if a thing at all here.</p>\n<p>I still know and see a few of my classmates or ones who were at school when I was there, but only because they still live locally and it's not that big a place. The others I have no idea where they are, how they are, even if they're still alive and with maybe two or three exceptions, have no great wish to find out.</p>",
+			"id": "evs2tl2",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 392,
+			"author": "acava2424",
+			"created_utc": 1564730216,
+			"edited": false,
+			"body_html": "<p>At my ten year reunion, the prom queen came wearing a tiara with a custom \"Queen '03\" sash over her shoulder. I had to go outside I was laughing so hard.&nbsp;</p>\n<p>But I'll be damned if she didn't rock that outfit the while time, so, respect.&nbsp;</p>\n<p>Still sad though</p>",
+			"id": "evs505n",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 18409,
+			"author": "[deleted]",
+			"created_utc": 1564719135,
+			"edited": false,
+			"body_html": "<p>Back &nbsp;when Facebook expanded beyond college students and obliterated MySpace, &nbsp;there was an influx of people that had never used social media before. &nbsp;So for my age group at the time (40 and over) there was a reconnection &nbsp;of old friends that you'd either lost contact with altogether, or &nbsp;haven't seen since \"the last reunion.\" It was a great time for a couple &nbsp;years, because people would say \"let's all meet at such-and-such bar\" &nbsp;and we'd all reconnect.</p>\n<p>Someone &nbsp;threw an \"all 80's\" get together which I attended. I graduated H.S. in &nbsp;'86. Some dude approached me and introduced himself, class of '81 (I was &nbsp;in Jr. High). He says, \"You probably remember me, or at least heard of &nbsp;me, because I won the talent show in '81, with my guitar.\"</p>",
+			"id": "evrur6g",
+			"all_awardings": [
+				{
+					"is_enabled": true,
+					"count": 1,
+					"subreddit_id": null,
+					"description": "Shows the Silver Award on the post... and that's it.",
+					"icon_height": 512,
+					"icon_url": "https://www.redditstatic.com/gold/awards/icon/silver_512.png",
+					"days_of_premium": 0,
+					"id": "gid_1",
+					"coin_reward": 0,
+					"resized_icons": [
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_16.png",
+							"width": 16,
+							"height": 16
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_32.png",
+							"width": 32,
+							"height": 32
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_48.png",
+							"width": 48,
+							"height": 48
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_64.png",
+							"width": 64,
+							"height": 64
+						},
+						{
+							"url": "https://www.redditstatic.com/gold/awards/icon/silver_128.png",
+							"width": 128,
+							"height": 128
+						}
+					],
+					"days_of_drip_extension": 0,
+					"award_type": "global",
+					"coin_price": 100,
+					"icon_width": 512,
+					"subreddit_coin_reward": 0,
+					"name": "Silver"
+				}
+			],
+			"replies": [
+				{
+					"score": 8192,
+					"author": "PMmeplumprumps",
+					"created_utc": 1564721583,
+					"edited": false,
+					"body_html": "<p>It's funny cause it's sad</p>",
+					"id": "evrxdxk",
+					"all_awardings": [],
+					"replies": []
+				}
+			]
+		},
+		{
+			"score": 219,
+			"author": "lazarus870",
+			"created_utc": 1564726427,
+			"edited": false,
+			"body_html": "<p>When I was in high school, this guy a year before me had a fearsome reputation. &nbsp;At house parties, people would fear him just by name alone. &nbsp;He would show up to parties with his cronies and start fights. &nbsp;He came from a decent enough family. &nbsp;Everybody wanted to be on his good side.</p>\n<p>Anyway, he graduates high school, and most of us were still in 12th grade. I remember he used to come around lunchtime to smoke with the people out front, shoot the breeze and talk about how much fun it is to just sleep in and do nothing and have all this freedom.</p>\n<p>A couple of months of \"Ohhh cool!\" To, \"Why are you still here?\" as we awkwardly shuffled back to class.</p>",
+			"id": "evs1wqt",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 750,
+			"author": "evanjw90",
+			"created_utc": 1564727215,
+			"edited": 1564740155,
+			"body_html": "<p>A guy graduated two years before me, in 2006. He got a job as a school \"narc\" my senior year. Basically a a job that is somewhere below security, and barely a step above student. We had our ten year reunion last year in the school gymnasium, and there he was, with his sunglasses on at 8pm, sporting a sweet flavor saver and shorts, with his black socks pulled up to his knees. As was the fashion for all the \"Bros\" at my high school when we attended. He was making his rounds, trying to enforce every single rule that was imposed on students. Meanwhile, we are all 27-29 years old, and nobody is taking his shit. Eventually someone told him, \"You were a fucking tool in high school, and nothing has changed. Get lost, Narc.\" He then started listing every girl he \"boned\" in high school. It was hard watching that guy spiral so hard while everyone was laughing at him.</p>",
+			"id": "evs2kqn",
+			"all_awardings": [],
+			"replies": []
+		},
+		{
+			"score": 226,
+			"author": "TheBordIdentity",
+			"created_utc": 1564721270,
+			"edited": 1564729227,
+			"body_html": "<p>I worked at a fast food restaurant, I saw people daily and normally forgot their conversations, but there are always those few who stick, here's one: The dude walks up to the worker on the left of me with three other guys and is talking to his friends about how he hasn't paid rent yet and he's having it held over his head but he knows he's going to get manager at the movie theater he works at but his bosses just don't like him. This guy looks like he's in his early thirties possibly late twenties, definitely at least 28. The worst part of this story is when his other friend butts in and says \"Is it really paying rent when you're just paying your mom to stay at her house?\" I am no expert, but I can tell he didn't know whether to be sad or angry about what his friend said. He was also probably trying to hide the fact that he still lived with his mom from his other friends.</p>",
+			"id": "evrx28w",
+			"all_awardings": [],
 			"replies": []
 		}
 	],
 	"options": {
-		"song": "NORMAL-POIGNANT-sincerely-by-kevin-macleod.mp3",
+		"song": "SAD-drone-in-d-by-kevin-macleod.mp3",
 		"theme": "thinkingstories"
 	}
 }

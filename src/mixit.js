@@ -1,12 +1,13 @@
-const fs = require('fs')
-const { renderFromComments, addTransitions } = require('./render')
+const { render } = require('./render')
+const { startInstance } = require('./puppet')
+const { questionData, commentData, options } = require('./render-data.log.json')
 
-const options = {
-	theme: 'thinkingstories',
-	song: 'NORMAL-POIGNANT-sincerely-by-kevin-macleod.mp3',
-}
+if (!options.theme) console.error("No theme selected")
+if (!options.song) console.error("No song selected")
 
-let files = fs.readdirSync('../for-compilation')
-	.map(d => '../for-compilation/' + d)
+options.outputName = questionData.id
 
-renderFromComments('../video-output/Q.mkv', addTransitions(files, options), options)
+startInstance()
+	.then(() => {
+		render(questionData, commentData, options)
+	})

@@ -24,9 +24,7 @@ module.exports.updateAuth = async function updateAuth() {
 let defaultOpts = {
 	filterEdits: false,
 	skipQuestion: false,
-	start: 0,
-	end: 100,
-	sortBy: 'best',
+	sort: 'best',
 }
 
 async function fetchSubreddit(subreddit) {
@@ -70,8 +68,7 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 	let query = querystring.stringify({
 		api_type: 'json',
 		raw_json: 1,
-		sort: options.sortBy,
-		limit: options.end,
+		sort: options.sort,
 		depth: 2,
 		context: 2,
 		showmore: true,
@@ -128,5 +125,5 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 	let parsedC = parseComments(p).map(extractComment)
 	let parsedQ = extractQuestion(parseQuestion(p))
 
-	return [parsedQ, parsedC]
+	return { questionData: parsedQ, commentData: parsedC }
 }
