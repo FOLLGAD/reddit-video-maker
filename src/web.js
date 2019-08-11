@@ -176,6 +176,19 @@ const server = http.createServer(async (req, res) => {
 				res.statusCode = 201
 				res.endJson({ message: 'Rendering' })
 			} break
+			case 'render-last': {
+				const { questionData, commentData, options } = require('./render-data.log.json')
+
+				if (!options.theme) console.error("No theme selected")
+				if (!options.song) console.error("No song selected")
+
+				options.outputName = questionData.id
+
+				startInstance()
+					.then(() => {
+						render(questionData, commentData, options)
+					})
+			} break
 			default: {
 				res.statusCode = 404
 				res.endJson({ error: 404, message: 'Wrong url bro' })

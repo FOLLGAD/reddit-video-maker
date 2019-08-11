@@ -5,18 +5,16 @@ const { spawn } = require('child_process')
 const tmp = require('tmp')
 
 module.exports.synthSpeech = function (name, text) {
-    let sanText = sanitizeSynth(text)
-
-    if (!/[\d\w]/.test(sanText)) { // If no letter or number is in text, don't produce it
+    if (!/[\d\w]/.test(text)) { // If no letter or number is in text, don't produce it
         return Promise.reject("Warning: TTS for current frame is empty")
     }
 
-    return module.exports.synthOddcast(name, sanText)
+    return module.exports.synthOddcast(name, text)
 
     // if (process.env.synthType === 'google') {
-    //     return module.exports.linuxTTSToFile(name, sanText)
+    //     return module.exports.linuxTTSToFile(name, text)
     // } else {
-    //     return module.exports.macTTSToFile(name, sanText)
+    //     return module.exports.macTTSToFile(name, text)
     // }
 }
 
