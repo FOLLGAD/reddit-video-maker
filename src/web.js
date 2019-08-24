@@ -78,8 +78,9 @@ const server = http.createServer(async (req, res) => {
 
 	res.statusCode = 200
 
-	let parsedUrl = url.parse(req.url)
+	let parsedUrl = url.parse(req.url, true)
 	let pathnames = parsedUrl.pathname.split('/').slice(1)
+	let query = parsedUrl.query
 
 	if (pathnames[0] !== 'api') {
 		res.setHeader('Content-Type', 'text/html')
@@ -97,10 +98,29 @@ const server = http.createServer(async (req, res) => {
 		stream.pipe(res)
 	} else {
 		switch (pathnames[1]) {
+			case 'get-last-edit': {
+				try {
+					let editJson = require('./render-data.log.json')
+					let str = JSON.stringify(editJson)
+					res.endJson(str)
+				} catch (err) {
+					res.statusCode = 400
+					res.endJson({
+						error: 400,
+						message: `Couldn't fetch edit`,
+					})
+				}
+			} break
 			case 'get-thread': {
 				let thread = pathnames[2]
 
-				fetchThread(thread)
+				let options = {
+					filterEdits: false,
+					skipQuestion: false,
+					sort: query.sort || 'best',
+				}
+
+				fetchThread(thread, options)
 					.catch(err => {
 						res.statusCode = 404
 						res.endJson({

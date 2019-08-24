@@ -26,7 +26,7 @@ let defaultOpts = {
 	skipQuestion: false,
 	start: 0,
 	end: 100,
-	sortBy: 'best',
+	sort: 'best',
 	t: 'day', // one of (hour, day, week, month, year, all)
 }
 
@@ -85,7 +85,7 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 	let query = querystring.stringify({
 		api_type: 'json',
 		raw_json: 1,
-		sort: options.sortBy,
+		sort: options.sort,
 		limit: options.end,
 		t: options.t,
 		depth: 2,
@@ -145,5 +145,5 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 	let parsedC = parseComments(p).map(extractComment)
 	let parsedQ = extractQuestion(parseQuestion(p))
 
-	return [parsedQ, parsedC]
+	return { questionData: parsedQ, commentData: parsedC }
 }

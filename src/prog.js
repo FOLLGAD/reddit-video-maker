@@ -57,14 +57,16 @@ async function main() {
 	thread = thread.trim()
 	console.log("Fetching from thread", thread)
 
-	let question, commentData
+	let questionData, commentData
 
 	if (!thread) {
 		throw new Error("Must enter a thread ID")
 	} else if (thread == "test") {
-		[question, commentData] = require('./testData')
+		[questionData, commentData] = require('./testData')
 	} else {
-		[question, commentData] = await fetchThread(thread, options)
+		let data = await fetchThread(thread, options)
+		questionData = data.questionData
+		commentData = data.commentData
 	}
 
 	let maxchars = 1600
@@ -86,7 +88,7 @@ async function main() {
 	console.log('Comments fetched:', comments.length)
 
 	if (!options.skipQuestion) {
-		await renderQuestion(question)
+		await renderQuestion(questionData)
 		console.log("Rendered", "Q")
 	}
 
