@@ -27,10 +27,25 @@ let defaultOpts = {
 	start: 0,
 	end: 100,
 	sortBy: 'best',
+	t: 'day', // one of (hour, day, week, month, year, all)
 }
 
-async function fetchSubreddit(subreddit) {
-	await fetch(`https://oauth.reddit.com/r/${subreddit}/about`, {
+module.exports.fetchSubreddit = function (subreddit, options = defaultOpts) {
+	let query = querystring.stringify({
+		api_type: 'json',
+		raw_json: 1,
+		sort: options.sortBy,
+		limit: options.end,
+		t: options.t,
+		depth: 2,
+		context: 2,
+		showmore: true,
+		threaded: true,
+	})
+	
+	console.log(options.sortBy)
+
+	return fetch(`https://oauth.reddit.com/r/${subreddit}/${options.sortBy}?${query}`, {
 		headers: {
 			Authorization: `Bearer ${access_token}`,
 		}
@@ -72,6 +87,7 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 		raw_json: 1,
 		sort: options.sortBy,
 		limit: options.end,
+		t: options.t,
 		depth: 2,
 		context: 2,
 		showmore: true,
@@ -101,6 +117,7 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 			created_utc: comm.created_utc,
 			edited: comm.edited,
 			body_html: comm.body_html,
+			body: comm.body,
 			id: comm.id,
 			all_awardings: comm.all_awardings,
 
