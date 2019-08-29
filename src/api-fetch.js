@@ -3,14 +3,13 @@ const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
 const { launch, commentTemplate } = require('./puppet')
 const { combineImageAudio, padAndConcat } = require('./video')
-const { sanitizeHtml, sanitizeUsername } = require('./sanitize')
+const { sanitizeHtml, sanitizeUsername, sanitizeSynth } = require('./sanitize')
 const { splitComment, splitQuestion } = require('./split')
 const tmp = require('tmp')
 
-let fileExt = 'mkv'
-
-let compileHtml = function (rootComment, options) {
+let compileHtml = function (rootComment, options = {}) {
 	let id = 0
+
 	let rec = commentTree => {
 		let $ = cheerio.load(commentTree.body_html)
 
@@ -32,30 +31,41 @@ let compileHtml = function (rootComment, options) {
 		let tts = []
 
 		let handle = function (arr, contents) {
-			let lastWasTag = false
 			// Splits string on punctuation
 			for (let i = 0; i < contents.length; i++) {
 				let h = contents[i]
 				if (h.type == 'text') {
 					let data = splitComment(h.data)
-					if (lastWasTag) {
-						arr[arr.length - 1] += data.shift()
-					}
-					lastWasTag = false
 
-					arr.push(...data)
+					let ttsData = data
+					let htmlData = data
+
+					if ($(h).closest('.no-censor').length === 0) {
+						htmlData = data.map(sanitizeHtml)
+						ttsData = ttsData.map(sanitizeSynth)
+					}
+
+					arr.push(...htmlData)
+					tts.push(...ttsData)
 				} else if (h.name == 'br') {
 					arr[arr.length - 1] += "<br>"
 				} else {
 					// It's a tag
-					lastWasTag = true
-					let $$ = cheerio.load(h)
-					let html = $$.html()
-					if ($$.text().indexOf('.') !== -1) lastWasTag = false
+					let html = $(h).html()
+					let ttsPush = html
+					
+					console.log(ttsPush)
+					if ($(h).closest('.no-censor').length === 0) {
+						html = sanitizeHtml(html)
+						ttsPush = sanitizeSynth(ttsPush)
+					}
+
 					if (arr.length > 0) {
 						arr[arr.length - 1] += html
+						tts[arr.length - 1] += ttsPush
 					} else {
 						arr[0] = html
+						tts[0] += ttsPush
 					}
 				}
 			}
@@ -67,10 +77,9 @@ let compileHtml = function (rootComment, options) {
 
 			handle(arr, contents)
 
-			tts.push(...arr)
+			// If (censoring is enabled), replace (the html of e) with (itself run through sanitizeHtml)
 			let html = arr
 				.map(d => `<span id="${id++}" class="hide">${d}</span>`)
-				.map(sanitizeHtml)
 				.join('')
 
 			$(e).html(html)
@@ -88,6 +97,7 @@ let compileHtml = function (rootComment, options) {
 	}
 	return rec(rootComment)
 }
+module.exports.compileHtml = compileHtml
 
 // Takes in a html element
 // Edits $ in the code, and returns an array of all tts segments
@@ -161,6 +171,7 @@ function hydrate(comment, upvoteProb = 0.1) {
 
 	return comment
 }
+module.exports.hydrate = hydrate
 
 async function sequentialWork(works) {
 	let arr = []
