@@ -7,8 +7,6 @@ const { sanitizeHtml, sanitizeUsername, sanitizeSynth } = require('./sanitize')
 const { splitComment, splitQuestion } = require('./split')
 const tmp = require('tmp')
 
-let fileExt = 'mkv'
-
 let compileHtml = function (rootComment, options = {}) {
 	let id = 0
 
@@ -37,23 +35,37 @@ let compileHtml = function (rootComment, options = {}) {
 			for (let i = 0; i < contents.length; i++) {
 				let h = contents[i]
 				if (h.type == 'text') {
-					let data = splitComment(h.data).map(sanitizeHtml)
+					let data = splitComment(h.data)
 
-					arr.push(...data)
+					let ttsData = data
+					let htmlData = data
+
+					if ($(h).closest('.no-censor').length === 0) {
+						htmlData = data.map(sanitizeHtml)
+						ttsData = ttsData.map(sanitizeSynth)
+					}
+
+					arr.push(...htmlData)
+					tts.push(...ttsData)
 				} else if (h.name == 'br') {
 					arr[arr.length - 1] += "<br>"
 				} else {
 					// It's a tag
 					let html = $(h).html()
-
+					let ttsPush = html
+					
+					console.log(ttsPush)
 					if ($(h).closest('.no-censor').length === 0) {
 						html = sanitizeHtml(html)
+						ttsPush = sanitizeSynth(ttsPush)
 					}
 
 					if (arr.length > 0) {
 						arr[arr.length - 1] += html
+						tts[arr.length - 1] += ttsPush
 					} else {
 						arr[0] = html
+						tts[0] += ttsPush
 					}
 				}
 			}
@@ -71,8 +83,6 @@ let compileHtml = function (rootComment, options = {}) {
 				.join('')
 
 			$(e).html(html)
-
-			tts.push(...arr.map(sanitizeSynth))
 		})
 
 		commentTree.body_html = $.html()
