@@ -1,6 +1,5 @@
 const fs = require('fs')
 const { makeCall } = require('./daniel')
-const { sanitizeSynth } = require('./sanitize')
 const { spawn } = require('child_process')
 const tmp = require('tmp')
 
@@ -9,13 +8,15 @@ module.exports.synthSpeech = function (name, text) {
         return Promise.reject("Warning: TTS for current frame is empty")
     }
 
-    return module.exports.synthOddcast(name, text)
-
-    // if (process.env.synthType === 'google') {
-    //     return module.exports.linuxTTSToFile(name, text)
-    // } else {
-    //     return module.exports.macTTSToFile(name, text)
-    // }
+    switch (process.env.ttsEngine) {
+        case "mac":
+            return module.exports.macTTSToFile(name, text)
+        case "linux":
+            return module.exports.linuxTTSToFile(name, text)
+        case "oddcast":
+        default:
+            return module.exports.synthOddcast(name, text)
+    }
 }
 
 module.exports.linuxTTSToFile = function (name, text) {
