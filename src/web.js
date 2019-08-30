@@ -6,6 +6,9 @@ const querystring = require('querystring')
 const { fetchThread, updateAuth, getInfo } = require('./reddit-api')
 const { render } = require('./render')
 const port = 5566
+const path = require('path')
+
+const outputDir = path.join(__dirname, '../video-output/')
 
 http.ServerResponse.prototype.endJson = function (data, ...args) {
 	return this.end(JSON.stringify(data), ...args)
@@ -60,6 +63,18 @@ function readJsonBody(req) {
 	})
 }
 
+// Should iterate up to 50
+function getBestName(origName, dir) {
+	for (let count = 0; count < 50; count++) {
+		let exists = fs.existsSync(path.join(origName, dir))
+		if (exists) {
+			let finalName = count === 0 ? origName : `${origName}-${count}`
+			return path.join(dir, finalName)
+		}
+	}
+	return path.join(dir, origName)
+}
+
 const server = http.createServer(async (req, res) => {
 	// PREFLIGHT CORS FIX
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -71,8 +86,6 @@ const server = http.createServer(async (req, res) => {
 		res.end();
 		return;
 	}
-
-	process.env.synthType = process.platform === 'linux' ? 'google' : 'say-cmd'
 
 	res.setHeader('Content-Type', 'application/json')
 
@@ -166,10 +179,12 @@ const server = http.createServer(async (req, res) => {
 				let comments = body.commentData
 				let options = body.options
 
+				options.theme = Object.assign({}, require(`../themes/${options.theme}/settings.json`), { name: options.theme })
+
 				if (!options.theme) console.error("No theme selected")
 				if (!options.song) console.error("No song selected")
 
-				options.outputName = question.id
+				options.outputPath = getBestName(question.id, outputDir) + '.mkv'
 
 				render(question, comments, options)
 
@@ -177,12 +192,14 @@ const server = http.createServer(async (req, res) => {
 				res.endJson({ message: 'Rendering' })
 			} break
 			case 'render-last': {
+				// Don't use, doesn't work!
+
 				const { questionData, commentData, options } = require('./render-data.log.json')
 
 				if (!options.theme) console.error("No theme selected")
 				if (!options.song) console.error("No song selected")
 
-				options.outputName = questionData.id
+				options.outputPath = questionData.id
 
 				startInstance()
 					.then(() => {
@@ -199,6 +216,6 @@ const server = http.createServer(async (req, res) => {
 })
 
 server.listen(port, () => {
-	console.log('server is up!')
+	console.log('Project BOG started')
 	open('http://localhost:' + port)
 })

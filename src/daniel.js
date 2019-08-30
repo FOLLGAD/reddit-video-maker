@@ -31,8 +31,8 @@ function getTextPromise(engine, language, voice, text, acc, checksum) {
 			if (res.headers.get('Content-Type') === 'audio/mpeg') {
 				resolve(res)
 			} else {
-				console.log(res.headers.get('Content-Type'))
-				console.error('An error ocurred with Daniel:', text)
+				console.log("Got Content-Type:", res.headers.get('Content-Type'))
+				console.error('An error ocurred with Daniel on:', text)
 				reject(new Error(400))
 			}
 		}).catch(err => {

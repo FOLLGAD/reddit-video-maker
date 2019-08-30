@@ -55,7 +55,7 @@ async function launchComment(name, markup) {
 		deviceScaleFactor: dsf,
 	})
 
-	let file = tmp.fileSync()
+	let file = tmp.fileSync({ postfix: '.png' })
 	let filepath = file.name
 
 	if (height * dsf > 1080) {
@@ -100,7 +100,7 @@ async function launchComment(name, markup) {
 
 async function launchQuestion(name, context) {
 	const page = await browser.newPage()
-	let file = tmp.fileSync()
+	let file = tmp.fileSync({ postfix: '.png' })
 	let filepath = file.name
 
 	let markup = questionTemplate(context)

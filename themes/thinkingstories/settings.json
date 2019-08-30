@@ -1,0 +1,9 @@
+{
+	"ttsEngine": {
+		"name": "google",
+		"speakingRate": 0.96,
+		"languageCode": "en-GB",
+		"voiceName": "en-GB-Wavenet-D",
+		"pitch": -4.4
+	}
+}

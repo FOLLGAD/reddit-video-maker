@@ -53,7 +53,7 @@ let compileHtml = function (rootComment, options = {}) {
 					// It's a tag
 					let html = $(h).html()
 					let ttsPush = html
-					
+
 					console.log("uh", ttsPush)
 					if ($(h).closest('.no-censor').length === 0) {
 						html = sanitizeHtml(html)
@@ -137,6 +137,7 @@ function compileQuestion($) {
 		handle(arr, contents)
 
 		tts.push(...arr)
+		tts = tts.map(sanitizeSynth) // Sanitize the Question title
 		let html = arr
 			.map(d => `<span id="${id++}" class="hide">${d}</span>`)
 			.map(sanitizeHtml)
@@ -173,12 +174,12 @@ function hydrate(comment, upvoteProb = 0.1) {
 }
 module.exports.hydrate = hydrate
 
-async function sequentialWork(works) {
+async function sequentialWork(works, options) {
 	let arr = []
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
 		let imgPromise = launch(obj.name, obj.type, obj.imgObj)
-		let audioPromise = synthSpeech(obj.name + '.aiff', obj.tts)
+		let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
 		try {
 			let [imgPath, audioPath] = await Promise.all([imgPromise, audioPromise])
 			let file = tmp.fileSync({ postfix: '.mkv' })
@@ -231,7 +232,7 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		workLine.push(obj)
 	})
 
-	return await sequentialWork(workLine)
+	return await sequentialWork(workLine, options)
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
@@ -240,7 +241,7 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		})
 }
 
-module.exports.renderQuestion = function renderQuestion(questionData) {
+module.exports.renderQuestion = function renderQuestion(questionData, options) {
 	let hydrated = hydrate(questionData, 0.5)
 
 	let $ = cheerio.load(hydrated.title)
@@ -267,7 +268,7 @@ module.exports.renderQuestion = function renderQuestion(questionData) {
 		workLine.push(obj)
 	})
 
-	return sequentialWork(workLine)
+	return sequentialWork(workLine, options)
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
