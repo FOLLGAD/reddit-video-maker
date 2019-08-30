@@ -3,12 +3,14 @@ const { makeCall } = require('./daniel')
 const { spawn } = require('child_process')
 const tmp = require('tmp')
 
+const settings = require('../env.json')
+
 module.exports.synthSpeech = function (name, text) {
     if (!/[\d\w]/.test(text)) { // If no letter or number is in text, don't produce it
         return Promise.reject("Warning: TTS for current frame is empty")
     }
 
-    switch (process.env.ttsEngine) {
+    switch (settings.ttsEngine) {
         case "mac":
             return module.exports.macTTSToFile(name, text)
         case "linux":
@@ -30,13 +32,16 @@ module.exports.linuxTTSToFile = function (name, text) {
 
 module.exports.macTTSToFile = function (name, text) {
     return new Promise(resolve => {
-        if (name.split('.').pop() !== 'aiff') {
+        let file = tmp.fileSync({ postfix: '.aiff' })
+        let filepath = file.name
+
+        if (filepath.split('.').pop() !== 'aiff') {
             console.error('Format must be .aiff')
         }
 
-        let proc = spawn('say', ['-o', `../audio-output/${name}`, '-v', 'Daniel', text])
+        let proc = spawn('say', ['-o', filepath, '-v', 'Daniel', text])
         proc.on('exit', () => {
-            resolve(name)
+            resolve(filepath)
         })
     })
 }

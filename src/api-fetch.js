@@ -54,7 +54,7 @@ let compileHtml = function (rootComment, options = {}) {
 					let html = $(h).html()
 					let ttsPush = html
 					
-					console.log(ttsPush)
+					console.log("uh", ttsPush)
 					if ($(h).closest('.no-censor').length === 0) {
 						html = sanitizeHtml(html)
 						ttsPush = sanitizeSynth(ttsPush)
