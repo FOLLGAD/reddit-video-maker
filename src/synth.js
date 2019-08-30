@@ -91,7 +91,7 @@ module.exports.synthOddcast = function (text) {
 		makeCall(text)
 			.then(res => res.buffer())
 			.then(buffer => {
-				let file = tmp.fileSync({ postfix: '.png' })
+				let file = tmp.fileSync({ postfix: '.mp3' })
 				let filepath = file.name
 				fs.writeFileSync(filepath, buffer)
 				resolve(filepath)

@@ -26,8 +26,8 @@ function getConcat(videoPaths) {
 }
 
 const probe = module.exports.probe = function (path) {
-    return new Promise((res, rej) => {
-        ffmpeg.ffprobe(path, (err, data) => {
+	return new Promise((res, rej) => {
+		ffmpeg.ffprobe(path, (err, data) => {
             if (err) rej(err);
             else res(data);
         })
@@ -73,7 +73,7 @@ const combineImageAudio = module.exports.combineImageAudio = function (imagePath
                 `pad=1920:1080:(ow-iw)/2:(oh-ih)/2:${color}`
             ])
             .input(audioPath)
-            .duration(audioInfo.format.duration - 0.15)
+            .duration(audioInfo.format.duration)
             .fps(25)
             .outputOptions([
                 '-shortest',
