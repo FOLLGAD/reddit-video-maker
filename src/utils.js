@@ -164,7 +164,7 @@ module.exports.compileQuestion = function ($) {
 		for (let i = 0; i < contents.length; i++) {
 			let h = contents[i]
 			if (h.type == 'text') {
-				let data = this.splitQuestion(h.data)
+				let data = module.exports.splitQuestion(h.data)
 				if (lastWasTag) {
 					arr[arr.length - 1] += data.shift()
 				}
@@ -210,16 +210,16 @@ module.exports.getFolderNames = function (dirPath) {
 }
 
 module.exports.hydrate = function (comment, upvoteProb = 0.1) {
-	comment.score = this.formatPoints(comment.score)
+	comment.score = module.exports.formatPoints(comment.score)
 	comment.created = timeAgo(comment.created_utc * 1000)
 	if (comment.edited) {
 		comment.edited = timeAgo(comment.edited * 1000)
 	}
 	if (comment.num_comments) {
-		comment.num_comments = this.formatPoints(comment.num_comments)
+		comment.num_comments = module.exports.formatPoints(comment.num_comments)
 	}
 	if (comment.replies) {
-		comment.replies = comment.replies.map(this.hydrate)
+		comment.replies = comment.replies.map(module.exports.hydrate)
 	}
 	comment.all_awardings = comment.all_awardings.map(d => ({
 		is_enabled: d.is_enabled,
