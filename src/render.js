@@ -1,11 +1,7 @@
-let { renderComment, renderQuestion } = require('./api-fetch')
+let { renderComment, renderQuestion } = require('./construct-html')
 let { combineVideoAudio, concatAndReencode, simpleConcat } = require('./video')
 let path = require('path')
 let tmp = require('tmp')
-
-// Input: thread; array of comment ID:s
-// Put transitions after every comment and add song.
-// add question & outro
 
 async function renderFromComments(question, videolist, options, inputPath) {
 	let outroPath = path.join(__dirname, '../themes', options.theme.name, 'outro.mkv')

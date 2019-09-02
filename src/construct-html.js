@@ -1,86 +1,9 @@
-const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
 const { launchPuppet, commentTemplate } = require('./puppet')
 const { combineImageAudio, padAndConcat } = require('./video')
-const { sanitizeHtml, sanitizeUsername, sanitizeSynth } = require('./sanitize')
-const { splitQuestion, compileHtml, formatPoints } = require('./utils')
+const { compileHtml, hydrate, compileQuestion } = require('./utils')
 const tmp = require('tmp')
-
-// Takes in a html element
-// Edits $ in the code, and returns an array of all tts segments
-function compileQuestion($) {
-	let id = 0,
-		tts = []
-
-	let handle = function (arr, contents) {
-		let lastWasTag = false
-		// Splits string on punctuation
-		for (let i = 0; i < contents.length; i++) {
-			let h = contents[i]
-			if (h.type == 'text') {
-				let data = splitQuestion(h.data)
-				if (lastWasTag) {
-					arr[arr.length - 1] += data.shift()
-				}
-				lastWasTag = false
-
-				arr.push(...data)
-			} else if (h.name == 'br') {
-				arr[arr.length - 1] += "<br>"
-			} else {
-				// It's a tag
-				lastWasTag = true
-				let text = cheerio.load(h).html()
-				if (text.indexOf('.') !== -1) lastWasTag = false
-				arr[arr.length - 1] += text
-			}
-		}
-	}
-
-	$('.text').each((_, e) => {
-		let arr = [],
-			contents = $(e).contents()
-
-		handle(arr, contents)
-
-		tts.push(...arr)
-		tts = tts.map(sanitizeSynth) // Sanitize the Question title
-		let html = arr
-			.map(d => `<span id="${id++}" class="hide">${d}</span>`)
-			.map(sanitizeHtml)
-			.join('')
-
-		$(e).html(html)
-	})
-
-	return tts
-}
-
-function hydrate(comment, upvoteProb = 0.1) {
-	comment.score = formatPoints(comment.score)
-	comment.created = timeAgo(comment.created_utc * 1000)
-	if (comment.edited) {
-		comment.edited = timeAgo(comment.edited * 1000)
-	}
-	if (comment.num_comments) {
-		comment.num_comments = formatPoints(comment.num_comments)
-	}
-	if (comment.replies) {
-		comment.replies = comment.replies.map(hydrate)
-	}
-	comment.all_awardings = comment.all_awardings.map(d => ({
-		is_enabled: d.is_enabled,
-		count: d.count,
-		icon_url: d.resized_icons[1].url, // Pick the 32x32 image
-	}))
-	comment.showBottom = true
-	comment.upvoted = Math.random() < upvoteProb // Some of the posts will randomly be seen as upvoted
-	comment.authorHtml = sanitizeUsername(comment.author)
-
-	return comment
-}
-module.exports.hydrate = hydrate
 
 async function sequentialWork(works, options) {
 	let arr = []
@@ -170,14 +93,12 @@ module.exports.renderQuestion = function renderQuestion(questionData, options) {
 	let tts = compileQuestion($)
 
 	let workLine = []
-	let name = 'Q'
 
 	$('span.hide').each((i, _) => {
 		$('.hide#' + i).removeClass('hide')
 		let toRender = $.html()
 
 		let obj = {
-			name: name + '-' + i,
 			imgObj: { ...hydrated, body_html: toRender },
 			tts: cheerio.load(tts[i]).text(),
 			type: 'question',

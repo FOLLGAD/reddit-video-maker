@@ -1,7 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const cheerio = require('cheerio')
-const { sanitizeHtml, sanitizeSynth } = require('./sanitize')
+const timeAgo = require('node-time-ago')
+const { sanitizeHtml, sanitizeSynth, sanitizeUsername } = require('./sanitize')
 
 const splitCommentRegex = /((?:^|.)+?[.,?!]+[^\w\s]*\s+)/gm
 let splitComment = module.exports.splitComment = function (str) {
@@ -151,9 +152,83 @@ module.exports.compileHtml = function (rootComment, options = {}) {
 	return rec(rootComment)
 }
 
+// Takes in a html element
+// Edits $ in the code, and returns an array of all tts segments
+module.exports.compileQuestion = function ($) {
+	let id = 0,
+		tts = []
+
+	let handle = function (arr, contents) {
+		let lastWasTag = false
+		// Splits string on punctuation
+		for (let i = 0; i < contents.length; i++) {
+			let h = contents[i]
+			if (h.type == 'text') {
+				let data = this.splitQuestion(h.data)
+				if (lastWasTag) {
+					arr[arr.length - 1] += data.shift()
+				}
+				lastWasTag = false
+
+				arr.push(...data)
+			} else if (h.name == 'br') {
+				arr[arr.length - 1] += "<br>"
+			} else {
+				// It's a tag
+				lastWasTag = true
+				let text = cheerio.load(h).html()
+				if (text.indexOf('.') !== -1) lastWasTag = false
+				arr[arr.length - 1] += text
+			}
+		}
+	}
+
+	$('.text').each((_, e) => {
+		let arr = [],
+			contents = $(e).contents()
+
+		handle(arr, contents)
+
+		tts.push(...arr)
+		tts = tts.map(sanitizeSynth) // Sanitize the Question title
+		let html = arr
+			.map(d => `<span id="${id++}" class="hide">${d}</span>`)
+			.map(sanitizeHtml)
+			.join('')
+
+		$(e).html(html)
+	})
+
+	return tts
+}
+
 module.exports.getFolderNames = function (dirPath) {
 	let names = fs.readdirSync(dirPath) // Get all items of directory
 		.filter(name => fs.lstatSync(path.join(dirPath, name)).isDirectory()) // Filter non-folders
-	
+
 	return names
+}
+
+module.exports.hydrate = function (comment, upvoteProb = 0.1) {
+	comment.score = this.formatPoints(comment.score)
+	comment.created = timeAgo(comment.created_utc * 1000)
+	if (comment.edited) {
+		comment.edited = timeAgo(comment.edited * 1000)
+	}
+	if (comment.num_comments) {
+		comment.num_comments = this.formatPoints(comment.num_comments)
+	}
+	if (comment.replies) {
+		comment.replies = comment.replies.map(this.hydrate)
+	}
+	comment.all_awardings = comment.all_awardings.map(d => ({
+		is_enabled: d.is_enabled,
+		count: d.count,
+		icon_url: d.resized_icons[1].url, // Pick the 32x32 image
+	}))
+	comment.showBottom = true
+	comment.upvoted = Math.random() < upvoteProb // Some of the posts will randomly be seen as upvoted
+	comment.authorHtml = sanitizeUsername(comment.author)
+
+	return comment
 }

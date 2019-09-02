@@ -1,4 +1,4 @@
-// This file for the tts calls
+// This file is for the tts calls
 
 const fs = require('fs')
 const { makeCall } = require('./daniel')
