@@ -7,40 +7,15 @@ const { fetchThread, updateAuth, getInfo } = require('./reddit-api')
 const { render } = require('./render')
 const port = 5566
 const path = require('path')
+const { getBestName, readJsonBody, getFolderNames } = require('./utils')
+const contentTypes = require('./content-types.json')
 
-const outputDir = path.join(__dirname, '../video-output/')
+const outputDir = path.join(__dirname, '../video-output/') // Where all final videos go
 
 http.ServerResponse.prototype.endJson = function (data, ...args) {
 	return this.end(JSON.stringify(data), ...args)
 }
 
-let contentTypeDict = {
-	"html": "text/html",
-	"css": "text/css",
-	"xml": "text/xml",
-	"gif": "image/gif",
-	"jpeg": "image/jpeg",
-	"js": "application/javascript",
-	"atom": "application/atom+xml",
-	"rss": "application/rss+xml",
-	"mml": "text/mathml",
-	"txt": "text/plain",
-	"jad": "text/vnd.sun.j2me.app-descriptor",
-	"wml": "text/vnd.wap.wml",
-	"htc": "text/x-component",
-	"png": "image/png",
-	"svg": "image/svg+xml",
-	"tif": "image/tiff",
-	"wbmp": "image/vnd.wap.wbmp",
-	"webp": "image/webp",
-	"ico": "image/x-icon",
-	"jng": "image/x-jng",
-	"bmp": "image/x-ms-bmp",
-	"woff": "font/woff",
-	"woff2": "font/woff2",
-	"jar": "application/java-archive",
-	"json": "application/json"
-}
 
 // No rendering, just web server!
 
@@ -49,31 +24,6 @@ let contentTypeDict = {
 
 updateAuth()
 setInterval(() => updateAuth(), 1000 * 60 * 60) // Update access token every hour
-
-function readJsonBody(req) {
-	return new Promise((res, rej) => {
-		let body = ''
-		req.on('data', chunk => {
-			body += chunk
-		})
-		req.on('end', () => {
-			let json = JSON.parse(body)
-			res(json)
-		})
-	})
-}
-
-// Should iterate up to 50
-function getBestName(origName, dir) {
-	for (let count = 0; count < 50; count++) {
-		let exists = fs.existsSync(path.join(origName, dir))
-		if (exists) {
-			let finalName = count === 0 ? origName : `${origName}-${count}`
-			return path.join(dir, finalName)
-		}
-	}
-	return path.join(dir, origName)
-}
 
 const server = http.createServer(async (req, res) => {
 	// PREFLIGHT CORS FIX
@@ -102,11 +52,11 @@ const server = http.createServer(async (req, res) => {
 		if (togo === '') togo = 'index.html'
 
 		let ext = togo.split('.').pop()
-		if (ext && contentTypeDict[ext]) {
-			res.setHeader('Content-Type', contentTypeDict[ext])
+		if (ext && contentTypes[ext]) {
+			res.setHeader('Content-Type', contentTypes[ext]) // Set the appropriate response header
 		}
 
-		let stream = fs.createReadStream('../hammurabi-build/' + togo) // return with the url (TODO: fix obvious security issue)
+		let stream = fs.createReadStream(path.join(__dirname, '../hammurabi-build/', togo)) // return with the url (TODO: fix obvious security issue)
 
 		stream.pipe(res)
 	} else {
@@ -154,13 +104,12 @@ const server = http.createServer(async (req, res) => {
 				res.endJson(commentData)
 			} break
 			case 'get-themes': {
-				let themes = fs.readdirSync('../themes')
-					.filter(name => fs.lstatSync('../themes/' + name).isDirectory())
+				let themes = getFolderNames(path.join(__dirname, '../themes'))
 					.map(name => ({ name: name }))
 
 				let data = themes.map(th => {
-					let mp3s = fs.readdirSync('../themes/' + th.name).filter(d => d.split('.').pop() == 'mp3')
-
+					let mp3s = fs.readdirSync(path.join(__dirname, '../themes/', th.name))
+						.filter(d => d.split('.').pop() == 'mp3')
 					return {
 						name: th.name,
 						songs: mp3s,
@@ -173,18 +122,21 @@ const server = http.createServer(async (req, res) => {
 				let body = await readJsonBody(req)
 				// TODO: Bearbeta innan skicka till render, beroende på options (ta bort edits osv)
 
-				fs.writeFile('./render-data.log.json', JSON.stringify(body, null, '\t'), () => { })
+				fs.writeFile(path.join(__dirname, './render-data.log.json'), JSON.stringify(body, null, '\t'), () => { })
 
 				let question = body.questionData
 				let comments = body.commentData
 				let options = body.options
 
-				options.theme = Object.assign({}, require(`../themes/${options.theme}/settings.json`), { name: options.theme })
+				options.theme = Object.assign({}, require(path.join(__dirname, `../themes/${options.theme}/settings.json`)), { name: options.theme })
 
 				if (!options.theme) console.error("No theme selected")
 				if (!options.song) console.error("No song selected")
 
-				options.outputPath = getBestName(question.id, outputDir) + '.mkv'
+				// let vidTitle = question.id
+				let vidTitle = "video"
+
+				options.outputPath = getBestName(vidTitle + '.mkv', outputDir)
 
 				render(question, comments, options)
 
@@ -192,19 +144,14 @@ const server = http.createServer(async (req, res) => {
 				res.endJson({ message: 'Rendering' })
 			} break
 			case 'render-last': {
-				// Don't use, doesn't work!
-
 				const { questionData, commentData, options } = require('./render-data.log.json')
 
 				if (!options.theme) console.error("No theme selected")
 				if (!options.song) console.error("No song selected")
 
-				options.outputPath = questionData.id
+				options.outputName = questionData.id
 
-				startInstance()
-					.then(() => {
-						render(questionData, commentData, options)
-					})
+				render(questionData, commentData, options)
 			} break
 			default: {
 				res.statusCode = 404

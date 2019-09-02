@@ -1,0 +1,12 @@
+{
+	"type": "service_account",
+	"project_id": "balmy-mile-251414",
+	"private_key_id": "1d4eaa22286d2d533959b848c78ba0a16ff5f768",
+	"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7wNyRY2wXbiR4\nbPhn+7vQ8YvYz/R6RUWX8EjUUzHlP2R5cn5boyySi2/5r2shJ7sb8pxBfonh+uEO\nFjq+l0vhhJfwLYFZoS/CMiZlpXTIbjTPB2E3b4Lp+nWG6L5h85LyPDV7AokKC9v2\nrLeA//UGLOpIPQgtefLhRKaglUtXdTvhnXsu7kqrwvRLWvm7ktjjg1bwqG2EApML\nVUrHg4LBb4lbsAb9/+//LatRLIHRy+SA7egs2oZ4tx54KjoZ76BOmWX0TNmGF8b3\nZjq9VX9OVnFLTEtPZElbpu8Jal+2mTSVAeVQaM6LlIdK2Ydn72br9qOz2R/gNksW\nZUTkS1RtAgMBAAECggEAAqGRMGa8CE0GbPtGn5BsdqENRGh6T4StKmlXNUXa3GX/\nHAuXH+TMFlv8DFFMF0lwVWkuODsUJsBRCz/pAAGXR42yjQ6vh3MbO/sKGjZkyf1E\nt1pYtKyW9qfy9y/HoTrxsNGCr1q0Uxl3nOqZN2Z+3MtgLMsm1ET8pXGvQxoB1bPR\nogJmLWSLZfzWQz6N31sbvFfk4O1Zv3tPtVdo8BIfyAYh5GcpP92l9sF1gaBZsa5v\nFNOHkLX4/pDDRm46WSG9r/ZmZRwJod7lHBt9jNJzO4eok2WLoXnvrdFpRmgmlUVe\nYmzIaFIjscMBXG3PQG4CbD8R35ZOVSgsD8bE7mq5sQKBgQDuGjWxHemHeCt5AJr9\nQAPzYtjEwnUEzuXVS0q7zkZx3KxGgXMEDwa2tOuSxMo0huhx6VK7TAFwUUwjQ97M\nMRPGhQ6fjPEVHXRYmckEZBHwbcYHIuc3xOxw9vGm3bE+03kSmgHOA9/Zxwgvhe3R\nP6meostaMEJa6uZ7HI2JCiJ+fQKBgQDJ3cnmgnNdVgsiuQUI71VzTVeDnqHJtaFG\nnZtnDKPkjkjHLLsNeL8PmUGU3bkoDHApX545qBcqTjsDO93Cl8pFUw2ROzhYoaIc\nz2e+PZNbCXn4RuIVdnkaUHlrb4wpP364ykpOUkJiUS/WIHCBG07b+1smlMwxm5RG\ndH0/b39gsQKBgQC5JmRuEEaSc13KwC/Fksv/rPPHPTdlv8V1MREyLVsWG3VTdkIL\n++tKlDFDdgePBQEn4znUL2xG/NDp81MDEX7BNqKCa0TlGHxqkVuBMJfKkHIXBosq\nENWTmlObYHT919AkKOISY2zkmiLBYbHmr0yk8Q6UWUagEF2dijx9PgZIuQKBgGav\nLDnWV8q9rxJtnVMLM6NgT0kDk3bgrnYWS+uicWgcvIaciVXz+vR7V/Hay4nEsfVJ\nz1my2H3Lp5cgh9Cpl9mlwrwCrMnhBm6zTilmdyOS8XlKzUxvpHCvSOROrLR6uQJU\n3HF0xJHwjG3WuIPkGTwrYxWAEVKWulkQfnmbROcxAoGAc/IpW0+yMUvGPh4OkUJU\nuHW2YGEBHorub8MgALHkE6RDIpqt58/ppIsjYEv+kznblcVm5Y0n9Xh7kfzVv1zg\nrhsp9oiAmYdad0/836/pX/ks+ok8zMBo+JxJWEVcPCMBydkqG0wQoySNMY4CmuHf\nhKOzTOlBLZ3ryYS8uHsn/qA=\n-----END PRIVATE KEY-----\n",
+	"client_email": "video-worker@balmy-mile-251414.iam.gserviceaccount.com",
+	"client_id": "100155148896871847926",
+	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+	"token_uri": "https://oauth2.googleapis.com/token",
+	"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+	"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/video-worker%40balmy-mile-251414.iam.gserviceaccount.com"
+}

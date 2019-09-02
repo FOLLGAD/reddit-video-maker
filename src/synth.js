@@ -1,3 +1,5 @@
+// This file for the tts calls
+
 const fs = require('fs')
 const { makeCall } = require('./daniel')
 const { spawn } = require('child_process')
@@ -53,10 +55,10 @@ const textToSpeech = require('@google-cloud/text-to-speech')
 const client = new textToSpeech.TextToSpeechClient()
 
 const defaultVoiceSettings = {
-	speakingRate: 1.05,
-	voiceName: 'en-GB-Wavenet-D',
+	speakingRate: 0.96,
+	voiceName: 'en-GB-Wavenet-B',
 	languageCode: 'en-GB',
-	pitch: -4.8,
+	pitch: -4.4,
 }
 
 module.exports.synthGoogle = function (text, voiceSettings = defaultVoiceSettings) {
@@ -93,6 +95,7 @@ module.exports.synthOddcast = function (text) {
 			.then(buffer => {
 				let file = tmp.fileSync({ postfix: '.mp3' })
 				let filepath = file.name
+				
 				fs.writeFileSync(filepath, buffer)
 				resolve(filepath)
 			})

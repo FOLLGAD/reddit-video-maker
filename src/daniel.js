@@ -1,3 +1,5 @@
+// This file is for the Oddcast API calls
+
 const fetch = require('node-fetch')
 const crypto = require('crypto')
 

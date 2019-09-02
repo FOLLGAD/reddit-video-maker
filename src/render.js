@@ -8,8 +8,8 @@ let tmp = require('tmp')
 // add question & outro
 
 async function renderFromComments(question, videolist, options, inputPath) {
-	let outroPath = path.join('../themes', options.theme.name, 'outro.mkv')
-	let songPath = path.join('../themes', options.theme.name, options.song)
+	let outroPath = path.join(__dirname, '../themes', options.theme.name, 'outro.mkv')
+	let songPath = path.join(__dirname, '../themes', options.theme.name, options.song)
 
 	console.log("Adding transitions...")
 	let nosoundFile = tmp.fileSync({ postfix: '.mkv' })
@@ -25,7 +25,7 @@ async function renderFromComments(question, videolist, options, inputPath) {
 module.exports.renderFromComments = renderFromComments
 
 function addTransitions(videolist, options) {
-	let transitionPath = path.join('../themes', options.theme.name, 'transition.mkv')
+	let transitionPath = path.join(__dirname, '../themes', options.theme.name, 'transition.mkv')
 
 	let arr = []
 	videolist.forEach(video => {

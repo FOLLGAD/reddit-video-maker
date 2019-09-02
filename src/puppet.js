@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer'),
 	handles = require('handlebars'),
 	fs = require('fs'),
-	tmp = require('tmp')
+	tmp = require('tmp'),
+	path = require('path')
 
 // Handlebar helper needed for inline comparisons in templates
 handles.registerHelper('ifgt', function (val1, val2, options) {
@@ -10,29 +11,31 @@ handles.registerHelper('ifgt', function (val1, val2, options) {
 	}
 })
 
-let commentPartial = fs.readFileSync('../html/comment-partial.html', { encoding: 'utf-8' })
+const questionTemplate = module.exports.questionTemplate = handles.compile(fs.readFileSync(path.join(__dirname, '/../html/question.html')).toString())
+module.exports.commentTemplate = handles.compile(fs.readFileSync(path.join(__dirname, '/../html/comment-new.html')).toString())
 
+let commentPartial = fs.readFileSync(path.join(__dirname, '/../html/comment-partial.html'), { encoding: 'utf-8' })
 handles.registerPartial('comment', commentPartial)
-
-const commentTemplate = module.exports.commentTemplate = handles.compile(fs.readFileSync('../html/comment-new.html').toString())
-const questionTemplate = module.exports.questionTemplate = handles.compile(fs.readFileSync('../html/question.html').toString())
 
 let browser
 
 module.exports.startInstance = async function startInstance() {
-	console.log('Starting puppeteer instance')
-	browser = await puppeteer.launch({
-		args: [
-			'font-render-hinting=none'
-		]
-	})
+	if (!browser) {
+		console.log('Starting puppeteer instance')
 
-	return
+		browser = await puppeteer.launch({
+			args: [
+				'font-render-hinting=none'
+			]
+		})
+	} else {
+		console.log('Puppeteer already started')
+	}
 }
 
 module.exports.startInstance()
 
-async function launchComment(name, markup) {
+async function launchComment(markup) {
 	const page = await browser.newPage()
 
 	await page.setContent(markup)
@@ -98,7 +101,7 @@ async function launchComment(name, markup) {
 	return filepath
 }
 
-async function launchQuestion(name, context) {
+async function launchQuestion(context) {
 	const page = await browser.newPage()
 	let file = tmp.fileSync({ postfix: '.png' })
 	let filepath = file.name
@@ -121,15 +124,20 @@ async function launchQuestion(name, context) {
 		deviceScaleFactor: 3,
 	})
 
-	await page.screenshot({ encoding: 'binary', path: filepath, type: 'png' })
+	await page.screenshot({
+		encoding: 'binary',
+		path: filepath,
+		type: 'png',
+	})
+	
 	page.close()
 
 	return filepath
 }
 
-module.exports.launch = function launch(name, type, context) {
+module.exports.launchPuppet = function launch(type, context) {
 	if (type == 'question') {
-		return launchQuestion(name, context)
+		return launchQuestion(context)
 	}
-	return launchComment(name, context)
+	return launchComment(context)
 }

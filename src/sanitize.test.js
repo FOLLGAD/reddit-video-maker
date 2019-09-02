@@ -112,13 +112,16 @@ test('sanitize html', () => {
 let usernameTestCases = [
 	{
 		in: 'PM_me_big_dicks_',
-		out: 'PM_me_big_d<span class="blur">ic</span>ks_'
+		out: '<span class="blur">PM_me_big_dicks_</span>'
 	}, {
 		in: 'bitch-cunt',
-		out: 'b<span class="blur">it</span>ch-c<span class="blur">un</span>t'
+		out: '<span class="blur">bitch-cunt</span>'
 	}, {
 		in: 'raperrapist',
-		out: 'r<span class="blur">ap</span>err<span class="blur">ap</span>ist'
+		out: '<span class="blur">raperrapist</span>'
+	}, {
+		in: 'innocentusername32',
+		out: 'innocentusername32'
 	},
 ]
 

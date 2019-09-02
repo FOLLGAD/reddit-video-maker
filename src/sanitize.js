@@ -158,8 +158,12 @@ const sanitizeUsenameArray = [
 ]
 
 module.exports.sanitizeUsername = function (username) {
-	sanitizeUsenameArray.forEach(reg => {
-		username = username.replace(new RegExp(reg, 'gi'), '$1<span class="blur">$2</span>$3')
+	let containsSwears = sanitizeUsenameArray.some(reg => {
+		let regex = new RegExp(reg, 'gi')
+		return regex.test(username)
 	})
+	if (containsSwears) {
+		return `<span class="blur">${username}</span>` // Blur whole username
+	}
 	return username
 }

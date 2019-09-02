@@ -1,3 +1,6 @@
+// This file contains all the ffmpeg-mappings
+// The library fluent-ffmpeg is used as a wrapper for all calls to ffmpeg
+
 const ffmpeg = require('fluent-ffmpeg'),
     tmp = require('tmp')
 
@@ -73,7 +76,7 @@ const combineImageAudio = module.exports.combineImageAudio = function (imagePath
                 `pad=1920:1080:(ow-iw)/2:(oh-ih)/2:${color}`
             ])
             .input(audioPath)
-            .duration(audioInfo.format.duration)
+            .duration(audioInfo.format.duration + 0.15)
             .fps(25)
             .outputOptions([
                 '-shortest',

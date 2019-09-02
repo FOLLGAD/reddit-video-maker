@@ -1,103 +1,11 @@
 const timeAgo = require('node-time-ago')
 const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
-const { launch, commentTemplate } = require('./puppet')
+const { launchPuppet, commentTemplate } = require('./puppet')
 const { combineImageAudio, padAndConcat } = require('./video')
 const { sanitizeHtml, sanitizeUsername, sanitizeSynth } = require('./sanitize')
-const { splitComment, splitQuestion } = require('./split')
+const { splitQuestion, compileHtml, formatPoints } = require('./utils')
 const tmp = require('tmp')
-
-let compileHtml = function (rootComment, options = {}) {
-	let id = 0
-
-	let rec = commentTree => {
-		let $ = cheerio.load(commentTree.body_html)
-
-		$('p,li,blockquote').addClass('text')
-		$('li,blockquote').addClass('hide-until-active') // To hide the list dots until they're needed
-
-		// Removes .text class from all <p> with <li> children
-		$('p li').parent('p').removeClass('text')
-		$('p,li,blockquote').parents('p,li,blockquote').removeClass('text')
-
-		if (!options.keepLinks) {
-			// Remove links
-			$('.text a').each(function () {
-				$(this).contents().insertAfter($(this))
-				$(this).remove()
-			})
-		}
-
-		let tts = []
-
-		let handle = function (arr, contents) {
-			// Splits string on punctuation
-			for (let i = 0; i < contents.length; i++) {
-				let h = contents[i]
-				if (h.type == 'text') {
-					let data = splitComment(h.data)
-
-					let ttsData = data
-					let htmlData = data
-
-					if ($(h).closest('.no-censor').length === 0) {
-						htmlData = data.map(sanitizeHtml)
-						ttsData = ttsData.map(sanitizeSynth)
-					}
-
-					arr.push(...htmlData)
-					tts.push(...ttsData)
-				} else if (h.name == 'br') {
-					arr[arr.length - 1] += "<br>"
-				} else {
-					// It's a tag
-					let html = $(h).html()
-					let ttsPush = html
-
-					console.log("uh", ttsPush)
-					if ($(h).closest('.no-censor').length === 0) {
-						html = sanitizeHtml(html)
-						ttsPush = sanitizeSynth(ttsPush)
-					}
-
-					if (arr.length > 0) {
-						arr[arr.length - 1] += html
-						tts[arr.length - 1] += ttsPush
-					} else {
-						arr[0] = html
-						tts[0] += ttsPush
-					}
-				}
-			}
-		}
-
-		$('.text').each((_, e) => {
-			let arr = [],
-				contents = $(e).contents()
-
-			handle(arr, contents)
-
-			// If (censoring is enabled), replace (the html of e) with (itself run through sanitizeHtml)
-			let html = arr
-				.map(d => `<span id="${id++}" class="hide">${d}</span>`)
-				.join('')
-
-			$(e).html(html)
-		})
-
-		commentTree.body_html = $.html()
-
-		if (Array.isArray(commentTree.replies)) {
-			commentTree.replies.forEach(reply => {
-				tts = tts.concat(rec(reply))
-			})
-		}
-
-		return tts
-	}
-	return rec(rootComment)
-}
-module.exports.compileHtml = compileHtml
 
 // Takes in a html element
 // Edits $ in the code, and returns an array of all tts segments
@@ -150,13 +58,13 @@ function compileQuestion($) {
 }
 
 function hydrate(comment, upvoteProb = 0.1) {
-	comment.score = formatNum(comment.score)
+	comment.score = formatPoints(comment.score)
 	comment.created = timeAgo(comment.created_utc * 1000)
 	if (comment.edited) {
 		comment.edited = timeAgo(comment.edited * 1000)
 	}
 	if (comment.num_comments) {
-		comment.num_comments = formatNum(comment.num_comments)
+		comment.num_comments = formatPoints(comment.num_comments)
 	}
 	if (comment.replies) {
 		comment.replies = comment.replies.map(hydrate)
@@ -178,7 +86,7 @@ async function sequentialWork(works, options) {
 	let arr = []
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
-		let imgPromise = launch(obj.name, obj.type, obj.imgObj)
+		let imgPromise = launchPuppet(obj.type, obj.imgObj)
 		let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
 		try {
 			let [imgPath, audioPath] = await Promise.all([imgPromise, audioPromise])
@@ -218,14 +126,24 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 			curr.closest('.DIV_28').siblings('.DIV_31').removeClass('hide-until-active')
 		}
 
+		// Save a snapshot of the html where the current element has class .center-elem
 		curr.addClass('center-elem')
 		let html = $.html()
 		curr.removeClass('center-elem')
 
+		let text
+		try {
+			text = cheerio.load(tts[i]).text()
+		} catch(e) {
+			console.log(tts)
+			console.log($('span.hide').length)
+			console.log(i)
+			throw e
+		}
+
 		let obj = {
-			name: name + '-' + i,
 			imgObj: html,
-			tts: cheerio.load(tts[i]).text(),
+			tts: text,
 			type: 'comment',
 		}
 
@@ -275,12 +193,4 @@ module.exports.renderQuestion = function renderQuestion(questionData, options) {
 			await padAndConcat(videos.filter(v => v != null), path)
 			return path
 		})
-}
-
-function formatNum(num) {
-	let d = parseInt(num)
-	if (num >= 1000) {
-		return Math.round(num / 100) / 10 + 'k'
-	}
-	return d
 }
