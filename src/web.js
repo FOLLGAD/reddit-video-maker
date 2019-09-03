@@ -136,7 +136,7 @@ const server = http.createServer(async (req, res) => {
 				// let vidTitle = question.id
 				let vidTitle = "video"
 
-				options.outputPath = getBestName(vidTitle + '.mkv', outputDir)
+				options.outPath = () => getBestName(vidTitle + '.mkv', outputDir)
 
 				render(question, comments, options)
 
