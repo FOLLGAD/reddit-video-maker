@@ -25,6 +25,32 @@ http.ServerResponse.prototype.endJson = function (data, ...args) {
 updateAuth()
 setInterval(() => updateAuth(), 1000 * 60 * 60) // Update access token every hour
 
+let stdin = process.stdin
+
+stdin.setEncoding('utf-8')
+
+stdin.on('data', (str) => {
+	switch (str.trim().toLowerCase()) {
+		case "h":
+			console.log([
+				"h - show this message",
+				"b - open hammurabi in browser",
+				"d - open video-output folder",
+				"e - show EEEE.",
+			].join('\n'))
+			break
+		case "b":
+			open(`localhost:${port}`)
+			break
+		case "d":
+			open(outputDir)
+			break
+		case "e":
+			console.log("EEEE.")
+			break
+	}
+})
+
 const server = http.createServer(async (req, res) => {
 	// PREFLIGHT CORS FIX
 	res.setHeader('Access-Control-Allow-Origin', '*');
