@@ -59,7 +59,7 @@ module.exports.render = async function (questionData, commentData, options = def
 		console.log("Rendering question...")
 		let question = await renderQuestion(questionData, options)
 
-		let outputPath = typeof options.outPath === "function" ? options.outPath() : options.outPath;
+		let outputPath = options.outPath
 
 		await renderFromComments(question, videolist, options, outputPath)
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")

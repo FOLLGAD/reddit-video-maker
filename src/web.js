@@ -51,6 +51,10 @@ stdin.on('data', (str) => {
 	}
 })
 
+function touchFile(filePath) {
+	fs.closeSync(fs.openSync(filePath, 'w'))
+}
+
 const server = http.createServer(async (req, res) => {
 	// PREFLIGHT CORS FIX
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -148,6 +152,11 @@ const server = http.createServer(async (req, res) => {
 				let body = await readJsonBody(req)
 				// TODO: Bearbeta innan skicka till render, beroende på options (ta bort edits osv)
 
+				// let vidTitle = question.id
+				let vidTitle = "video"
+				let outPath = getBestName(vidTitle + '.mkv', outputDir)
+				touchFile(outPath) // touch the file to make sure no other process overwrites the progress
+
 				fs.writeFile(path.join(__dirname, './render-data.log.json'), JSON.stringify(body, null, '\t'), () => { })
 
 				let question = body.questionData
@@ -158,11 +167,7 @@ const server = http.createServer(async (req, res) => {
 
 				if (!options.theme) console.error("No theme selected")
 				if (!options.song) console.error("No song selected")
-
-				// let vidTitle = question.id
-				let vidTitle = "video"
-
-				options.outPath = () => getBestName(vidTitle + '.mkv', outputDir)
+				options.outPath = outPath
 
 				render(question, comments, options)
 
@@ -175,7 +180,7 @@ const server = http.createServer(async (req, res) => {
 				if (!options.theme) console.error("No theme selected")
 				if (!options.song) console.error("No song selected")
 
-				options.outputName = questionData.id
+				options.outPath = path.join(outputDir, questionData.id)
 
 				render(questionData, commentData, options)
 			} break
