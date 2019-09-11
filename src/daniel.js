@@ -35,7 +35,7 @@ function getTextPromise(engine, language, voice, text, acc, checksum) {
 			} else {
 				console.log("Got Content-Type:", res.headers.get('Content-Type'))
 				console.error('An error ocurred with Daniel on:', text)
-				reject(new Error(400))
+				reject(new Error("400"))
 			}
 		}).catch(err => {
 			console.error("Daniel: Request failed")
@@ -59,18 +59,19 @@ module.exports.makeCall = async function (text, engine = 4, language = 1, voice 
 	const checksum = getChecksum(text, engine, language, voice, acc)
 
 	let tries = 0
-	while (tries < 5) {
+	while (tries < 10) {
 		tries++
 		try {
 			// Timout at 3 seconds
-			let t = await timeoutPromise(3000, getTextPromise(engine, language, voice, newtext, acc, checksum))
+			let t = await timeoutPromise(5000, getTextPromise(engine, language, voice, newtext, acc, checksum))
 			return t
 		} catch (err) {
 			if (err.message == 400) {
 				throw err
 			}
-			console.log("Daniel: Request failed. Retrying...")
-			// else, try again
+			let retrytime = 5000
+			console.error(`Daniel: Request failed. Retrying again in ${retrytime / 1000} seconds...`)
+			await new Promise(r => setTimeout(r, retrytime)) // Wait
 		}
 	}
 
