@@ -59,7 +59,7 @@ module.exports.makeCall = async function (text, engine = 4, language = 1, voice 
 	const checksum = getChecksum(text, engine, language, voice, acc)
 
 	let tries = 0
-	while (tries < 10) {
+	while (tries < 1000) {
 		tries++
 		try {
 			// Timout at 3 seconds

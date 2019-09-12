@@ -130,10 +130,6 @@ const foulReplace = [
 		regex: /(\W|^)raping/,
 		replace: "$1violating",
 	},
-	{
-		regex: /drugs/,
-		replace: "substances",
-	}
 ]
 
 module.exports.sanitizeHtml = function (str) {
