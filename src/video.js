@@ -61,7 +61,7 @@ module.exports.combineImageAudio = function (imagePath, audioPath, outPath) {
 				'-stream_loop 1',
 			])
 			.videoCodec('libx264')
-			.fpsOutput(25)
+			.fpsOutput(25) // No effect?
 			.duration(audioInfo.format.duration + 0.15)
 			.input(audioPath)
 			.audioCodec('aac')
@@ -116,22 +116,6 @@ module.exports.simpleConcat = function (videoPaths, outPath) {
 				res()
 
 				console.log("simpleConcat took %s", Date.now() - start)
-			})
-			.on('error', console.error)
-			.save(outPath)
-	})
-}
-
-module.exports.padAndConcat = function (videoPaths, outPath) {
-	let start = Date.now()
-	return new Promise((res, rej) => {
-		getConcat(videoPaths)
-			.videoCodec('copy')
-			.audioCodec('copy')
-			.on('end', () => {
-				res()
-
-				console.log("padAndConcat took %s", Date.now() - start)
 			})
 			.on('error', console.error)
 			.save(outPath)

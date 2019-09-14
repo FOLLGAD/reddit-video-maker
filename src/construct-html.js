@@ -2,7 +2,7 @@ const tmp = require('tmp')
 const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
 const { launchPuppet, commentTemplate } = require('./puppet')
-const { combineImageAudio, padAndConcat } = require('./video')
+const { combineImageAudio, simpleConcat } = require('./video')
 const { compileHtml, hydrate, compileQuestion } = require('./utils')
 
 async function sequentialWork(works, options) {
@@ -86,7 +86,7 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
-			await padAndConcat(videos.filter(v => v != null), path)
+			await simpleConcat(videos.filter(v => v != null), path)
 			return path
 		})
 }
@@ -120,7 +120,7 @@ module.exports.renderQuestion = function renderQuestion(questionData, options) {
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
-			await padAndConcat(videos.filter(v => v != null), path)
+			await simpleConcat(videos.filter(v => v != null), path)
 			return path
 		})
 }
