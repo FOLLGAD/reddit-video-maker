@@ -1,5 +1,5 @@
 let { renderComment, renderQuestion } = require('./construct-html')
-let { combineVideoAudio, concatAndReencode, simpleConcat } = require('./video')
+let { combineVideoAudio, simpleConcat } = require('./video')
 let path = require('path')
 let tmp = require('tmp')
 
@@ -8,18 +8,19 @@ async function renderFromComments(question, videolist, options, inputPath) {
 	let songPath = path.join(__dirname, '../themes', options.theme.name, options.song)
 
 	console.log("Adding transitions...")
-	let nosoundFile = tmp.fileSync({ postfix: '.mkv' })
-	await simpleConcat(videolist, nosoundFile.name)
+	let nosoundFile = tmp.fileSync({ postfix: '.mkv', prefix: 'transitions-' })
+	let videosWithTransitions = addTransitions(videolist, options)
+	await simpleConcat(videosWithTransitions, nosoundFile.name)
 
 	console.log("Adding sound...")
-	let soundFile = tmp.fileSync({ postfix: '.mkv' })
+	let soundFile = tmp.fileSync({ postfix: '.mkv', prefix: 'sound-' })
 	await combineVideoAudio(nosoundFile.name, songPath, soundFile.name)
 
 	console.log("Rendering final...")
-	await concatAndReencode([question, soundFile.name, outroPath], inputPath)
+	await simpleConcat([question, soundFile.name, outroPath], inputPath)
 }
-module.exports.renderFromComments = renderFromComments
 
+// Insert transitions between all elements
 function addTransitions(videolist, options) {
 	let transitionPath = path.join(__dirname, '../themes', options.theme.name, 'transition.mkv')
 
@@ -30,7 +31,6 @@ function addTransitions(videolist, options) {
 
 	return arr
 }
-module.exports.addTransitions = addTransitions
 
 const defaultOptions = {
 	keepLinks: false,
@@ -52,8 +52,6 @@ module.exports.render = async function (questionData, commentData, options = def
 			console.log("Comment number", i, "failed to render. It will not be added.")
 		}
 	}
-
-	videolist = addTransitions(videolist, options)
 
 	try {
 		console.log("Rendering question...")

@@ -1,20 +1,29 @@
+const tmp = require('tmp')
 const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
 const { launchPuppet, commentTemplate } = require('./puppet')
-const { combineImageAudio, padAndConcat } = require('./video')
+const { combineImageAudio, simpleConcat } = require('./video')
 const { compileHtml, hydrate, compileQuestion } = require('./utils')
-const tmp = require('tmp')
 
 async function sequentialWork(works, options) {
+	let imgAudioArr = []
+	for (let i = 0; i < works.length; i++) {
+			let obj = works[i]
+			let imgPromise = launchPuppet(obj.type, obj.imgObj)
+			imgPromise.catch(console.error)
+			let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
+			audioPromise.catch(console.error)
+			imgAudioArr[i] = [imgPromise, audioPromise]
+	}
+
 	let arr = []
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
-		let imgPromise = launchPuppet(obj.type, obj.imgObj)
-		let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
 		try {
-			let [imgPath, audioPath] = await Promise.all([imgPromise, audioPromise])
+			let start = Date.now()
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
+			let [imgPath, audioPath] = await Promise.all(imgAudioArr[i])
 			await combineImageAudio(imgPath, audioPath, path)
 			arr.push(path)
 		} catch (e) {
@@ -25,7 +34,7 @@ async function sequentialWork(works, options) {
 	}
 	if (arr.length === 0) {
 		// Skip this shit
-		throw new Error("Comment render: No segments succeeded.")
+		throw new Error("Comment: No segments succeeded.")
 	}
 	return arr
 }
@@ -57,7 +66,7 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		let text
 		try {
 			text = cheerio.load(tts[i]).text()
-		} catch(e) {
+		} catch (e) {
 			console.log(tts)
 			console.log($('span.hide').length)
 			console.log(i)
@@ -77,7 +86,7 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
-			await padAndConcat(videos.filter(v => v != null), path)
+			await simpleConcat(videos.filter(v => v != null), path)
 			return path
 		})
 }
@@ -111,7 +120,7 @@ module.exports.renderQuestion = function renderQuestion(questionData, options) {
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
-			await padAndConcat(videos.filter(v => v != null), path)
+			await simpleConcat(videos.filter(v => v != null), path)
 			return path
 		})
 }
