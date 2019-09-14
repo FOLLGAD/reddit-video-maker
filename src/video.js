@@ -2,7 +2,8 @@
 // The library fluent-ffmpeg is used as a wrapper for all calls to ffmpeg
 
 const ffmpeg = require('fluent-ffmpeg'),
-	tmp = require('tmp')
+	tmp = require('tmp'),
+	fs = require('fs')
 
 tmp.setGracefulCleanup() // Enforce graceful file cleanup
 
@@ -18,13 +19,12 @@ let tempFolderInfo = tmp.dirSync()
 let tempFolder = tempFolderInfo.name
 
 function getConcat(videoPaths) {
-	// ffmpeg(`concat:${videoPaths.join('|')}`)
-	let f = ffmpeg()
-	videoPaths.forEach(v =>
-		f.input(v)
-			.inputFormat(inputFormat)
-	)
-	// f.mergeToFile(outPath, tempFolder)
+	let txt = tmp.fileSync()
+	let tempPath = txt.name
+
+	fs.writeFileSync(tempPath, videoPaths.map(d => `file '${d}'\n`).join(''))
+
+	let f = ffmpeg().input(tempPath).inputOptions(['-f concat', '-safe 0'])
 	return f
 }
 
@@ -58,20 +58,17 @@ module.exports.combineImageAudio = function (imagePath, audioPath, outPath) {
 		let afterProbe = Date.now()
 		ffmpeg(imagePath)
 			.inputOptions([
-				'-loop 1',
+				'-stream_loop 1',
 			])
-			.videoCodec('copy')
-			// .videoFilters([
-			// 	`pad=1920:1080:(ow-iw)/2:(oh-ih)/2:${color}`
-			// ])
+			.videoCodec('libx264')
 			.fpsOutput(25)
-			.outputOptions([
-				'-shortest',
-			])
-			.input(audioPath)
 			.duration(audioInfo.format.duration + 0.15)
-			.audioCodec('copy')
-			// .size('1920x1080')
+			.input(audioPath)
+			.audioCodec('aac')
+			.audioFrequency(24000)
+			.outputOptions([
+                '-pix_fmt yuv420p',
+			])
 			.output(outPath)
 			.on('end', () => {
 				res()
@@ -87,12 +84,11 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
 	return new Promise((res, rej) => {
 		ffmpeg(videoPath)
 			.inputFormat(inputFormat)
-			.videoCodec('copy')
+			.videoCodec('libx264')
 			.input(audioPath)
 			.audioCodec('aac')
-			.complexFilter([
-				'[0:a][1:a]amerge=inputs=2[a]',
-			])
+			.complexFilter([ '[0:a][1:a] amerge=inputs=2 [a]' ])
+			.fpsOutput(25)
 			.outputOptions([
 				'-shortest',
 				'-map 0:v',
@@ -114,15 +110,15 @@ module.exports.simpleConcat = function (videoPaths, outPath) {
 	let start = Date.now()
 	return new Promise((res, rej) => {
 		getConcat(videoPaths)
-			.videoCodec('libx264')
-			.audioCodec('aac')
+			.videoCodec('copy')
+			.audioCodec('copy')
 			.on('end', () => {
 				res()
 
 				console.log("simpleConcat took %s", Date.now() - start)
 			})
 			.on('error', console.error)
-			.mergeToFile(outPath, tempFolder)
+			.save(outPath)
 	})
 }
 
@@ -130,14 +126,14 @@ module.exports.padAndConcat = function (videoPaths, outPath) {
 	let start = Date.now()
 	return new Promise((res, rej) => {
 		getConcat(videoPaths)
-			.videoCodec('libx264')
-			.audioCodec('aac')
+			.videoCodec('copy')
+			.audioCodec('copy')
 			.on('end', () => {
 				res()
 
-				console.log("simpleConcat took %s", Date.now() - start)
+				console.log("padAndConcat took %s", Date.now() - start)
 			})
 			.on('error', console.error)
-			.mergeToFile(outPath, tempFolder)
+			.save(outPath)
 	})
 }

@@ -8,10 +8,12 @@ const { compileHtml, hydrate, compileQuestion } = require('./utils')
 async function sequentialWork(works, options) {
 	let imgAudioArr = []
 	for (let i = 0; i < works.length; i++) {
-		let obj = works[i]
-		let imgPromise = launchPuppet(obj.type, obj.imgObj)
-		let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
-		imgAudioArr[i] = [imgPromise, audioPromise]
+			let obj = works[i]
+			let imgPromise = launchPuppet(obj.type, obj.imgObj)
+			imgPromise.catch(console.error)
+			let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
+			audioPromise.catch(console.error)
+			imgAudioArr[i] = [imgPromise, audioPromise]
 	}
 
 	let arr = []
@@ -32,7 +34,7 @@ async function sequentialWork(works, options) {
 	}
 	if (arr.length === 0) {
 		// Skip this shit
-		throw new Error("Comment render: No segments succeeded.")
+		throw new Error("Comment: No segments succeeded.")
 	}
 	return arr
 }

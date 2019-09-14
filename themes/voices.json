@@ -14,7 +14,7 @@
 		"audioConfig": {
 			"audioEncoding": "MP3",
 			"pitch": -2.0,
-			"speakingRate": 1.04
+			"speakingRate": 0.98
 		},
 		"voice": {
 			"languageCode": "en-US",
