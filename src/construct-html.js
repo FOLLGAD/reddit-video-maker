@@ -1,20 +1,27 @@
+const tmp = require('tmp')
 const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
 const { launchPuppet, commentTemplate } = require('./puppet')
 const { combineImageAudio, padAndConcat } = require('./video')
 const { compileHtml, hydrate, compileQuestion } = require('./utils')
-const tmp = require('tmp')
 
 async function sequentialWork(works, options) {
-	let arr = []
+	let imgAudioArr = []
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
 		let imgPromise = launchPuppet(obj.type, obj.imgObj)
 		let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
+		imgAudioArr[i] = [imgPromise, audioPromise]
+	}
+
+	let arr = []
+	for (let i = 0; i < works.length; i++) {
+		let obj = works[i]
 		try {
-			let [imgPath, audioPath] = await Promise.all([imgPromise, audioPromise])
+			let start = Date.now()
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
+			let [imgPath, audioPath] = await Promise.all(imgAudioArr[i])
 			await combineImageAudio(imgPath, audioPath, path)
 			arr.push(path)
 		} catch (e) {
@@ -57,7 +64,7 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		let text
 		try {
 			text = cheerio.load(tts[i]).text()
-		} catch(e) {
+		} catch (e) {
 			console.log(tts)
 			console.log($('span.hide').length)
 			console.log(i)
