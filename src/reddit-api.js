@@ -17,8 +17,14 @@ async function getAuth() {
 }
 
 let access_token
-module.exports.updateAuth = async function updateAuth() {
-	access_token = await getAuth()
+module.exports.initAuth = () => {
+	updateAuth()
+	setInterval(() => updateAuth(), 1000 * 60 * 60) // Update access token every hour
+}
+
+async function updateAuth() {
+	let authToken = await getAuth()
+	access_token = authToken
 }
 
 let defaultOpts = {
@@ -31,6 +37,7 @@ let defaultOpts = {
 }
 
 module.exports.fetchSubreddit = function (subreddit, options = defaultOpts) {
+	// Get subreddit information
 	let query = querystring.stringify({
 		api_type: 'json',
 		raw_json: 1,
@@ -42,7 +49,7 @@ module.exports.fetchSubreddit = function (subreddit, options = defaultOpts) {
 		showmore: true,
 		threaded: true,
 	})
-	
+
 	console.log(options.sortBy)
 
 	return fetch(`https://oauth.reddit.com/r/${subreddit}/${options.sortBy}?${query}`, {
@@ -52,26 +59,6 @@ module.exports.fetchSubreddit = function (subreddit, options = defaultOpts) {
 	}).then(r => {
 		return r.json()
 	})
-}
-
-// An array of all comments of which you want data
-module.exports.getInfo = async function getInfo(children) {
-	let data = {
-		api_type: 'json',
-		raw_json: 1,
-		id: children.map(d => 't1_' + d).join(','),
-	}
-	let query = querystring.stringify(data)
-
-	let p = await fetch(`https://oauth.reddit.com/api/info.json?${query}`, {
-		headers: {
-			Authorization: `Bearer ${access_token}`,
-		}
-	}).then(r => {
-		return r.json()
-	})
-
-	return p.data.children
 }
 
 module.exports.fetchThread = async function (threadId, options = defaultOpts) {
@@ -145,5 +132,5 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 	let parsedC = parseComments(p).map(extractComment)
 	let parsedQ = extractQuestion(parseQuestion(p))
 
-	return { questionData: parsedQ, commentData: parsedC }
+	return [parsedQ, parsedC]
 }

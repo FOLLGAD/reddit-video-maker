@@ -10,7 +10,7 @@ module.exports.synthSpeech = function (text, voiceSettings) {
 		return Promise.reject("Warning: TTS for current frame is empty")
 	}
 
-	switch (voiceSettings.name) {
+	switch (voiceSettings) {
 		case "daniel":
 			if (process.platform === "darwin") {
 				// Darwin means Mac
@@ -20,10 +20,10 @@ module.exports.synthSpeech = function (text, voiceSettings) {
 			return module.exports.synthOddcast(text)
 		case "linux":
 			return module.exports.linuxTTSToFile(text)
-		case "google":
+		case "google-uk":
 		// Fallthrough to default
 		default:
-			return module.exports.synthGoogle(text, voiceSettings)
+			return module.exports.synthGoogle(text)
 	}
 }
 

@@ -59,6 +59,7 @@ Video:
 	"owner": ObjectId,
 	"theme": ObjectId,
 	"created": Date,
+	"finished": Date,
 	"expiration": Date,
 	"downloads": 2
 }

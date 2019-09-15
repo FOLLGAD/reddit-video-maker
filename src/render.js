@@ -32,11 +32,7 @@ function addTransitions(videolist, options) {
 }
 module.exports.addTransitions = addTransitions
 
-const defaultOptions = {
-	keepLinks: false,
-}
-
-module.exports.render = async function (questionData, commentData, options = defaultOptions) {
+module.exports.render = async function (questionData, commentData, options) {
 	console.log('Started rendering')
 	let start = Date.now()
 	let videolist = []
@@ -44,7 +40,7 @@ module.exports.render = async function (questionData, commentData, options = def
 	console.log('Rendering', commentData.length, commentData.length === 1 ? 'comment' : 'comments')
 	for (let i = 0; i < commentData.length; i++) {
 		try {
-			let commentPath = await renderComment(commentData[i], i, options)
+			let commentPath = await renderComment(commentData[i], options)
 			videolist.push(commentPath)
 			console.log("Successfully rendered comment", i)
 		} catch (e) {
@@ -53,7 +49,7 @@ module.exports.render = async function (questionData, commentData, options = def
 		}
 	}
 
-	videolist = addTransitions(videolist, options)
+	const withTransitions = addTransitions(videolist, options)
 
 	try {
 		console.log("Rendering question...")
@@ -61,7 +57,7 @@ module.exports.render = async function (questionData, commentData, options = def
 
 		let outputPath = options.outPath
 
-		await renderFromComments(question, videolist, options, outputPath)
+		await renderFromComments(question, withTransitions, options, outputPath)
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
 		console.error(e)

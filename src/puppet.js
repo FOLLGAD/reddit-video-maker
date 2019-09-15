@@ -21,8 +21,6 @@ let browser
 
 module.exports.startInstance = async function startInstance() {
 	if (!browser) {
-		console.log('Starting puppeteer instance')
-
 		browser = await puppeteer.launch({
 			args: [
 				'font-render-hinting=none'

@@ -10,7 +10,7 @@ async function sequentialWork(works, options) {
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
 		let imgPromise = launchPuppet(obj.type, obj.imgObj)
-		let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
+		let audioPromise = synthSpeech(obj.tts, options.theme.voice)
 		try {
 			let [imgPath, audioPath] = await Promise.all([imgPromise, audioPromise])
 			let file = tmp.fileSync({ postfix: '.mkv' })
@@ -31,7 +31,7 @@ async function sequentialWork(works, options) {
 }
 
 // Should return the name of video of the created comment
-module.exports.renderComment = async function renderComment(commentData, name, options) {
+module.exports.renderComment = async function renderComment(commentData, options) {
 	let rootComment = hydrate(commentData, 0.1)
 	let tts = compileHtml(rootComment, options)
 	let workLine = []
