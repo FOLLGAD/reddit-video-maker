@@ -36,18 +36,19 @@ module.exports.User = mongoose.model('User', UserSchema)
 // const PathSchema = { type: String, set: original => `${uuid()}.${getExt(original)}` }
 
 const ThemeSchema = new Schema({
-	name: { type: String, default: 'Untitled Theme' },
+	name: { type: String, default: 'Untitled Theme', select: 1 },
 	public: { type: Boolean, default: false, select: 0 },
 
 	// Filenames:
-	intro: String,
-	transition: String,
-	outro: String,
-	songs: [String],
+	intro: { type: String, select: 1 },
+	transition: { type: String, select: 1 },
+	outro: { type: String, select: 1 },
 
-	voice: { type: String, enum: ["daniel", "google-uk"], default: "daniel" },
+	songs: { type: [String], select: 1 },
 
-	owner: ObjectId,
+	voice: { type: String, enum: ["daniel", "google-us", "google-uk"], default: "daniel", select: 1 },
+
+	owner: { type: ObjectId, select: 0 },
 	updated: { type: Date, default: Date.now },
 })
 
@@ -81,6 +82,9 @@ module.exports.SwearwordDict = mongoose.model('SwearwordDict', SwearwordDictSche
 
 const VoiceSchema = new Schema({
 	engine: { type: String, enum: ["daniel", "google"] },
+	googleSettings: {
+
+	},
 })
 
 module.exports.Voice = mongoose.model('Voice', VoiceSchema)

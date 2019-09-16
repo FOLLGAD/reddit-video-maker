@@ -23,6 +23,8 @@ const verifyTokenMiddleware = async (req, res, next) => {
 	}
 }
 
+const filesLocation = path.join(__dirname, '../../files')
+
 const multerStorage = multer.diskStorage({
 	filename(req, file, cb) {
 		let ext = file.originalname.split('.').pop()
@@ -31,6 +33,9 @@ const multerStorage = multer.diskStorage({
 		} else {
 			cb(null, uuid())
 		}
+	},
+	destination(req, file, cb) {
+		cb(null, filesLocation)
 	}
 })
 
@@ -38,7 +43,7 @@ const deleteFileCond = filename => {
 	// Delete the file
 	return new Promise((res, rej) => {
 		if (filename) {
-			fs.unlink(path.join(__dirname, '../../files', filename), (err) => {
+			fs.unlink(path.join(filesLocation, filename), (err) => {
 				if (err) rej(err)
 				else res()
 			})
@@ -52,7 +57,6 @@ const init = () => {
 	const app = express()
 	const upload = multer({
 		storage: multerStorage,
-		dest: 'files/',
 		limits: { fileSize: 50000000, files: 5 }, // 50MB file size limit
 	})
 
@@ -62,9 +66,8 @@ const init = () => {
 	// Enable cors for development mode
 	app.use(cors({
 		credentials: true,
-		origin: 'http://localhost:3000'
+		origin(a, b) { b(null, true) }
 	}))
-	// }
 
 	app.use(express.json()) // Use json body parsing
 	app.use(cookieParser())
@@ -119,6 +122,8 @@ const init = () => {
 		.get('/test', (_, res) => {
 			res.json({})
 		})
+
+		// THREAD GET
 		.get('/thread/:thread', (req, res) => {
 			let thread = req.params.thread
 
@@ -138,22 +143,15 @@ const init = () => {
 					})
 				})
 		})
-		// .post('/get-info', (req, res) => {
-		// 	// Currently unused
-		// 	// http://localhost:8000/get-info?comments=cmnt1,cmnt2,cmnt3
-		// 	let comments = querystring.parse(parsedUrl.query).comments.split(',')
-		// 	let commentData = await getInfo(comments) // Should return an array of comment data
 
-		// 	res.endJson(commentData)
-		// })
+		// VOICE
+		// NOT IMPLEMENTED
 		.get('/voices', async (req, res) => {
-			let themes = await Theme.find(
-				{ $or: [{ public: 'true' }, { owner: req.user._id }] },
-				{ name: 1, songs: 1, _id: 1 }
-			)
-
-			res.json(themes)
+			res.status(500).json({})
 		})
+
+		// THEMES
+		/////////////
 		.get('/themes', async (req, res) => {
 			let themes = await Theme.find(
 				{ $or: [{ public: 'true' }, { owner: req.user._id }] },
@@ -162,11 +160,11 @@ const init = () => {
 
 			res.json(themes)
 		})
-		.get('/theme/:themeId', async (req, res) => {
-			let themes = await Theme.findOne(
-				{ _id: req.params.themeId, $or: [{ public: 'true' }, { owner: req.user._id }] },
-				{ name: 1, songs: 1, _id: 1, public: 1 }
-			)
+		.get('/themes/:themeId', async (req, res) => {
+			let themes = await Theme.findOne({
+				_id: req.params.themeId,
+				$or: [{ public: 'true' }, { owner: req.user._id }]
+			})
 
 			res.json(themes)
 		})
@@ -193,33 +191,56 @@ const init = () => {
 				obj.voice = req.body.voice
 			}
 
-			await Theme.updateOne({ _id: themeId, owner: req.user._id }, req.body)
+			await Theme.updateOne({ _id: themeId, owner: req.user._id }, obj)
 
-			res.json({})
+			res.json({ theme: themeId })
 		})
 		// Upload theme transition
-		.post('/themes/:theme/transition', upload.single('file'), async (req, res) => {
+		.post('/themes/:theme/files', upload.fields([
+			{ name: 'intro' },
+			{ name: 'transition' },
+			{ name: 'outro' },
+		]), async (req, res) => {
 			let themeId = req.params.theme
+
+			const intro = req.files['intro'] && req.files['intro'][0]
+			const transition = req.files['transition'] && req.files['transition'][0]
+			const outro = req.files['outro'] && req.files['outro'][0]
 
 			let theme = await Theme.findOne({
 				_id: themeId,
 				owner: req.user._id,
 			})
 
-			let oldfile = theme.transition
-			theme.transition = req.file.filename
+			let toDelete = []
+
+			if (intro) {
+				theme.intro && toDelete.push(theme.intro)
+				theme.intro = intro.filename
+			}
+			if (transition) {
+				theme.transition && toDelete.push(theme.transition)
+				theme.transition = transition.filename
+			}
+			if (outro) {
+				theme.outro && toDelete.push(theme.outro)
+				theme.outro = outro.filename
+			}
 
 			await theme.save()
 
 			res.json({})
 
-			deleteFileCond(oldfile)
+			// Remove all the files
+			toDelete.forEach(file => deleteFileCond(file))
 		})
 		.delete('/themes/:theme', async (req, res) => {
 			await Theme.deleteOne({ _id: themeId, owner: req.user._id })
 
 			res.json({})
 		})
+
+		// RENDER VIDEO
 		.post('/render-video', async (req, res) => {
 			let body = req.body
 
@@ -274,6 +295,55 @@ const init = () => {
 			}
 
 			res.json({})
+		})
+
+		.get('/legacy/themes', async (req, res) => {
+			const { getFolderNames } = require('../utils')
+			let themes = getFolderNames(path.join(__dirname, '../../themes'))
+				.map(name => ({ name: name }))
+
+			let data = themes.map(th => {
+				let mp3s = fs.readdirSync(path.join(__dirname, '../../themes/', th.name))
+					.filter(d => d.split('.').pop() == 'mp3')
+				return {
+					name: th.name,
+					songs: mp3s,
+				}
+			})
+
+			res.json(data)
+		})
+		.post('/legacy/render-video', async (req, res) => {
+			const { getBestName } = require('../utils')
+			let body = req.body
+			// TODO: Bearbeta innan skicka till render, beroende på options (ta bort edits osv)
+
+			// let vidTitle = question.id
+			let vidTitle = "video"
+			let outPath = getBestName(vidTitle + '.mkv', path.join(__dirname, '../../video-output'))
+
+			let touchFile = (filePath) => {
+				fs.closeSync(fs.openSync(filePath, 'w'))
+			}
+
+			touchFile(outPath) // touch the file to make sure no other process overwrites the progress
+
+			fs.writeFile(path.join(__dirname, '../render-data.log.json'), JSON.stringify(body, null, '\t'), () => { })
+
+			let question = body.questionData
+			let comments = body.commentData
+			let options = body.options
+
+			options.theme = Object.assign({}, require(path.join(__dirname, `../../themes/${options.theme}/settings.json`)), { name: options.theme })
+
+			if (!options.theme) console.error("No theme selected")
+			if (!options.song) console.error("No song selected")
+			options.outPath = outPath
+
+			render(question, comments, options)
+
+			res.statusCode = 201
+			res.json({ message: 'Rendering' })
 		})
 
 	app.use('/api', apiRouter)
