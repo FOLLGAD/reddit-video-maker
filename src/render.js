@@ -1,5 +1,5 @@
 let { renderComment, renderQuestion } = require('./construct-html')
-let { combineVideoAudio, concatAndReencode, simpleConcat } = require('./video')
+let { combineVideoAudio, simpleConcat } = require('./video')
 let tmp = require('tmp')
 
 async function renderFromComments(question, videolist, inputPath, {
@@ -8,8 +8,9 @@ async function renderFromComments(question, videolist, inputPath, {
 	song,
 }) {
 	console.log("Adding transitions...")
-	let nosoundFile = tmp.fileSync({ postfix: '.mkv' })
-	await simpleConcat(videolist, nosoundFile.name)
+	let nosoundFile = tmp.fileSync({ postfix: '.mkv', prefix: 'transitions-' })
+	let videosWithTransitions = addTransitions(videolist, options)
+	await simpleConcat(videosWithTransitions, nosoundFile.name)
 
 	let soundFile
 
@@ -27,7 +28,7 @@ async function renderFromComments(question, videolist, inputPath, {
 	if (intro) queue.unshift(intro) // Insert as first element
 
 	console.log("Rendering final...")
-	await concatAndReencode(queue, inputPath)
+	await simpleConcat(queue, inputPath)
 }
 
 function addTransitions(videolist, transitionPath) {

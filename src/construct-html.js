@@ -1,20 +1,29 @@
+const tmp = require('tmp')
 const cheerio = require('cheerio')
 const { synthSpeech } = require('./synth')
 const { launchPuppet, commentTemplate } = require('./puppet')
-const { combineImageAudio, padAndConcat } = require('./video')
+const { combineImageAudio, simpleConcat } = require('./video')
 const { compileHtml, hydrate, compileQuestion } = require('./utils')
-const tmp = require('tmp')
 
 async function sequentialWork(works, { voice }) {
+	let imgAudioArr = []
+	for (let i = 0; i < works.length; i++) {
+			let obj = works[i]
+			let imgPromise = launchPuppet(obj.type, obj.imgObj)
+			imgPromise.catch(console.error)
+			let audioPromise = synthSpeech({ text: obj.tts, voice })
+			audioPromise.catch(console.error)
+			imgAudioArr[i] = [imgPromise, audioPromise]
+	}
+
 	let arr = []
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
-		let imgPromise = launchPuppet(obj.type, obj.imgObj)
-		let audioPromise = synthSpeech({ text: obj.tts, voice })
 		try {
-			let [imgPath, audioPath] = await Promise.all([imgPromise, audioPromise])
+			let start = Date.now()
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
+			let [imgPath, audioPath] = await Promise.all(imgAudioArr[i])
 			await combineImageAudio(imgPath, audioPath, path)
 			arr.push(path)
 		} catch (e) {
@@ -25,7 +34,7 @@ async function sequentialWork(works, { voice }) {
 	}
 	if (arr.length === 0) {
 		// Skip this shit
-		throw new Error("Comment render: No segments succeeded.")
+		throw new Error("Comment: No segments succeeded.")
 	}
 	return arr
 }
@@ -80,7 +89,7 @@ module.exports.renderComment = async function renderComment({
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
-			await padAndConcat(videos.filter(v => v != null), path)
+			await simpleConcat(videos.filter(v => v != null), path)
 			return path
 		})
 }
@@ -117,7 +126,7 @@ module.exports.renderQuestion = function renderQuestion({
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
-			await padAndConcat(videos.filter(v => v != null), path)
+			await simpleConcat(videos.filter(v => v != null), path)
 			return path
 		})
 }

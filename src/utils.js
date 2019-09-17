@@ -38,7 +38,9 @@ module.exports.getBestName = function (origFileName, dir) {
 	let fileExt = lastDotIndex !== -1 ? origFileName.slice(lastDotIndex) : "" // Get the file extension
 	let thread = lastDotIndex !== -1 ? origFileName.slice(0, lastDotIndex) : origFileName
 
-	for (let count = 0; count < 50; count++) {
+	let count = 0
+	while (true) {
+		count++
 		let finalName = (count === 0 ? thread : `${thread}-${count}`) + fileExt
 		let exists = fs.existsSync(path.join(dir, finalName))
 		if (!exists) {

@@ -69,7 +69,7 @@ module.exports.makeCall = async function (text, engine = 4, language = 1, voice 
 			if (err.message == 400) {
 				throw err
 			}
-			let retrytime = 5000
+			let retrytime = 1000
 			console.error(`Daniel: Request failed. Retrying again in ${retrytime / 1000} seconds...`)
 			await new Promise(r => setTimeout(r, retrytime)) // Wait
 		}

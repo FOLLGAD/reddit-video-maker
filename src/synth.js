@@ -7,7 +7,7 @@ const tmp = require('tmp')
 
 module.exports.synthSpeech = function ({ text, voice }) {
 	if (!/[\d\w]/.test(text)) { // If no letter or number is in text, don't produce it
-		return Promise.reject("Warning: TTS for current frame is empty")
+		return new Promise((_, rej) => rej("Warning: TTS for current frame is empty"))
 	}
 
 	switch (voice) {

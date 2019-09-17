@@ -91,6 +91,12 @@ async function launchComment(markup) {
 			encoding: 'binary',
 			path: filepath,
 			type: 'png',
+			clip: {
+				x: 0,
+				y: -(pageHeight - height) / 2, // Center on screen
+				width: pageWidth,
+				height: pageHeight,
+			},
 		})
 	}
 
@@ -108,26 +114,30 @@ async function launchQuestion(context) {
 
 	await page.setContent(markup)
 
-	page.setViewport({
-		width: 1920 / 3,
-		height: 1080,
-		deviceScaleFactor: 3,
-	})
-
-	const height = await page.$eval('#DIV_1', e => e.scrollHeight)
+	let dsf = 3,
+		pageWidth = 1920 / dsf,
+		pageHeight = 1080 / dsf
 
 	page.setViewport({
-		width: 1920 / 3,
-		height: height,
+		width: pageWidth,
+		height: pageHeight,
 		deviceScaleFactor: 3,
 	})
+	
+	let height = await page.$eval('#DIV_1', e => e.scrollHeight)
 
 	await page.screenshot({
 		encoding: 'binary',
 		path: filepath,
 		type: 'png',
+		clip: {
+			x: 0,
+			y: -(pageHeight - height) / 2, // Center on screen
+			width: pageWidth,
+			height: pageHeight,
+		},
 	})
-	
+
 	page.close()
 
 	return filepath

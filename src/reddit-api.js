@@ -75,8 +75,8 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 		sort: options.sort,
 		limit: options.end,
 		t: options.t,
-		depth: 2,
-		context: 2,
+		depth: 3,
+		context: 3,
 		showmore: true,
 		threaded: true,
 	})
