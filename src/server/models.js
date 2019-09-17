@@ -44,7 +44,7 @@ const ThemeSchema = new Schema({
 	transition: { type: String, select: 1 },
 	outro: { type: String, select: 1 },
 
-	songs: { type: [String], select: 1 },
+	songs: { type: [String], select: 0 },
 
 	voice: { type: String, enum: ["daniel", "google-us", "google-uk"], default: "daniel", select: 1 },
 
@@ -62,13 +62,23 @@ ThemeSchema.pre('save', next => {
 
 module.exports.Theme = mongoose.model('Theme', ThemeSchema)
 
-const VideoSchema = new Schema({
-	file: String,
-	owner: ObjectId,
-	theme: ObjectId,
-	finished: Date,
+const SongSchema = new Schema({
+	public: { type: Boolean, default: false, select: 0 },
+	name: { type: String, select: 1 },
+	file: { type: String, select: 0 },
+	owner: { type: ObjectId, select: 0 },
 	created: { type: Date, default: Date.now },
-	expiration: { type: Date, default: Date.now() + 1000 * 60 * 60 * 24 * 7 }, // One week before expiration
+})
+
+module.exports.Song = mongoose.model('Song', SongSchema)
+
+const VideoSchema = new Schema({
+	file: { type: String, select: 1 },
+	owner: { type: ObjectId, select: 0 },
+	theme: { type: ObjectId, select: 1 },
+	finished: { type: Date, select: 1 },
+	created: { type: Date, default: Date.now, select: 1 },
+	expiration: { type: Date, default: Date.now() + 1000 * 60 * 60 * 24, select: 1 }, // 24 hours before expiration
 	downloads: { type: Number, default: 0 },
 })
 

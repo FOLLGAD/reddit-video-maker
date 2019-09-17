@@ -1,4 +1,4 @@
-const { User, Theme, Video } = require('./models')
+const { User, Theme, Video, Song } = require('./models')
 const { createToken, verifyToken } = require('./utils')
 const { render } = require('../render')
 const express = require('express')
@@ -24,6 +24,9 @@ const verifyTokenMiddleware = async (req, res, next) => {
 }
 
 const filesLocation = path.join(__dirname, '../../files')
+const toFilesDir = file => file ? path.join(filesLocation, file) : null
+
+const uuidFileName = extension => extension ? uuid() + '.' + extension : uuid()
 
 const multerStorage = multer.diskStorage({
 	filename(req, file, cb) {
@@ -150,12 +153,38 @@ const init = () => {
 			res.status(500).json({})
 		})
 
+		// SONGS
+		/////////////
+		.get('/songs', async (req, res) => {
+			let songs = await Song.find({ owner: req.user._id })
+
+			res.json(songs)
+		})
+		.post('/songs', upload.single('song'), async (req, res) => {
+			const song = req.file
+
+			let songDoc = new Song({
+				name: song.originalname,
+				file: song.filename,
+				owner: req.user._id,
+			})
+			await songDoc.save()
+
+			res.json({ song: songDoc._id })
+		})
+		.delete('/songs/:songId', async (req, res) => {
+			const songId = req.params.songId
+
+			await Song.deleteOne({ owner: req.user._id, _id: songId })
+
+			res.json({ song: songId })
+		})
+
 		// THEMES
 		/////////////
 		.get('/themes', async (req, res) => {
 			let themes = await Theme.find(
-				{ $or: [{ public: 'true' }, { owner: req.user._id }] },
-				{ name: 1, songs: 1, _id: 1 }
+				{ $or: [{ public: 'true' }, { owner: req.user._id }] }
 			)
 
 			res.json(themes)
@@ -235,13 +264,40 @@ const init = () => {
 			toDelete.forEach(file => deleteFileCond(file))
 		})
 		.delete('/themes/:theme', async (req, res) => {
-			await Theme.deleteOne({ _id: themeId, owner: req.user._id })
+			await Theme.deleteOne({ _id: req.params.theme, owner: req.user._id })
+
+			res.json({})
+		})
+		.delete('/themes/:theme/files', async (req, res) => {
+			let { intro, outro, transition } = req.body
+
+			let theme = await Theme.findOne({
+				_id: req.params.theme,
+				owner: req.user._id,
+			})
+
+			let toDelete = []
+
+			if (intro) {
+				toDelete.push(theme.intro)
+				theme.intro = null
+			}
+			if (transition) {
+				toDelete.push(theme.transition)
+				theme.transition = null
+			}
+			if (outro) {
+				toDelete.push(theme.outro)
+				theme.outro = null
+			}
+
+			await Theme.updateOne({ _id: req.params.theme, owner: req.user._id }, deltaObj)
 
 			res.json({})
 		})
 
 		// RENDER VIDEO
-		.post('/render-video', async (req, res) => {
+		.post('/videos', async (req, res) => {
 			let body = req.body
 
 			let question = body.questionData
@@ -255,17 +311,20 @@ const init = () => {
 				return res.status(400).json({ error: "NO_THEME" })
 			}
 
-			if (!options.song) console.error("No song selected")
+			let song = options.song ? await Song.findById(options.song, { file: 1 }) : null
 
-			const toFilesPath = filename => filename ? path.join(__dirname, '../files', filename) : null
-
-			let vid = new Video({ theme: theme._id, owner: req.user._id, file: toFilesPath(uuid()) })
+			let vid = new Video({
+				theme: theme._id,
+				owner: req.user._id,
+				file: toFilesDir(uuidFileName('mkv'))
+			})
 			vid.save()
 
 			let renderPromise = render(question, comments, {
-				transition: toFilesPath(theme.transition),
-				outro: toFilesPath(theme.outro),
-				intro: toFilesPath(theme.intro),
+				transition: toFilesDir(theme.transition),
+				outro: toFilesDir(theme.outro),
+				intro: toFilesDir(theme.intro),
+				song: toFilesDir(song.file),
 				voice: theme.voice,
 				outPath: vid.file,
 			})
@@ -296,59 +355,25 @@ const init = () => {
 
 			res.json({})
 		})
-
-		.get('/legacy/themes', async (req, res) => {
-			const { getFolderNames } = require('../utils')
-			let themes = getFolderNames(path.join(__dirname, '../../themes'))
-				.map(name => ({ name: name }))
-
-			let data = themes.map(th => {
-				let mp3s = fs.readdirSync(path.join(__dirname, '../../themes/', th.name))
-					.filter(d => d.split('.').pop() == 'mp3')
-				return {
-					name: th.name,
-					songs: mp3s,
-				}
-			})
-
-			res.json(data)
+		.get('/videos', async (req, res) => {
+			let vids = await Video.find({ owner: req.user._id })
+			res.json(vids)
 		})
-		.post('/legacy/render-video', async (req, res) => {
-			const { getBestName } = require('../utils')
-			let body = req.body
-			// TODO: Bearbeta innan skicka till render, beroende på options (ta bort edits osv)
+		.get('/videos/:videoId', async (req, res) => {
+			let videoId = req.params.videoId
 
-			// let vidTitle = question.id
-			let vidTitle = "video"
-			let outPath = getBestName(vidTitle + '.mkv', path.join(__dirname, '../../video-output'))
+			let vid = await Video.findById(videoId)
 
-			let touchFile = (filePath) => {
-				fs.closeSync(fs.openSync(filePath, 'w'))
-			}
+			res.sendFile(toFilesDir(vid.file))
 
-			touchFile(outPath) // touch the file to make sure no other process overwrites the progress
-
-			fs.writeFile(path.join(__dirname, '../render-data.log.json'), JSON.stringify(body, null, '\t'), () => { })
-
-			let question = body.questionData
-			let comments = body.commentData
-			let options = body.options
-
-			options.theme = Object.assign({}, require(path.join(__dirname, `../../themes/${options.theme}/settings.json`)), { name: options.theme })
-
-			if (!options.theme) console.error("No theme selected")
-			if (!options.song) console.error("No song selected")
-			options.outPath = outPath
-
-			render(question, comments, options)
-
-			res.statusCode = 201
-			res.json({ message: 'Rendering' })
+			// Increment downloads by one
+			Video.updateOne({ _id: videoId }, { $inc: { downloads: 1 } })
 		})
 
 	app.use('/api', apiRouter)
 
-	app.use(express.static('hammurabi-build'))
+	app.use('/files', verifyTokenMiddleware, express.static('files')) // Serve files
+	app.use(express.static('hammurabi-build')) // Serve hammurabi client
 
 	app.listen(8000)
 }

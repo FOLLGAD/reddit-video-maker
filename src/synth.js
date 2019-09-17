@@ -5,12 +5,12 @@ const { makeCall } = require('./daniel')
 const { spawn } = require('child_process')
 const tmp = require('tmp')
 
-module.exports.synthSpeech = function (text, voiceSettings) {
+module.exports.synthSpeech = function ({ text, voice }) {
 	if (!/[\d\w]/.test(text)) { // If no letter or number is in text, don't produce it
 		return Promise.reject("Warning: TTS for current frame is empty")
 	}
 
-	switch (voiceSettings) {
+	switch (voice) {
 		case "daniel":
 			if (process.platform === "darwin") {
 				// Darwin means Mac
@@ -18,12 +18,27 @@ module.exports.synthSpeech = function (text, voiceSettings) {
 			}
 			// Else, fall back on the epic Oddcast api
 			return module.exports.synthOddcast(text)
+
 		case "linux":
+			// Don't use
 			return module.exports.linuxTTSToFile(text)
+
 		case "google-uk":
-		// Fallthrough to default
-		default:
-			return module.exports.synthGoogle(text)
+			return module.exports.synthGoogle(text, {
+				languageCode: "en-GB",
+				voiceName: "en-GB-Wavenet-B",
+				pitch: -4.4,
+				speakingRate: 0.96,
+			})
+
+		case "google-us": default:
+			// Fallthrough to default
+			return module.exports.synthGoogle(text, {
+				speakingRate: 0.98,
+				languageCode: "en-US",
+				voiceName: "en-US-Wavenet-D",
+				pitch: -2.0,
+			})
 	}
 }
 
@@ -55,10 +70,10 @@ const textToSpeech = require('@google-cloud/text-to-speech')
 const client = new textToSpeech.TextToSpeechClient()
 
 const defaultVoiceSettings = {
-	speakingRate: 0.96,
-	voiceName: 'en-GB-Wavenet-B',
-	languageCode: 'en-GB',
-	pitch: -4.4,
+	speakingRate: 0.98,
+	"languageCode": "en-US",
+	"voiceName": "en-US-Wavenet-D",
+	pitch: -2.0,
 }
 
 module.exports.synthGoogle = function (text, voiceSettings = defaultVoiceSettings) {
@@ -95,7 +110,7 @@ module.exports.synthOddcast = function (text) {
 			.then(buffer => {
 				let file = tmp.fileSync({ postfix: '.mp3' })
 				let filepath = file.name
-				
+
 				fs.writeFileSync(filepath, buffer)
 				resolve(filepath)
 			})

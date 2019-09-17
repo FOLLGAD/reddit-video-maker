@@ -5,12 +5,12 @@ const { combineImageAudio, padAndConcat } = require('./video')
 const { compileHtml, hydrate, compileQuestion } = require('./utils')
 const tmp = require('tmp')
 
-async function sequentialWork(works, options) {
+async function sequentialWork(works, { voice }) {
 	let arr = []
 	for (let i = 0; i < works.length; i++) {
 		let obj = works[i]
 		let imgPromise = launchPuppet(obj.type, obj.imgObj)
-		let audioPromise = synthSpeech(obj.tts, options.theme.voice)
+		let audioPromise = synthSpeech({ text: obj.tts, voice })
 		try {
 			let [imgPath, audioPath] = await Promise.all([imgPromise, audioPromise])
 			let file = tmp.fileSync({ postfix: '.mkv' })
@@ -31,9 +31,12 @@ async function sequentialWork(works, options) {
 }
 
 // Should return the name of video of the created comment
-module.exports.renderComment = async function renderComment(commentData, options) {
+module.exports.renderComment = async function renderComment({
+	commentData,
+	voice,
+}) {
 	let rootComment = hydrate(commentData, 0.1)
-	let tts = compileHtml(rootComment, options)
+	let tts = compileHtml(rootComment)
 	let workLine = []
 	let markup = commentTemplate(rootComment)
 	let $ = cheerio.load(markup)
@@ -57,7 +60,7 @@ module.exports.renderComment = async function renderComment(commentData, options
 		let text
 		try {
 			text = cheerio.load(tts[i]).text()
-		} catch(e) {
+		} catch (e) {
 			console.log(tts)
 			console.log($('span.hide').length)
 			console.log(i)
@@ -73,7 +76,7 @@ module.exports.renderComment = async function renderComment(commentData, options
 		workLine.push(obj)
 	})
 
-	return await sequentialWork(workLine, options)
+	return await sequentialWork(workLine, { voice })
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
@@ -82,7 +85,10 @@ module.exports.renderComment = async function renderComment(commentData, options
 		})
 }
 
-module.exports.renderQuestion = function renderQuestion(questionData, options) {
+module.exports.renderQuestion = function renderQuestion({
+	questionData,
+	voice,
+}) {
 	let hydrated = hydrate(questionData, 0.5)
 
 	let $ = cheerio.load(hydrated.title)
@@ -107,7 +113,7 @@ module.exports.renderQuestion = function renderQuestion(questionData, options) {
 		workLine.push(obj)
 	})
 
-	return sequentialWork(workLine, options)
+	return sequentialWork(workLine, { voice })
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
