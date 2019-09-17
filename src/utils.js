@@ -62,7 +62,7 @@ module.exports.formatPoints = function (num) {
 
 // Compiles Html by wrapping in span's and returns a tts transcript for every matching span
 // rootComment needs a body_html and replies (array of other comments)
-module.exports.compileHtml = function (rootComment, options = {}) {
+module.exports.compileHtml = function (rootComment, keepLinks = false) {
 	let id = 0
 
 	let rec = commentTree => {
@@ -75,7 +75,7 @@ module.exports.compileHtml = function (rootComment, options = {}) {
 		$('p li').parent('p').removeClass('text')
 		$('p,li,blockquote').parents('p,li,blockquote').removeClass('text')
 
-		if (!options.keepLinks) {
+		if (!keepLinks) {
 			// Remove links
 			$('.text a').each(function () {
 				$(this).contents().insertAfter($(this))

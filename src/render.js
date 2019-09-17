@@ -1,29 +1,37 @@
 let { renderComment, renderQuestion } = require('./construct-html')
 let { combineVideoAudio, simpleConcat } = require('./video')
-let path = require('path')
 let tmp = require('tmp')
 
-async function renderFromComments(question, videolist, options, inputPath) {
-	let outroPath = path.join(__dirname, '../themes', options.theme.name, 'outro.mkv')
-	let songPath = path.join(__dirname, '../themes', options.theme.name, options.song)
-
+async function renderFromComments(question, videolist, inputPath, {
+	intro,
+	outro,
+	song,
+}) {
 	console.log("Adding transitions...")
 	let nosoundFile = tmp.fileSync({ postfix: '.mkv', prefix: 'transitions-' })
 	let videosWithTransitions = addTransitions(videolist, options)
 	await simpleConcat(videosWithTransitions, nosoundFile.name)
 
-	console.log("Adding sound...")
-	let soundFile = tmp.fileSync({ postfix: '.mkv', prefix: 'sound-' })
-	await combineVideoAudio(nosoundFile.name, songPath, soundFile.name)
+	let soundFile
+
+	if (song) {
+		console.log("Adding sound...")
+		soundFile = tmp.fileSync({ postfix: '.mkv' })
+		await combineVideoAudio(nosoundFile.name, song, soundFile.name)
+	} else {
+		console.log("No song selected")
+		soundFile = nosoundFile
+	}
+
+	let queue = [question, soundFile.name]
+	if (outro) queue.push(outro)
+	if (intro) queue.unshift(intro) // Insert as first element
 
 	console.log("Rendering final...")
-	await simpleConcat([question, soundFile.name, outroPath], inputPath)
+	await simpleConcat(queue, inputPath)
 }
 
-// Insert transitions between all elements
-function addTransitions(videolist, options) {
-	let transitionPath = path.join(__dirname, '../themes', options.theme.name, 'transition.mkv')
-
+function addTransitions(videolist, transitionPath) {
 	let arr = []
 	videolist.forEach(video => {
 		arr.push(video, transitionPath)
@@ -32,11 +40,7 @@ function addTransitions(videolist, options) {
 	return arr
 }
 
-const defaultOptions = {
-	keepLinks: false,
-}
-
-module.exports.render = async function (questionData, commentData, options = defaultOptions) {
+module.exports.render = async function (questionData, commentData, options) {
 	console.log('Started rendering')
 	let start = Date.now()
 	let videolist = []
@@ -44,7 +48,10 @@ module.exports.render = async function (questionData, commentData, options = def
 	console.log('Rendering', commentData.length, commentData.length === 1 ? 'comment' : 'comments')
 	for (let i = 0; i < commentData.length; i++) {
 		try {
-			let commentPath = await renderComment(commentData[i], i, options)
+			let commentPath = await renderComment({
+				commentData: commentData[i],
+				voice: options.voice
+			})
 			videolist.push(commentPath)
 			console.log("Successfully rendered comment", i)
 		} catch (e) {
@@ -53,13 +60,19 @@ module.exports.render = async function (questionData, commentData, options = def
 		}
 	}
 
+	const withTransitions = options.transition ?
+		addTransitions(videolist, options.transition) :
+		videolist
+
 	try {
 		console.log("Rendering question...")
-		let question = await renderQuestion(questionData, options)
+		let question = await renderQuestion({ questionData, voice: options.voice })
 
-		let outputPath = options.outPath
-
-		await renderFromComments(question, videolist, options, outputPath)
+		await renderFromComments(question, withTransitions, options.outPath, {
+			outro: options.outro,
+			intro: options.intro,
+			song: options.song,
+		})
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
 		console.error(e)

@@ -5,13 +5,13 @@ const { launchPuppet, commentTemplate } = require('./puppet')
 const { combineImageAudio, simpleConcat } = require('./video')
 const { compileHtml, hydrate, compileQuestion } = require('./utils')
 
-async function sequentialWork(works, options) {
+async function sequentialWork(works, { voice }) {
 	let imgAudioArr = []
 	for (let i = 0; i < works.length; i++) {
 			let obj = works[i]
 			let imgPromise = launchPuppet(obj.type, obj.imgObj)
 			imgPromise.catch(console.error)
-			let audioPromise = synthSpeech(obj.tts, options.theme.ttsEngine)
+			let audioPromise = synthSpeech({ text: obj.tts, voice })
 			audioPromise.catch(console.error)
 			imgAudioArr[i] = [imgPromise, audioPromise]
 	}
@@ -40,9 +40,12 @@ async function sequentialWork(works, options) {
 }
 
 // Should return the name of video of the created comment
-module.exports.renderComment = async function renderComment(commentData, name, options) {
+module.exports.renderComment = async function renderComment({
+	commentData,
+	voice,
+}) {
 	let rootComment = hydrate(commentData, 0.1)
-	let tts = compileHtml(rootComment, options)
+	let tts = compileHtml(rootComment)
 	let workLine = []
 	let markup = commentTemplate(rootComment)
 	let $ = cheerio.load(markup)
@@ -82,7 +85,7 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		workLine.push(obj)
 	})
 
-	return await sequentialWork(workLine, options)
+	return await sequentialWork(workLine, { voice })
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name
@@ -91,7 +94,10 @@ module.exports.renderComment = async function renderComment(commentData, name, o
 		})
 }
 
-module.exports.renderQuestion = function renderQuestion(questionData, options) {
+module.exports.renderQuestion = function renderQuestion({
+	questionData,
+	voice,
+}) {
 	let hydrated = hydrate(questionData, 0.5)
 
 	let $ = cheerio.load(hydrated.title)
@@ -116,7 +122,7 @@ module.exports.renderQuestion = function renderQuestion(questionData, options) {
 		workLine.push(obj)
 	})
 
-	return sequentialWork(workLine, options)
+	return sequentialWork(workLine, { voice })
 		.then(async videos => {
 			let file = tmp.fileSync({ postfix: '.mkv' })
 			let path = file.name

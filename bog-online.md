@@ -1,6 +1,7 @@
 Primitive edition
 720p rendering
 Transition, Intro, outro
+Video length estimation
 Custom video format?
 
 premium edition:
@@ -16,4 +17,3 @@ Generate monetization indicators
 To add:
 triple children
 Make question html and comment html to be theme-dependant
-
