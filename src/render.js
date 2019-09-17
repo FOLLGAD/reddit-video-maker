@@ -9,8 +9,7 @@ async function renderFromComments(question, videolist, inputPath, {
 }) {
 	console.log("Adding transitions...")
 	let nosoundFile = tmp.fileSync({ postfix: '.mkv', prefix: 'transitions-' })
-	let videosWithTransitions = addTransitions(videolist, options)
-	await simpleConcat(videosWithTransitions, nosoundFile.name)
+	await simpleConcat(videolist, nosoundFile.name)
 
 	let soundFile
 
