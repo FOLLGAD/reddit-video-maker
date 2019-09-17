@@ -90,7 +90,6 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
 			.complexFilter([ '[0:a][1:a] amerge=inputs=2 [a]' ])
 			.fpsOutput(25)
 			.outputOptions([
-				'-shortest',
 				'-map 0:v',
 				'-map [a]',
 			])

@@ -324,7 +324,7 @@ const init = () => {
 				transition: toFilesDir(theme.transition),
 				outro: toFilesDir(theme.outro),
 				intro: toFilesDir(theme.intro),
-				song: toFilesDir(song.file),
+				song: song && toFilesDir(song.file),
 				voice: theme.voice,
 				outPath: vid.file,
 			})

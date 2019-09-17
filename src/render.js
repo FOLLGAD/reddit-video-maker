@@ -16,6 +16,7 @@ async function renderFromComments(question, videolist, inputPath, {
 	if (song) {
 		console.log("Adding sound...")
 		soundFile = tmp.fileSync({ postfix: '.mkv' })
+		console.log(song)
 		await combineVideoAudio(nosoundFile.name, song, soundFile.name)
 	} else {
 		console.log("No song selected")
@@ -26,7 +27,6 @@ async function renderFromComments(question, videolist, inputPath, {
 	if (outro) queue.push(outro)
 	if (intro) queue.unshift(intro) // Insert as first element
 
-	console.log("Rendering final...")
 	await simpleConcat(queue, inputPath)
 }
 
