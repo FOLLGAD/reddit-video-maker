@@ -1,5 +1,6 @@
 let { renderComment, renderQuestion } = require('./construct-html')
 let { combineVideoAudio, simpleConcat } = require('./video')
+let {fetchAboutSubreddit} = require('./reddit-api')
 let tmp = require('tmp')
 
 async function renderFromComments(question, videolist, inputPath, {
@@ -16,7 +17,6 @@ async function renderFromComments(question, videolist, inputPath, {
 	if (song) {
 		console.log("Adding sound...")
 		soundFile = tmp.fileSync({ postfix: '.mkv' })
-		console.log(song)
 		await combineVideoAudio(nosoundFile.name, song, soundFile.name)
 	} else {
 		console.log("No song selected")

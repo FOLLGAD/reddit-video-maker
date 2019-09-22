@@ -55,13 +55,14 @@ module.exports.getBestName = function (origFileName, dir) {
 module.exports.formatPoints = function (num) {
 	let d = parseInt(num)
 	if (d >= 1000) {
-		return Math.round(d / 100) / 10 + 'k'
+		return (Math.round(d / 100) / 10).toFixed(1) + 'k'
 	}
 	return d.toString()
 }
 
 // Compiles Html by wrapping in span's and returns a tts transcript for every matching span
-// rootComment needs a body_html and replies (array of other comments)
+// rootComment needs a body_html and can optionally have replies (array of other comments)
+// Mutates argument rootComment
 module.exports.compileHtml = function (rootComment, keepLinks = false) {
 	let id = 0
 
@@ -135,13 +136,13 @@ module.exports.compileHtml = function (rootComment, keepLinks = false) {
 
 			// If (censoring is enabled), replace (the html of e) with (itself run through sanitizeHtml)
 			let html = arr
-				.map(d => `<span id="${id++}" class="hide">${d}</span>`)
+				.map(d => `<span id="${id++}" class="hide body">${d}</span>`)
 				.join('')
 
 			$(e).html(html)
 		})
 
-		commentTree.body_html = $.html()
+		commentTree.body_html = $('body').html()
 
 		if (Array.isArray(commentTree.replies)) {
 			commentTree.replies.forEach(reply => {
@@ -185,21 +186,19 @@ module.exports.compileQuestion = function ($) {
 		}
 	}
 
-	$('.text').each((_, e) => {
-		let arr = [],
-			contents = $(e).contents()
+	let arr = [],
+		contents = $('body').contents()
 
-		handle(arr, contents)
+	handle(arr, contents)
 
-		tts.push(...arr)
-		tts = tts.map(sanitizeSynth) // Sanitize the Question title
-		let html = arr
-			.map(d => `<span id="${id++}" class="hide">${d}</span>`)
-			.map(sanitizeHtml)
-			.join('')
+	tts.push(...arr)
+	tts = tts.map(sanitizeSynth) // Sanitize the Question title
+	let html = arr
+		.map(d => `<span id="q-${id++}" class="question hide">${d}</span>`)
+		.map(sanitizeHtml)
+		.join('')
 
-		$(e).html(html)
-	})
+	$('body').html(html)
 
 	return tts
 }

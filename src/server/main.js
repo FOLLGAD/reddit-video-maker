@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const initRoutes = require('./routes')
+const initRoutes = require('./express')
 
 mongoose.set('useCreateIndex', true)
 mongoose

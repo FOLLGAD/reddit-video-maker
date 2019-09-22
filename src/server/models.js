@@ -7,10 +7,7 @@ const uuid = require('uuid')
 const UserSchema = new Schema({
 	email: { type: String, required: true, lowercase: true, unique: true },
 	password: { type: String, set: val => bcrypt.hashSync(val, 10) },
-	credits: {
-		normal: { type: Number, default: 0 },
-		premium: { type: Number, default: 0 },
-	},
+	credits: { type: Number, default: 0 },
 	videoCount: { type: Number, default: 0 },
 	registered: { type: Date, default: Date.now },
 })

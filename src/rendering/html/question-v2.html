@@ -1,0 +1,355 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,500,700&display=swap" rel="stylesheet">
+	<style>
+		* {
+			text-decoration: none;
+			box-sizing: border-box;
+		}
+
+		html {
+			font-family: 'IBM Plex Sans', sans-serif;
+			background-color: var(--background-color);
+			color: var(--body-color);
+		}
+
+		html * {
+			font-family: inherit;
+		}
+
+		body {
+			margin: 0;
+		}
+
+		.post-info {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			color: rgb(129, 131, 132);
+		}
+
+		.upvote.active {
+			color: var(--upvote-color);
+		}
+		.score.upvote {
+			color: var(--upvote-color);
+		}
+		.score.downvote {
+			color: var(--downvote-color);
+		}
+		.downvote.active {
+			color: var(--downvote-color);
+		}
+
+		.subreddit-text {
+			color: var(--body-color);
+			font-size: 12px;
+			font-weight: 700;
+			line-height: 20px;
+			vertical-align: baseline;
+		}
+
+		.header-text {
+			color: var(--body-color);
+			font-size: 20px;
+			font-weight: 500;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			font-family: 'IBM Plex Sans', sans-serif;
+		}
+
+		.header-box {
+			margin: 0 0 8px 0;
+		}
+
+		.title-box {
+			margin: 0 8px 0 8px;
+		}
+
+		.subreddit-image {
+			flex: 0 0 auto;
+		}
+
+		.subreddit-image img {
+			width: 20px;
+			height: 20px;
+			margin-right: 4px;
+			border-radius: 9999px;
+		}
+
+		.top-bar {
+			display: flex;
+			margin: 0 0 8px 0;
+		}
+
+		.author-matter {
+			font-size: 12px;
+			font-weight: 400;
+			line-height: 16px;
+			display: inline-block;
+		}
+
+		.award {
+			max-height: 16px;
+			max-width: 16px;
+			vertical-align: middle;
+			margin-left: 4px;
+			margin-right: 2px;
+		}
+
+		.award-amount {
+			color: var(--meta-text);
+			font-size: 12px;
+			line-height: 16px;
+		}
+
+		.award-row {
+			margin-left: 3px;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+
+		.main-content {
+			padding: 5px 10px 5px 40px;
+			position: relative;
+		}
+
+		.voting-flex {
+			width: 40px;
+			position: absolute;
+			left: 0;
+			top: 0;
+			display: flex;
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.score {
+			font-size: 12px;
+			font-weight: 700;
+			line-height: 16px;
+		}
+
+		.voting-flex>.icon {
+			padding: 3.5px 0;
+		}
+
+		.icon.upvote::before {
+			content: "\F13C";
+		}
+
+		.icon.downvote::before {
+			content: "\F110";
+		}
+
+		.icon.comment::before {
+			content: "\F10C";
+		}
+
+		.icon.gild::before {
+			content: "\F11E";
+		}
+
+		.icon.share::before {
+			content: "\F135";
+		}
+
+		.icon-text {
+			display: inline-block;
+			line-height: 1;
+			vertical-align: middle;
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		.bottom-bar {
+			font-size: 12px;
+			font-weight: 700;
+			line-height: 16px;
+			align-items: center;
+			display: flex;
+			flex-direction: row;
+			height: 32px;
+			padding: 0 8px 0 0;
+			flex-grow: 1;
+			margin-left: -4px;
+			color: var(--icon-color);
+		}
+
+		.bottom-bar .icon {
+			margin-right: 4px;
+			vertical-align: middle;
+			width: 16px;
+			height: 16px;
+			font-size: 16px;
+			font-weight: 400;
+			line-height: 16px;
+			display: inline-block;
+		}
+
+		.bottom-bar>div {
+			margin: 0 4px 0 0;
+			padding: 4px;
+		}
+
+		:root {
+			--upvote-color: #FF4500;
+			--downvote-color: #7193FF;
+			--body-color: #D7DADC;
+			--background-color: #1A1A1B;
+			--icon-color: #818384;
+			--meta-text: #818384;
+			--blur-shadow: 0 0 0.45em rgb(255, 255, 255);
+		}
+
+		@font-face {
+			font-family: redesignFont;
+			src: url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.9a459d23b43def7afcdfc4e9054b9055.ttf);
+		}
+
+		.icon:before {
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			font-family: redesignFont;
+			color: var(--icon-color)
+		}
+
+		.nsfw {
+			border: 1px solid rgb(255, 88, 91);
+			color: rgb(255, 88, 91);
+			font-size: 12px;
+			font-weight: 500;
+			border-radius: 2px;
+			display: inline-block;
+			margin-right: 5px;
+			overflow: hidden;
+			vertical-align: text-bottom;
+			white-space: pre;
+			padding: 0 4px;
+			height: 16px;
+		}
+
+		.flair {
+			font-size: 12px;
+			font-weight: 500;
+			line-height: 16px;
+			border-radius: 2px;
+			display: inline-block;
+			margin-right: 5px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			vertical-align: text-bottom;
+			white-space: pre;
+			margin-left: 0;
+			padding: 0 4px;
+			background-color: #343536;
+			/* Default flair color */
+		}
+
+		.body-box {
+			font-family: 'Noto Sans';
+			margin-top: 12px;
+			padding: 5px 0;
+			line-height: 21px;
+			font-size: 14px;
+		}
+
+		.body-box :first-child {
+			padding-top: 0;
+		}
+
+		.body-box p {
+			padding: .8em 0 .25em;
+			margin: 0;
+			vertical-align: baseline;
+		}
+
+		.invis,
+		.hide,
+		.hide-until-active {
+			opacity: 0 !important;
+			color: rgba(0, 0, 0, 0) !important;
+			text-shadow: 0 0 0 rgb(255, 255, 255) !important;
+		}
+
+		.blur {
+			/* For blurring out swear words */
+			color: transparent !important;
+			text-shadow: var(--blur-shadow);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="main-content">
+		<div class="voting-flex">
+			<span class="upvote icon {{#if upvoted}}active{{/if}}"></span>
+			<div class="score {{#if upvoted}}upvoted active{{/if}}">{{score}}</div>
+			<span class="downvote icon {{#if downvoted}}active{{/if}}"></span>
+		</div>
+		<div class="title-box">
+			<div class="top-bar">
+				{{#if subredditIcon}}
+				<div class="subreddit-image">
+					<img style="background-color: {{subredditColor}};" src="{{subredditIcon}}">
+				</div>
+				{{/if}}
+				<div class="post-info">
+					{{#if subredditIcon}}
+					<span class="subreddit-text">r/{{subredditName}}</span>
+					<span style="font-size: 6px;line-height: 20px;margin: 0 4px;">•</span>
+					{{/if}}
+					<span class="author-matter" style="margin-right: 3px;">Posted by</span>
+					<span class="author-matter" style="margin-right: 3px;">u/{{authorHtml}}</span>
+					<span class="author-matter">{{created}}</span>
+				</div>
+				<div class="award-row">
+					{{#each all_awardings}}
+					{{#if is_enabled}}
+					<img class="award" src="{{icon_url}}" />
+					{{#ifgt count 1}}
+					<span class="award-amount">{{count}}</span>
+					{{/ifgt}}
+					{{/if}}
+					{{/each}}
+				</div>
+			</div>
+			<div class="header-box">
+				<h1 class="header-text">
+					{{{title_html}}}
+				</h1>
+			</div>
+			{{#if flair.text}}
+
+			<div class="flair-box">
+				{{#if flair.text}}<span class="flair"
+					style="background-color: {{flair.bgColor}};">{{/if}}{{flair.text}}</span>{{#if nsfw}}<span
+					class="nsfw">nsfw</span>{{/if}}
+			</div>
+			{{/if}}
+			<div class="body-box">
+				{{#if selftext_html}}
+				{{{selftext_html}}}
+				{{/if}}
+			</div>
+			<div class="bottom-bar">
+				<div>
+					<span class="icon comment"></span><span class="icon-text">{{num_comments}} Comments</span>
+				</div>
+				<div>
+					<span class="icon gild"></span><span class="icon-text">Give Award</span></div>
+				<div>
+					<span class="icon share"></span><span class="icon-text">Share</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

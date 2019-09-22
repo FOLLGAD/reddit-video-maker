@@ -1,6 +1,6 @@
 const { User, Theme, Video, Song } = require('./models')
 const { createToken, verifyToken } = require('./utils')
-const { render } = require('../render')
+const { render } = require('../rendering/render')
 const express = require('express')
 const multer = require('multer')
 const fs = require('fs')
@@ -9,8 +9,13 @@ const path = require('path')
 const morgan = require('morgan')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const tmp = require('tmp')
 
-const { fetchThread, initAuth } = require('../reddit-api')
+const { stripeApiKey } = require('../../env.json')
+
+const stripe = require('stripe')(stripeApiKey)
+
+const { fetchThread, initAuth } = require('../rendering/reddit-api')
 
 const verifyTokenMiddleware = async (req, res, next) => {
 	if (req.cookies && req.cookies.token) {
@@ -102,6 +107,10 @@ const init = () => {
 		// in the Authorization header using the 'Basic' scheme
 		// If successful, results in client getting the 'token' cookie (httpOnly)
 		.post('/auth', (req, res) => {
+			if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+				return res.status(401).json({ error: "NO_AUTH_HEADER" })
+			}
+
 			const authHeader = req.headers.authorization || ''
 			let str = Buffer.from(authHeader.split(' ')[1], 'base64').toString()
 			let [email, password] = str.split(':')
@@ -123,6 +132,18 @@ const init = () => {
 		})
 		.use(verifyTokenMiddleware)
 		.get('/test', (_, res) => {
+			res.json({})
+		})
+
+		.get('/credits', (req, res) => {
+			res.json({ credits: req.user.credits })
+		})
+		.post('/buy-credits', (req, res) => {
+			console.log(req.body.tokenId)
+			let { tokenId } = req.body
+
+			stripe
+
 			res.json({})
 		})
 
@@ -298,11 +319,9 @@ const init = () => {
 
 		// RENDER VIDEO
 		.post('/videos', async (req, res) => {
-			let body = req.body
+			let { questionData, commentData, options } = req.body
 
-			let question = body.questionData
-			let comments = body.commentData
-			let options = body.options
+			fs.writeFile(path.join(__dirname, '../render-log.json'), JSON.stringify(req.body), () => { })
 
 			let theme
 			try {
@@ -316,18 +335,20 @@ const init = () => {
 			let vid = new Video({
 				theme: theme._id,
 				owner: req.user._id,
-				file: toFilesDir(uuidFileName('mkv'))
+				file: uuidFileName('mkv')
 			})
 			vid.save()
 
-			let renderPromise = render(question, comments, {
+			let renderOptions = {
+				outPath: toFilesDir(vid.file),
 				transition: toFilesDir(theme.transition),
 				outro: toFilesDir(theme.outro),
 				intro: toFilesDir(theme.intro),
 				song: song && toFilesDir(song.file),
 				voice: theme.voice,
-				outPath: vid.file,
-			})
+			}
+
+			let renderPromise = render(questionData, commentData, renderOptions)
 
 			renderQueue.push({
 				promise: renderPromise,
@@ -341,6 +362,42 @@ const init = () => {
 			})
 
 			res.json({ message: 'Rendering', id: vid._id })
+		})
+		.post('/preview', async (req, res) => {
+			// Same as [POST /videos], except the question data and comment
+			// data is pre-set and calling this doesn't cost credits.
+			// Used to give the user a good idea of the music & intro, outro
+			// and videos they have chosen.
+
+			// Should wait until rendering is done and then return a link to
+			// where the video is found.
+
+			let { options } = req.body
+
+			let theme
+			try {
+				theme = await Theme.findById(options.theme)
+			} catch (e) {
+				return res.status(400).json({ error: "NO_THEME" })
+			}
+
+			let song = options.song ? await Song.findById(options.song, { file: 1 }) : null
+
+			let file = tmp.fileSync({ prefix: 'preview-', postfix: '.mkv' })
+			let tempPath = file.name
+
+			let renderOptions = {
+				transition: toFilesDir(theme.transition),
+				outro: toFilesDir(theme.outro),
+				intro: toFilesDir(theme.intro),
+				song: song && toFilesDir(song.file),
+				voice: theme.voice,
+				outPath: tempPath,
+			}
+
+			let { questionData, commentData } = require('../example-data.json') // Warning: require(...) caches the content of the file
+
+			let renderPromise = render(questionData, commentData, renderOptions)
 		})
 		.post('/check-on-video/:videoId', async (req, res) => {
 			// Long polling for getting the video state
@@ -356,24 +413,36 @@ const init = () => {
 			res.json({})
 		})
 		.get('/videos', async (req, res) => {
-			let vids = await Video.find({ owner: req.user._id })
+			let vids = await Video.find({ owner: req.user._id }).sort({ created: -1 })
 			res.json(vids)
 		})
-		.get('/videos/:videoId', async (req, res) => {
-			let videoId = req.params.videoId
+		.get('/videos/:videoName', async (req, res) => {
+			let videoName = req.params.videoName
 
-			let vid = await Video.findById(videoId)
+			Video.findOne({ file: videoName, owner: req.user._id })
+				.catch(err => {
+					res.status(404).json({})
+				})
+				.then(vid => {
+					res.sendFile(toFilesDir(vid.file))
 
-			res.sendFile(toFilesDir(vid.file))
-
-			// Increment downloads by one
-			Video.updateOne({ _id: videoId }, { $inc: { downloads: 1 } })
+					// Increment downloads by one
+					Video.updateOne({ _id: videoName }, { $inc: { downloads: 1 } })
+				})
 		})
 
 	app.use('/api', apiRouter)
+	app.use('/api/*', (req, res) => {
+		res.status(404).json({ error: "NOT_FOUND" })
+	})
 
-	app.use('/files', verifyTokenMiddleware, express.static('files')) // Serve files
+	app.use('/videos', verifyTokenMiddleware, express.static('files')) // Serve files
+
 	app.use(express.static('hammurabi-build')) // Serve hammurabi client
+	app.use('*', (req, res) => {
+		// Serve hammurabi
+		res.sendFile(path.join(__dirname, '../../hammurabi-build/index.html'))
+	})
 
 	app.listen(8000)
 }

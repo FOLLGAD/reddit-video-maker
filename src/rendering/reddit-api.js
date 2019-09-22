@@ -1,6 +1,6 @@
 const querystring = require('querystring')
 const fetch = require('node-fetch')
-const env = require('../env.json')
+const env = require('../../env.json')
 
 // Fetch the auth token from reddit using credentials in .env
 async function getAuth() {
@@ -41,7 +41,7 @@ module.exports.fetchSubreddit = function (subreddit, options = defaultOpts) {
 	let query = querystring.stringify({
 		api_type: 'json',
 		raw_json: 1,
-		sort: options.sortBy,
+		sort: options.sort,
 		limit: options.end,
 		t: options.t,
 		depth: 2,
@@ -50,15 +50,35 @@ module.exports.fetchSubreddit = function (subreddit, options = defaultOpts) {
 		threaded: true,
 	})
 
-	console.log(options.sortBy)
-
-	return fetch(`https://oauth.reddit.com/r/${subreddit}/${options.sortBy}?${query}`, {
+	return fetch(`https://oauth.reddit.com/r/${subreddit}/${options.sort}?${query}`, {
 		headers: {
 			Authorization: `Bearer ${access_token}`,
 		}
 	}).then(r => {
 		return r.json()
 	})
+}
+
+module.exports.fetchAboutSubreddit = async function (subreddit) {
+	if (subreddit.indexOf('r/') === 0) {
+		subreddit = subreddit.slice(2)
+	}
+	let res = await fetch(`https://oauth.reddit.com/r/${subreddit}/about`, {
+		headers: {
+			Authorization: `Bearer ${access_token}`,
+		}
+	}).then(r => {
+		return r.json()
+	})
+	
+	let data = res.data
+
+	let info = {
+		icon: data.icon_img || data.community_icon,
+		iconBg: data.primary_color,
+	}
+
+	return info
 }
 
 module.exports.fetchThread = async function (threadId, options = defaultOpts) {
@@ -96,6 +116,8 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 			}
 		})
 
+	let isNotDeleted = str => str !== '[deleted]' && str !== '[removed]'
+
 	let extractComment = commD => {
 		let comm = commD.data
 		return {
@@ -108,7 +130,7 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 			id: comm.id,
 			all_awardings: comm.all_awardings,
 
-			replies: comm.replies && comm.replies.data && comm.replies.data.children.slice(0, -1).map(extractComment),
+			replies: comm.replies && comm.replies.data && comm.replies.data.children.slice(0, -1).filter(reply => isNotDeleted(reply.data.body)).map(extractComment),
 		}
 	}
 
@@ -126,10 +148,14 @@ module.exports.fetchThread = async function (threadId, options = defaultOpts) {
 				text: question.link_flair_text || null,
 				bgColor: question.link_flair_background_color,
 			},
+			archived: question.archived,
+
+			selftext_html: question.selftext_html,
+			subreddit: question.subreddit_name_prefixed.slice(2),
 		}
 	}
 
-	let parsedC = parseComments(p).map(extractComment)
+	let parsedC = parseComments(p).filter(d => isNotDeleted(d.data.body)).map(extractComment)
 	let parsedQ = extractQuestion(parseQuestion(p))
 
 	return [parsedQ, parsedC]

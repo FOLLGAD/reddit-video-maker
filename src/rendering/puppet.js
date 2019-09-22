@@ -11,10 +11,10 @@ handles.registerHelper('ifgt', function (val1, val2, options) {
 	}
 })
 
-const questionTemplate = module.exports.questionTemplate = handles.compile(fs.readFileSync(path.join(__dirname, '/../html/question.html')).toString())
-module.exports.commentTemplate = handles.compile(fs.readFileSync(path.join(__dirname, '/../html/comment-new.html')).toString())
+const questionTemplate = module.exports.questionTemplate = handles.compile(fs.readFileSync(path.join(__dirname, './html/question-v2.html')).toString())
+module.exports.commentTemplate = handles.compile(fs.readFileSync(path.join(__dirname, './html/comment-new.html')).toString())
 
-let commentPartial = fs.readFileSync(path.join(__dirname, '/../html/comment-partial.html'), { encoding: 'utf-8' })
+let commentPartial = fs.readFileSync(path.join(__dirname, './html/comment-partial.html'), { encoding: 'utf-8' })
 handles.registerPartial('comment', commentPartial)
 
 let browser
@@ -33,13 +33,13 @@ module.exports.startInstance = async function startInstance() {
 
 module.exports.startInstance()
 
-async function launchComment(markup) {
+// dsf = device scale factor
+async function launchComment(markup, dsf) {
 	const page = await browser.newPage()
 
 	await page.setContent(markup)
 
-	let dsf = 2.4,
-		pageWidth = 1920 / dsf,
+	let pageWidth = 1920 / dsf,
 		pageHeight = 1080 / dsf
 
 	await page.setViewport({
@@ -48,7 +48,7 @@ async function launchComment(markup) {
 		deviceScaleFactor: dsf,
 	})
 
-	let height = await page.$eval('.DIV_1', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
+	let height = await page.$eval('.main-content', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
 
 	await page.setViewport({
 		width: pageWidth,
@@ -61,13 +61,18 @@ async function launchComment(markup) {
 
 	if (height * dsf > 1080) {
 		// Expects there to be an element with class "center-elem", which is where it will put focus.
-		let focus = await page.$eval('.center-elem', e => {
-			let rect = e.getBoundingClientRect()
-			return {
-				y: rect.y,
-				height: rect.height,
-			}
-		})
+		let focus = { y: 0, height: 0 }
+		try {
+			focus = await page.$eval('.center-elem', e => {
+				let rect = e.getBoundingClientRect()
+				return {
+					y: rect.y,
+					height: rect.height,
+				}
+			})
+		} catch (err) {
+			// No .center-elem exists
+		}
 
 		let topPadding = focus.y + focus.height // top padding required to focus the current element
 
@@ -87,9 +92,8 @@ async function launchComment(markup) {
 			},
 		})
 	} else {
-		await page.screenshot({
+		let sc = await page.screenshot({
 			encoding: 'binary',
-			path: filepath,
 			type: 'png',
 			clip: {
 				x: 0,
@@ -98,6 +102,7 @@ async function launchComment(markup) {
 				height: pageHeight,
 			},
 		})
+		fs.writeFileSync(filepath, sc, "binary")
 	}
 
 	page.close()
@@ -105,47 +110,6 @@ async function launchComment(markup) {
 	return filepath
 }
 
-async function launchQuestion(context) {
-	const page = await browser.newPage()
-	let file = tmp.fileSync({ postfix: '.png' })
-	let filepath = file.name
-
-	let markup = questionTemplate(context)
-
-	await page.setContent(markup)
-
-	let dsf = 3,
-		pageWidth = 1920 / dsf,
-		pageHeight = 1080 / dsf
-
-	page.setViewport({
-		width: pageWidth,
-		height: pageHeight,
-		deviceScaleFactor: 3,
-	})
-	
-	let height = await page.$eval('#DIV_1', e => e.scrollHeight)
-
-	await page.screenshot({
-		encoding: 'binary',
-		path: filepath,
-		type: 'png',
-		clip: {
-			x: 0,
-			y: -(pageHeight - height) / 2, // Center on screen
-			width: pageWidth,
-			height: pageHeight,
-		},
-	})
-
-	page.close()
-
-	return filepath
-}
-
-module.exports.launchPuppet = function launch(type, context) {
-	if (type == 'question') {
-		return launchQuestion(context)
-	}
-	return launchComment(context)
+module.exports.launchPuppet = function launch(markup, dsf = 2.4) {
+	return launchComment(markup, dsf)
 }
