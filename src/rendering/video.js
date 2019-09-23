@@ -7,14 +7,6 @@ const ffmpeg = require('fluent-ffmpeg'),
 
 tmp.setGracefulCleanup() // Enforce graceful file cleanup
 
-let color = '#19191a' // Dark mode
-// let color = '#ffffff' // Light mode
-
-// ffmpeg -i transition_new_dark.mp4 -c:a aac -c:v libx264 -r 25 -ac 2 -ar 24000 transition_dark.mkv
-
-let intermediaryFileFormat = 'mkv'
-let inputFormat = 'matroska'
-
 let tempFolderInfo = tmp.dirSync()
 let tempFolder = tempFolderInfo.name
 
@@ -39,15 +31,43 @@ const probe = function (path) {
 	})
 }
 
+// Make the song into the correct type for conformity
+module.exports.normalizeSong = function (songPath, outputPath) {
+	return new Promise((res, rej) => {
+		ffmpeg(songPath)
+			.on('end', () => {
+				res()
+			})
+			.audioFrequency(24000)
+			.audioChannels(1)
+			.output(outputPath)
+			.exec()
+	})
+}
+
+// Same as normalizeSong but for video
+module.exports.normalizeVideo = function (songPath, outputPath) {
+	return new Promise((res, rej) => {
+		ffmpeg(songPath)
+			.audioCodec('aac')
+			.audioFrequency(24000)
+			.audioChannels(1)
+			.videoCodec('libx264')
+			.on('end', () => {
+				res()
+			})
+			.output(outputPath)
+			.exec()
+	})
+}
+
 module.exports.concatAndReencode = function (videoPaths, outPath) {
-	let start = Date.now()
 	return new Promise((res, rej) => {
 		getConcat(videoPaths)
 			.videoCodec('libx264')
 			.audioCodec('aac')
 			.on('end', () => {
 				res()
-				console.log("concatAndReencode took %s", Date.now() - start)
 			})
 			.on('error', console.error)
 			.mergeToFile(outPath, tempFolder)
@@ -56,7 +76,6 @@ module.exports.concatAndReencode = function (videoPaths, outPath) {
 
 module.exports.combineImageAudio = function (imagePath, audioPath, outPath, delay = 0) {
 	return new Promise(async (res, rej) => {
-		let beforeProbe = Date.now()
 		let audioInfo = await probe(audioPath)
 		ffmpeg(imagePath)
 			.inputOptions([
@@ -74,7 +93,6 @@ module.exports.combineImageAudio = function (imagePath, audioPath, outPath, dela
 			.output(outPath)
 			.on('end', () => {
 				res()
-				console.log("combineImageAudio w/ probing took %s", Date.now() - beforeProbe)
 			})
 			.on('error', console.error)
 			.exec()
@@ -82,12 +100,10 @@ module.exports.combineImageAudio = function (imagePath, audioPath, outPath, dela
 }
 
 module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
-	let start = Date.now()
 	return new Promise(async (res, rej) => {
 		let videoInfo = await probe(videoPath)
 
 		ffmpeg(videoPath)
-			.inputFormat(inputFormat)
 			.videoCodec('libx264')
 			.input(audioPath)
 			.audioCodec('aac')
@@ -105,8 +121,6 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
 			.output(outPath)
 			.on('end', () => {
 				res()
-
-				console.log("combineVideoAudio took %s", Date.now() - start)
 			})
 			.on('error', console.error)
 			.exec()
@@ -114,15 +128,12 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
 }
 
 module.exports.simpleConcat = function (videoPaths, outPath) {
-	let start = Date.now()
 	return new Promise((res, rej) => {
 		getConcat(videoPaths)
 			.videoCodec('copy')
 			.audioCodec('copy')
 			.on('end', () => {
 				res()
-
-				console.log("simpleConcat took %s", Date.now() - start)
 			})
 			.on('error', console.error)
 			.save(outPath)

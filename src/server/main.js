@@ -1,13 +1,8 @@
-const mongoose = require('mongoose')
 
 const initRoutes = require('./express')
+const { connect } = require('./db')
 
-mongoose.set('useCreateIndex', true)
-mongoose
-	.connect('mongodb://localhost/project_bog', {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	})
+connect()
 	.then(() => {
 		initRoutes()
 	})

@@ -12,7 +12,7 @@ handles.registerHelper('ifgt', function (val1, val2, options) {
 })
 
 const questionTemplate = module.exports.questionTemplate = handles.compile(fs.readFileSync(path.join(__dirname, './html/question-v2.html')).toString())
-module.exports.commentTemplate = handles.compile(fs.readFileSync(path.join(__dirname, './html/comment-new.html')).toString())
+const commentTemplate = module.exports.commentTemplate = handles.compile(fs.readFileSync(path.join(__dirname, './html/comment-new.html')).toString())
 
 let commentPartial = fs.readFileSync(path.join(__dirname, './html/comment-partial.html'), { encoding: 'utf-8' })
 handles.registerPartial('comment', commentPartial)
@@ -29,6 +29,11 @@ module.exports.startInstance = async function startInstance() {
 	} else {
 		console.log('Puppeteer already started')
 	}
+
+	let page = await browser.newPage()
+	await page.setContent(questionTemplate({}))
+	await page.setContent(commentTemplate({}))
+	page.close()
 }
 
 module.exports.startInstance()

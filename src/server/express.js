@@ -1,20 +1,24 @@
 const { User, Theme, Video, Song } = require('./models')
 const { createToken, verifyToken } = require('./utils')
-const { render } = require('../rendering/render')
 const express = require('express')
 const multer = require('multer')
 const fs = require('fs')
+const tmp = require('tmp')
 const uuid = require('uuid')
 const path = require('path')
-const morgan = require('morgan')
 const cors = require('cors')
+const morgan = require('morgan')
+const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const tmp = require('tmp')
 
-const { stripeApiKey } = require('../../env.json')
+const { stripeApiKey, stripeWebhookSecret } = require('../../env.json')
+
+const vidExtension = 'mp4'
 
 const stripe = require('stripe')(stripeApiKey)
 
+const { render } = require('../rendering/render')
+const { normalizeSong, normalizeVideo } = require('../rendering/video')
 const { fetchThread, initAuth } = require('../rendering/reddit-api')
 
 const verifyTokenMiddleware = async (req, res, next) => {
@@ -36,16 +40,17 @@ const uuidFileName = extension => extension ? uuid() + '.' + extension : uuid()
 const multerStorage = multer.diskStorage({
 	filename(req, file, cb) {
 		let ext = file.originalname.split('.').pop()
-		if (ext) {
-			cb(null, `${uuid()}.${ext}`)
-		} else {
-			cb(null, uuid())
-		}
+
+		cb(null, uuidFileName(ext))
 	},
-	destination(req, file, cb) {
-		cb(null, filesLocation)
-	}
+	// destination(req, file, cb) {
+	// 	cb(null, filesLocation)
+	// }
 })
+
+function getVideoPrice(length) {
+	return 1
+}
 
 const deleteFileCond = filename => {
 	// Delete the file
@@ -77,11 +82,47 @@ const init = () => {
 		origin(a, b) { b(null, true) }
 	}))
 
-	app.use(express.json()) // Use json body parsing
-	app.use(cookieParser())
-
 	initAuth() // Start the reddit api
 
+	app
+		.post('/api/stripe-webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+			const sig = req.headers['stripe-signature'];
+
+			let event
+
+			try {
+				event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
+			} catch (err) {
+				console.error(err)
+				return res.status(400).send(`Webhook Error: ${err.message}`);
+			}
+
+			// Handle the checkout.session.completed event
+			if (event.type === 'checkout.session.completed') {
+				const session = event.data.object;
+
+				// Fulfill the purchase...
+				let userId = session.client_reference_id
+				console.log(session)
+				if (!userId) {
+					throw new Error("No client reference Id gotten! Can't match payment with payer.")
+				}
+				session.display_items.forEach(product => {
+					if (product.custom.name === "Credits") {
+						User.updateOne({ _id: userId }, { $inc: { credits: product.quantity } }).exec()
+					} else {
+						console.error("Unknown product name", product.custom.name)
+						User.updateOne({ _id: userId }, { $inc: { credits: product.quantity } }).exec()
+					}
+				})
+			}
+
+			// Return a response to acknowledge receipt of the event
+			res.json({ received: true })
+		})
+
+	app.use(cookieParser())
+	app.use(bodyParser.json()) // Use json body parsing
 	// API router for all api calls
 	const apiRouter = express.Router()
 		.post('/register', (req, res) => {
@@ -130,6 +171,7 @@ const init = () => {
 		.get('/logout', (req, res) => {
 			res.clearCookie('token').status(200).json({})
 		})
+
 		.use(verifyTokenMiddleware)
 		.get('/test', (_, res) => {
 			res.json({})
@@ -138,13 +180,39 @@ const init = () => {
 		.get('/credits', (req, res) => {
 			res.json({ credits: req.user.credits })
 		})
-		.post('/buy-credits', (req, res) => {
-			console.log(req.body.tokenId)
-			let { tokenId } = req.body
+		.post('/credits/check-price', (req, res) => {
+			let quantity = req.body.quantity
+			if (!quantity) {
+				return res.status(400).json({ error: 'NO_QUANTITY' })
+			}
 
-			stripe
+			// Calculate price
+			let price = 8
+			let total = quantity * price
 
-			res.json({})
+			res.json({ total })
+		})
+		.post('/credits/buy', async (req, res) => {
+			if (!req.body.quantity) {
+				return res.status(400).json({ error: 'NO_QUANTITY' })
+			}
+
+			const session = await stripe.checkout.sessions.create({
+				payment_method_types: ['card'],
+				line_items: [{
+					name: 'Credits',
+					description: 'Video credits',
+					images: ['https://example.com/t-shirt.png'],
+					currency: 'eur',
+					quantity: req.body.quantity,
+					amount: 1000, // TODO: make amount depend on how many you buy (mängdrabatt)
+				}],
+				client_reference_id: req.user._id.toString(),
+				success_url: 'http://localhost:3000/credits-success',
+				cancel_url: 'http://localhost:3000/credits-cancel',
+			})
+
+			res.json({ session })
 		})
 
 		// THREAD GET
@@ -182,11 +250,17 @@ const init = () => {
 			res.json(songs)
 		})
 		.post('/songs', upload.single('song'), async (req, res) => {
-			const song = req.file
+			const origSong = req.file
+
+			let newFileName = uuidFileName('mp3') // Force mp3
+			let newFilePath = toFilesDir(newFileName)
+			await normalizeSong(origSong.path, newFilePath)
+
+			// Song is now normalized and at "newFilePath"
 
 			let songDoc = new Song({
-				name: song.originalname,
-				file: song.filename,
+				name: origSong.originalname,
+				file: newFileName,
 				owner: req.user._id,
 			})
 			await songDoc.save()
@@ -253,28 +327,30 @@ const init = () => {
 		]), async (req, res) => {
 			let themeId = req.params.theme
 
-			const intro = req.files['intro'] && req.files['intro'][0]
-			const transition = req.files['transition'] && req.files['transition'][0]
-			const outro = req.files['outro'] && req.files['outro'][0]
-
 			let theme = await Theme.findOne({
 				_id: themeId,
 				owner: req.user._id,
 			})
 
 			let toDelete = []
+			for (const vidPart of ['intro', 'transition', 'outro']) {
+				if (!req.files[vidPart] || !req.files[vidPart][0]) {
+					continue
+				}
 
-			if (intro) {
-				theme.intro && toDelete.push(theme.intro)
-				theme.intro = intro.filename
-			}
-			if (transition) {
-				theme.transition && toDelete.push(theme.transition)
-				theme.transition = transition.filename
-			}
-			if (outro) {
-				theme.outro && toDelete.push(theme.outro)
-				theme.outro = outro.filename
+				const filePath = req.files[vidPart][0].path
+
+				let newFileName = uuidFileName(vidExtension) // Force mkv
+				let newFilePath = toFilesDir(newFileName)
+
+				await normalizeVideo(filePath, newFilePath)
+
+				if (theme[vidPart]) {
+					// If there already exists a video of this type on this theme,
+					// delete it.
+					toDelete.push(theme[vidPart])
+				}
+				theme[vidPart] = newFileName
 			}
 
 			await theme.save()
@@ -321,47 +397,61 @@ const init = () => {
 		.post('/videos', async (req, res) => {
 			let { questionData, commentData, options } = req.body
 
-			fs.writeFile(path.join(__dirname, '../render-log.json'), JSON.stringify(req.body), () => { })
+			if (req.user.credits < 1) {
+				return res.status(400).json({ error: "NOT_ENOUGH_CREDITS" })
+			}
 
-			let theme
+			let cost = getVideoPrice()
+			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost } }).exec()
+
 			try {
-				theme = await Theme.findById(options.theme)
-			} catch (e) {
-				return res.status(400).json({ error: "NO_THEME" })
-			}
 
-			let song = options.song ? await Song.findById(options.song, { file: 1 }) : null
 
-			let vid = new Video({
-				theme: theme._id,
-				owner: req.user._id,
-				file: uuidFileName('mkv')
-			})
-			vid.save()
+				fs.writeFile(path.join(__dirname, '../render-log.json'), JSON.stringify(req.body), () => { })
 
-			let renderOptions = {
-				outPath: toFilesDir(vid.file),
-				transition: toFilesDir(theme.transition),
-				outro: toFilesDir(theme.outro),
-				intro: toFilesDir(theme.intro),
-				song: song && toFilesDir(song.file),
-				voice: theme.voice,
-			}
-
-			let renderPromise = render(questionData, commentData, renderOptions)
-
-			renderQueue.push({
-				promise: renderPromise,
-				id: vid._id,
-			})
-			renderPromise.then(() => {
-				let index = renderQueue.findIndex(r => r.id === vid._id)
-				if (index >= 0) {
-					renderQueue.splice(index, 1)
+				let theme
+				try {
+					theme = await Theme.findById(options.theme)
+				} catch (e) {
+					return res.status(400).json({ error: "NO_THEME" })
 				}
-			})
 
-			res.json({ message: 'Rendering', id: vid._id })
+				let song = options.song ? await Song.findById(options.song, { file: 1 }) : null
+
+				let vid = new Video({
+					theme: theme._id,
+					owner: req.user._id,
+					file: uuidFileName(vidExtension)
+				})
+				vid.save()
+
+				let renderOptions = {
+					outPath: toFilesDir(vid.file),
+					transition: toFilesDir(theme.transition),
+					outro: toFilesDir(theme.outro),
+					intro: toFilesDir(theme.intro),
+					song: song && toFilesDir(song.file),
+					voice: theme.voice,
+				}
+
+				let renderPromise = render(questionData, commentData, renderOptions)
+
+				renderQueue.push({
+					promise: renderPromise,
+					id: vid._id,
+				})
+				renderPromise.then(() => {
+					let index = renderQueue.findIndex(r => r.id === vid._id)
+					if (index >= 0) {
+						renderQueue.splice(index, 1)
+					}
+				})
+
+				res.json({ message: 'Rendering', id: vid._id })
+			} catch (error) {
+				console.error(error)
+				User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
+			}
 		})
 		.post('/preview', async (req, res) => {
 			// Same as [POST /videos], except the question data and comment
@@ -383,21 +473,23 @@ const init = () => {
 
 			let song = options.song ? await Song.findById(options.song, { file: 1 }) : null
 
-			let file = tmp.fileSync({ prefix: 'preview-', postfix: '.mkv' })
+			let file = tmp.fileSync({ prefix: 'preview-', postfix: '.' + vidExtension })
 			let tempPath = file.name
 
 			let renderOptions = {
+				outPath: tempPath,
 				transition: toFilesDir(theme.transition),
 				outro: toFilesDir(theme.outro),
 				intro: toFilesDir(theme.intro),
 				song: song && toFilesDir(song.file),
 				voice: theme.voice,
-				outPath: tempPath,
 			}
 
-			let { questionData, commentData } = require('../example-data.json') // Warning: require(...) caches the content of the file
+			let { questionData, commentData } = require('../example-data.json') // Warning: require(...) caches the content of this file
 
 			let renderPromise = render(questionData, commentData, renderOptions)
+
+			res.json({ message: 'Rendering', id: vid._id })
 		})
 		.post('/check-on-video/:videoId', async (req, res) => {
 			// Long polling for getting the video state

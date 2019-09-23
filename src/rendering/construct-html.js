@@ -6,6 +6,8 @@ const { combineImageAudio, simpleConcat } = require('./video')
 const { compileHtml, hydrate, compileQuestion } = require('./utils')
 const { fetchAboutSubreddit } = require('./reddit-api')
 
+const vidExtension = 'mp4'
+
 async function sequentialWork(works, { voice, dsf = 2.4 }) {
 	let arr = []
 	for (const current of works) {
@@ -19,10 +21,9 @@ async function sequentialWork(works, { voice, dsf = 2.4 }) {
 			puppet.then(() => console.log("Puppet took %s", Date.now() - start))
 			daniel.then(() => console.log("Daniel took %s", Date.now() - start))
 
-			let file = tmp.fileSync({ postfix: '.mkv' })
+			let file = tmp.fileSync({ postfix: '.' + vidExtension })
 			let path = file.name
 			let [imgPath, audioPath] = await Promise.all(todo)
-			console.log("Waiting for DanPup took %s", Date.now() - start)
 
 			await combineImageAudio(imgPath, audioPath, path)
 			arr.push(path)
@@ -49,7 +50,7 @@ module.exports.renderComment = async function ({ commentData, voice }) {
 	let workLine = createBodyWorkLine(markup, tts)
 
 	let videos = await sequentialWork(workLine, { voice, dsf: 2.4 })
-	let file = tmp.fileSync({ postfix: '.mkv' })
+	let file = tmp.fileSync({ postfix: '.' + vidExtension })
 	let path = file.name
 	await simpleConcat(videos.filter(v => v != null), path)
 	return path
@@ -104,7 +105,7 @@ module.exports.renderQuestion = async function ({ questionData, voice }) {
 
 	let videos = await sequentialWork(workLine, { voice, dsf: 3 })
 
-	let file = tmp.fileSync({ postfix: '.mkv' })
+	let file = tmp.fileSync({ postfix: '.' + vidExtension })
 	let path = file.name
 	await simpleConcat(videos.filter(v => v != null), path)
 	return path

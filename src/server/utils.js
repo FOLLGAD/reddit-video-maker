@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
 const { tokenSecret } = require('../../env.json')
-const { User } = require('./models')
 
 module.exports = {
 	createToken(email) {
