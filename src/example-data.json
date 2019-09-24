@@ -11,7 +11,9 @@
 		"flair": {
 			"text": null,
 			"bgColor": ""
-		}
+		},
+		"archived": false,
+		"subreddit": "AskReddit"
 	},
 	"commentData": [
 		{
