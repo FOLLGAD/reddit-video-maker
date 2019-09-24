@@ -80,7 +80,6 @@ module.exports.renderQuestion = async function ({ questionData, voice }) {
 	}
 
 	let markup = questionTemplate(hydrated) // Full question html
-	require('fs').writeFileSync('./test.html', markup)
 
 	// Create question-title workline
 	let $ = cheerio.load(markup)

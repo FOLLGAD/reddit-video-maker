@@ -77,6 +77,7 @@ const VideoSchema = new Schema({
 	created: { type: Date, default: Date.now, select: 1 },
 	expiration: { type: Date, default: Date.now() + 1000 * 60 * 60 * 24, select: 1 }, // 24 hours before expiration
 	downloads: { type: Number, default: 0 },
+	preview: { type: Boolean, default: false },
 })
 
 module.exports.Video = mongoose.model('Video', VideoSchema)

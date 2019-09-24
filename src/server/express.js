@@ -405,8 +405,6 @@ const init = () => {
 			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost } }).exec()
 
 			try {
-
-
 				fs.writeFile(path.join(__dirname, '../render-log.json'), JSON.stringify(req.body), () => { })
 
 				let theme
@@ -473,11 +471,16 @@ const init = () => {
 
 			let song = options.song ? await Song.findById(options.song, { file: 1 }) : null
 
-			let file = tmp.fileSync({ prefix: 'preview-', postfix: '.' + vidExtension })
-			let tempPath = file.name
+			let vid = new Video({
+				theme: theme._id,
+				owner: req.user._id,
+				file: uuidFileName(vidExtension),
+				preview: true,
+			})
+			await vid.save()
 
 			let renderOptions = {
-				outPath: tempPath,
+				outPath: toFilesDir(vid.file),
 				transition: toFilesDir(theme.transition),
 				outro: toFilesDir(theme.outro),
 				intro: toFilesDir(theme.intro),
@@ -489,20 +492,31 @@ const init = () => {
 
 			let renderPromise = render(questionData, commentData, renderOptions)
 
-			res.json({ message: 'Rendering', id: vid._id })
+			renderQueue.push({
+				promise: renderPromise,
+				id: vid._id,
+			})
+			renderPromise.then(() => {
+				let index = renderQueue.findIndex(r => r.id === vid._id)
+				if (index >= 0) {
+					renderQueue.splice(index, 1)
+				}
+			})
+
+			res.json({ message: 'Rendering', id: vid._id, })
 		})
-		.post('/check-on-video/:videoId', async (req, res) => {
+		.get('/check-on-video/:videoId', async (req, res) => {
 			// Long polling for getting the video state
 			let id = req.params.videoId
 
 			let vid
 			if (vid = renderQueue.find(q => q.id == id)) {
 				await vid.promise
-				res.json({})
-				return
 			}
 
-			res.json({})
+			let video = await Video.findById(id)
+
+			res.json({ file: video.file })
 		})
 		.get('/videos', async (req, res) => {
 			let vids = await Video.find({ owner: req.user._id }).sort({ created: -1 })
@@ -516,10 +530,14 @@ const init = () => {
 					res.status(404).json({})
 				})
 				.then(vid => {
-					res.sendFile(toFilesDir(vid.file))
-
-					// Increment downloads by one
-					Video.updateOne({ _id: videoName }, { $inc: { downloads: 1 } })
+					if (vid) {
+						res.sendFile(toFilesDir(vid.file))
+						
+						// Increment downloads by one
+						Video.updateOne({ _id: videoName }, { $inc: { downloads: 1 } })
+					} else {
+						res.sendStatus(404)
+					}
 				})
 		})
 

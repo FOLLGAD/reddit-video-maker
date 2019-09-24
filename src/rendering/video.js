@@ -52,6 +52,7 @@ module.exports.normalizeVideo = function (songPath, outputPath) {
 			.audioCodec('aac')
 			.audioFrequency(24000)
 			.audioChannels(1)
+			.fps(25)
 			.videoCodec('libx264')
 			.on('end', () => {
 				res()
