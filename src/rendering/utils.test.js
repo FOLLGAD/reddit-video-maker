@@ -2,7 +2,8 @@ const { splitQuestion, splitComment, compileHtml } = require('./utils')
 
 test('split question', () => {
 	let res = splitQuestion('You have one chance. What do you do? test 123')
-	let shouldBe = ['You have one chance. ', 'What do you do? ', 'test 123']
+	// let shouldBe = ['You have one chance. ', 'What do you do? ', 'test 123']
+	let shouldBe = ['You have one chance. What do you do? test 123']
 	res.forEach((v, i) => {
 		expect(v)
 			.toBe(shouldBe[i])
