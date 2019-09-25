@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
+const path = require('path')
 const { tokenSecret } = require('../../env.json')
+
+const filesLocation = path.join(__dirname, '../../files')
 
 module.exports = {
 	createToken(email) {
@@ -17,5 +21,20 @@ module.exports = {
 				return res(payload)
 			})
 		})
-	}
+	},
+
+
+	filesLocation,
+	deleteFileCond(filename) {
+		// Delete the file
+		return new Promise((res, rej) => {
+			if (filename) {
+				fs.unlink(path.join(filesLocation, filename), (err) => {
+					if (err) rej(err)
+					else res()
+				})
+			}
+		})
+	},
+	toFilesDir: file => file ? path.join(filesLocation, file) : null,
 }

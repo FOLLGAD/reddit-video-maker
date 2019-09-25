@@ -1,3 +1,5 @@
+const { deleteFileCond } = require('./utils')
+
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
@@ -78,6 +80,19 @@ const VideoSchema = new Schema({
 	expiration: { type: Date, default: Date.now() + 1000 * 60 * 60 * 24, select: 1 }, // 24 hours before expiration
 	downloads: { type: Number, default: 0 },
 	preview: { type: Boolean, default: false },
+})
+
+VideoSchema.pre('deleteMany', async function (next) {
+	let query = this.getQuery()
+
+	// Must await, otherwise the videos will already be gone
+	await mongoose.model('Video')
+		.find(query)
+		.then(videos => {
+			videos.forEach(vid => deleteFileCond(vid.file))
+		})
+
+	next()
 })
 
 module.exports.Video = mongoose.model('Video', VideoSchema)

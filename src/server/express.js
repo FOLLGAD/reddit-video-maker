@@ -1,15 +1,17 @@
+const { filesLocation } = require('./utils')
+const { toFilesDir } = require('./utils')
 const { User, Theme, Video, Song } = require('./models')
 const { createToken, verifyToken } = require('./utils')
 const express = require('express')
 const multer = require('multer')
 const fs = require('fs')
-const tmp = require('tmp')
 const uuid = require('uuid')
 const path = require('path')
 const cors = require('cors')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const cron = require('./cronjob')
 
 const { stripeApiKey, stripeWebhookSecret } = require('../../env.json')
 
@@ -32,8 +34,6 @@ const verifyTokenMiddleware = async (req, res, next) => {
 	}
 }
 
-const filesLocation = path.join(__dirname, '../../files')
-const toFilesDir = file => file ? path.join(filesLocation, file) : null
 
 const uuidFileName = extension => extension ? uuid() + '.' + extension : uuid()
 
@@ -532,7 +532,7 @@ const init = () => {
 				.then(vid => {
 					if (vid) {
 						res.sendFile(toFilesDir(vid.file))
-						
+
 						// Increment downloads by one
 						Video.updateOne({ _id: videoName }, { $inc: { downloads: 1 } })
 					} else {

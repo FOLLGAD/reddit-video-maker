@@ -11,12 +11,15 @@ let splitComment = module.exports.splitComment = function (str) {
 		.filter(d => d.replace('\u200B', '').length > 0)
 }
 
-const splitQuestionRegex = /(.+?[^\w\s]+\s+)/
-let splitQuestion = module.exports.splitQuestion = function (str) {
-	return str
-		.split(splitQuestionRegex)
-		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
-}
+// const splitQuestionRegex = /(.+?[^\w\s]+\s+)/
+// let splitQuestion = module.exports.splitQuestion = function (str) {
+// 	return str
+// 		.split(splitQuestionRegex)
+// 		.filter(d => d.replace('\u200B', ' ').trim().length > 0)
+// }
+
+// Don't split quesiton at all
+let splitQuestion = module.exports.splitQuestion = str => [str]
 
 // Read a json data stream and turn into a js object
 module.exports.readJsonBody = function (req) {
@@ -167,7 +170,7 @@ module.exports.compileQuestion = function ($) {
 		for (let i = 0; i < contents.length; i++) {
 			let h = contents[i]
 			if (h.type == 'text') {
-				let data = module.exports.splitQuestion(h.data)
+				let data = splitQuestion(h.data)
 				if (lastWasTag) {
 					arr[arr.length - 1] += data.shift()
 				}
