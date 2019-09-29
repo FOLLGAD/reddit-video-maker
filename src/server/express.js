@@ -7,7 +7,6 @@ const multer = require('multer')
 const fs = require('fs')
 const uuid = require('uuid')
 const path = require('path')
-const cors = require('cors')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -80,12 +79,13 @@ const init = () => {
 
 	app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
-	// if (process.env.NODE_ENV === "development") {
-	// Enable cors for development mode
-	app.use(cors({
-		credentials: true,
-		origin(a, b) { b(null, true) }
-	}))
+	if (process.env.NODE_ENV !== "production") {
+		// Enable cors for development mode
+		app.use(require('cors')({
+			credentials: true,
+			origin(a, b) { b(null, true) }
+		}))
+	}
 
 	initAuth() // Start the reddit api
 
@@ -410,8 +410,6 @@ const init = () => {
 			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost } }).exec()
 
 			try {
-				fs.writeFile(path.join(__dirname, '../render-log.json'), JSON.stringify(req.body), () => { })
-
 				let theme
 				try {
 					theme = await Theme.findById(options.theme)
