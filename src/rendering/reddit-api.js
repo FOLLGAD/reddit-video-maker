@@ -1,12 +1,13 @@
 const querystring = require('querystring')
 const fetch = require('node-fetch')
-const env = require('../../env.json')
+
+require('dotenv').config()
 
 // Fetch the auth token from reddit using credentials in .env
 async function getAuth() {
 	let response = await fetch('https://www.reddit.com/api/v1/access_token?grant_type=client_credentials', {
 		headers: {
-			'Authorization': `Basic ${env.Authorization}`, // Use Basic authentication
+			'Authorization': `Basic ${process.env.AUTHORIZATION}`, // Use Basic authentication
 		},
 		method: 'POST',
 	})

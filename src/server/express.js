@@ -13,11 +13,16 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cron = require('./cronjob')
 
-const { stripeApiKey, stripeWebhookSecret } = require('../../env.json')
+require('dotenv').config()
+const {
+	STRIPE_WEBHOOK_SECRET,
+	STRIPE_API_KEY,
+	PORT,
+} = process.env
 
 const vidExtension = 'mp4'
 
-const stripe = require('stripe')(stripeApiKey)
+const stripe = require('stripe')(STRIPE_API_KEY)
 
 const { render } = require('../rendering/render')
 const { normalizeSong, normalizeVideo } = require('../rendering/video')
@@ -91,7 +96,7 @@ const init = () => {
 			let event
 
 			try {
-				event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
+				event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
 			} catch (err) {
 				console.error(err)
 				return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -410,6 +415,9 @@ const init = () => {
 				let theme
 				try {
 					theme = await Theme.findById(options.theme)
+					if (!theme) {
+						throw "WRONG_THEME"
+					}
 				} catch (e) {
 					return res.status(400).json({ error: "NO_THEME" })
 				}
@@ -554,7 +562,7 @@ const init = () => {
 		res.sendFile(path.join(__dirname, '../../hammurabi-build/index.html'))
 	})
 
-	app.listen(8000)
+	app.listen(PORT)
 }
 
 module.exports = init

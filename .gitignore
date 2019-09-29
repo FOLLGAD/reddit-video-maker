@@ -3,3 +3,4 @@ env.json
 yarn-error.log
 *.log.json
 files/
+.env

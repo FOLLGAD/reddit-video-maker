@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const path = require('path')
-const { tokenSecret } = require('../../env.json')
+require('dotenv').config()
+
+const tokenSecret = process.env.TOKEN_SECRET
 
 const filesLocation = path.join(__dirname, '../../files')
 
