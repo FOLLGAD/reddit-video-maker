@@ -424,6 +424,7 @@ const init = () => {
 
 				let vid = new Video({
 					theme: theme._id,
+					name: questionData.title,
 					owner: req.user._id,
 					file: uuidFileName(vidExtension)
 				})
@@ -480,6 +481,7 @@ const init = () => {
 			let vid = new Video({
 				theme: theme._id,
 				owner: req.user._id,
+				name: "Preview",
 				file: uuidFileName(vidExtension),
 				preview: true,
 			})

@@ -72,6 +72,7 @@ const SongSchema = new Schema({
 module.exports.Song = mongoose.model('Song', SongSchema)
 
 const VideoSchema = new Schema({
+	name: { type: String, default: "Video" },
 	file: { type: String, select: 1 },
 	owner: { type: ObjectId, select: 0 },
 	theme: { type: ObjectId, select: 1 },
