@@ -7,7 +7,7 @@ require('dotenv').config()
 async function getAuth() {
 	let response = await fetch('https://www.reddit.com/api/v1/access_token?grant_type=client_credentials', {
 		headers: {
-			'Authorization': `Basic ${process.env.AUTHORIZATION}`, // Use Basic authentication
+			'Authorization': `Basic ${process.env.REDDIT_AUTHORIZATION}`, // Use Basic authentication
 		},
 		method: 'POST',
 	})
