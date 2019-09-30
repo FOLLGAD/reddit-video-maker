@@ -539,7 +539,7 @@ const init = () => {
 				})
 				.then(vid => {
 					if (vid) {
-						res.sendFile(toFilesDir(vid.file))
+						res.download(toFilesDir(vid.file))
 
 						// Increment downloads by one
 						Video.updateOne({ _id: videoName }, { $inc: { downloads: 1 } })
