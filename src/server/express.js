@@ -38,6 +38,8 @@ const verifyTokenMiddleware = async (req, res, next) => {
 	}
 }
 
+// Credit price in euros
+const creditPrice = 8
 
 const uuidFileName = extension => extension ? uuid() + '.' + extension : uuid()
 
@@ -192,8 +194,7 @@ const init = () => {
 			}
 
 			// Calculate price
-			let price = 8
-			let total = quantity * price
+			let total = quantity * creditPrice
 
 			res.json({ total })
 		})
@@ -207,14 +208,14 @@ const init = () => {
 				line_items: [{
 					name: 'Credits',
 					description: 'Video credits',
-					images: ['https://example.com/t-shirt.png'],
+					// images: ['https://example.com/t-shirt.png'],
 					currency: 'eur',
 					quantity: req.body.quantity,
-					amount: 1000, // TODO: make amount depend on how many you buy (mängdrabatt)
+					amount: creditPrice * 100, // TODO: make amount depend on how many you buy (mängdrabatt)
 				}],
 				client_reference_id: req.user._id.toString(),
-				success_url: 'http://localhost:3000/credits-success',
-				cancel_url: 'http://localhost:3000/credits-cancel',
+				success_url: process.env.DOMAIN_URL + '/credits-success',
+				cancel_url: process.env.DOMAIN_URL + '/credits-cancel',
 			})
 
 			res.json({ session })
