@@ -1,16 +1,16 @@
-const { filesLocation } = require('./utils')
-const { toFilesDir } = require('./utils')
-const { User, Theme, Video, Song } = require('./models')
-const { createToken, verifyToken } = require('./utils')
+const { User, Theme, Video, Song, File } = require('./models')
+const { createToken, verifyToken, uuidFileName, vidExtension, renderFromRequest, toFilesDir } = require('./utils')
 const express = require('express')
 const multer = require('multer')
-const fs = require('fs')
-const uuid = require('uuid')
 const path = require('path')
 const morgan = require('morgan')
+const fs = require('fs')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const cron = require('./cronjob')
+
+const { render } = require('../rendering/render')
+const { normalizeSong, normalizeVideo } = require('../rendering/video')
+const { fetchThread, initAuth } = require('../rendering/reddit-api')
 
 require('dotenv').config()
 const {
@@ -19,29 +19,39 @@ const {
 	PORT,
 } = process.env
 
-const vidExtension = 'mp4'
-
 const stripe = require('stripe')(STRIPE_API_KEY)
-
-const { render } = require('../rendering/render')
-const { normalizeSong, normalizeVideo } = require('../rendering/video')
-const { fetchThread, initAuth } = require('../rendering/reddit-api')
 
 const verifyTokenMiddleware = async (req, res, next) => {
 	if (req.cookies && req.cookies.token) {
-		const payload = await verifyToken(req.cookies.token)
-		const user = await User.findOne({ email: payload.email })
-		req.user = user
-		next()
+		try {
+			const payload = await verifyToken(req.cookies.token)
+			const user = await User.findOne({ email: payload.email })
+
+			if (!user) {
+				throw "INVALID_TOKEN"
+			}
+
+			req.user = user
+			next()
+		} catch (e) {
+			return res.status(401).json({ error: "INVALID_TOKEN" })
+		}
 	} else {
 		res.status(401).json({ error: "NO_TOKEN" })
+	}
+}
+
+const verifyAdminMiddleware = async (req, res, next) => {
+	if (req.user.isAdmin) {
+		next()
+	} else {
+		res.status(403).json({ code: 403, error: "NOT_ALLOWED" })
 	}
 }
 
 // Credit price in euros
 const creditPrice = 8
 
-const uuidFileName = extension => extension ? uuid() + '.' + extension : uuid()
 
 const multerStorage = multer.diskStorage({
 	filename(req, file, cb) {
@@ -56,18 +66,6 @@ const multerStorage = multer.diskStorage({
 
 function getVideoPrice(length) {
 	return 1
-}
-
-const deleteFileCond = filename => {
-	// Delete the file
-	return new Promise((res, rej) => {
-		if (filename) {
-			fs.unlink(path.join(filesLocation, filename), (err) => {
-				if (err) rej(err)
-				else res()
-			})
-		}
-	})
 }
 
 let renderQueue = []
@@ -130,6 +128,36 @@ const init = () => {
 
 	app.use(cookieParser())
 	app.use(bodyParser.json()) // Use json body parsing
+
+	const adminRouter = express.Router()
+		.use(verifyTokenMiddleware)
+		.use(verifyAdminMiddleware)
+		.get('/users', async (req, res) => {
+			let users = await User.find().select({ password: 0 })
+			res.json(users)
+		})
+		.get('/users/:userId', async (req, res) => {
+			let user = await User.findOne({ _id: req.params.userId }).select({ password: 0 })
+			res.json(user)
+		})
+		.post('/users', async (req, res) => {
+			let user = await User.create({
+				email: req.body.email,
+				password: req.body.password,
+			})
+			res.json(user)
+		})
+		.put('/users/:userId/change-password', async (req, res) => {
+			let user = await User.updateOne({ _id: req.params.userId }, { password: req.body.password })
+			res.json(user)
+		})
+		.put('/users/:userId/add-credits', async (req, res) => {
+			if (isNaN(req.body.quantity)) return res.status(400).json({ error: "QUANTITY_NAN" })
+
+			let user = await User.updateOne({ _id: req.params.userId }, { $inc: { credits: req.body.quantity } })
+			res.json(user)
+		})
+
 	// API router for all api calls
 	const apiRouter = express.Router()
 		.post('/register', (req, res) => {
@@ -184,6 +212,14 @@ const init = () => {
 			res.json({})
 		})
 
+		.get('/me', async (req, res) => {
+			let user = await User.findOne({ _id: req.user._id }).select({ password: 0 })
+			res.json(user)
+		})
+		.put('/me/change-password', async (req, res) => {
+			await User.updateOne({ _id: req.user._id }, { password: req.body.password })
+			res.json({})
+		})
 		.get('/credits', (req, res) => {
 			res.json({ credits: req.user.credits })
 		})
@@ -251,11 +287,13 @@ const init = () => {
 		// SONGS
 		/////////////
 		.get('/songs', async (req, res) => {
-			let songs = await Song.find({ owner: req.user._id })
+			let songs = await Song.find({ owner: req.user._id }).populate('file')
 
 			res.json(songs)
 		})
 		.post('/songs', upload.single('song'), async (req, res) => {
+			res.json({})
+
 			const origSong = req.file
 
 			let newFileName = uuidFileName('mp3') // Force mp3
@@ -264,14 +302,16 @@ const init = () => {
 
 			// Song is now normalized and at "newFilePath"
 
+			let songFile = await File.create({
+				filename: newFileName,
+				origname: origSong.originalname,
+			})
+
 			let songDoc = new Song({
-				name: origSong.originalname,
-				file: newFileName,
+				file: songFile._id,
 				owner: req.user._id,
 			})
 			await songDoc.save()
-
-			res.json({ song: songDoc._id })
 		})
 		.delete('/songs/:songId', async (req, res) => {
 			const songId = req.params.songId
@@ -295,6 +335,9 @@ const init = () => {
 				_id: req.params.themeId,
 				$or: [{ public: 'true' }, { owner: req.user._id }]
 			})
+				.populate('intro')
+				.populate('outro')
+				.populate('transition')
 
 			res.json(themes)
 		})
@@ -304,6 +347,7 @@ const init = () => {
 				name: req.body.name || 'Untitled theme',
 				owner: req.user._id,
 				voice: req.body.voice,
+				voiceSpeed: voiceSpeed,
 			})
 			await theme.save()
 
@@ -319,6 +363,9 @@ const init = () => {
 			}
 			if (req.body.voice) {
 				obj.voice = req.body.voice
+			}
+			if (req.body.voiceSpeed) {
+				obj.voiceSpeed = req.body.voiceSpeed
 			}
 
 			await Theme.updateOne({ _id: themeId, owner: req.user._id }, obj)
@@ -338,15 +385,16 @@ const init = () => {
 				owner: req.user._id,
 			})
 
-			let toDelete = []
 			for (const vidPart of ['intro', 'transition', 'outro']) {
 				if (!req.files[vidPart] || !req.files[vidPart][0]) {
 					continue
 				}
 
 				const filePath = req.files[vidPart][0].path
+				const originalName = req.files[vidPart][0].originalname
 
-				let newFileName = uuidFileName(vidExtension) // Force mkv
+
+				let newFileName = uuidFileName(vidExtension) // Force correct extension
 				let newFilePath = toFilesDir(newFileName)
 
 				await normalizeVideo(filePath, newFilePath)
@@ -354,17 +402,20 @@ const init = () => {
 				if (theme[vidPart]) {
 					// If there already exists a video of this type on this theme,
 					// delete it.
-					toDelete.push(theme[vidPart])
+					File.deleteOne({ _id: theme[vidPart] })
 				}
-				theme[vidPart] = newFileName
+
+				let file = await File.create({
+					filename: newFileName,
+					origname: originalName,
+				})
+
+				theme[vidPart] = file._id
 			}
 
 			await theme.save()
 
 			res.json({})
-
-			// Remove all the files
-			toDelete.forEach(file => deleteFileCond(file))
 		})
 		.delete('/themes/:theme', async (req, res) => {
 			await Theme.deleteOne({ _id: req.params.theme, owner: req.user._id })
@@ -379,68 +430,37 @@ const init = () => {
 				owner: req.user._id,
 			})
 
-			let toDelete = []
-
 			if (intro) {
-				toDelete.push(theme.intro)
+				File.deleteOne({ _id: theme.intro })
 				theme.intro = null
 			}
 			if (transition) {
-				toDelete.push(theme.transition)
+				File.deleteOne({ _id: theme.transition })
 				theme.transition = null
 			}
 			if (outro) {
-				toDelete.push(theme.outro)
+				File.deleteOne({ _id: theme.outro })
 				theme.outro = null
 			}
 
-			await Theme.updateOne({ _id: req.params.theme, owner: req.user._id }, deltaObj)
+			theme.save()
 
 			res.json({})
 		})
 
 		// RENDER VIDEO
 		.post('/videos', async (req, res) => {
-			let { questionData, commentData, options } = req.body
+			// Take credit from user
 
 			if (req.user.credits < 1) {
 				return res.status(400).json({ error: "NOT_ENOUGH_CREDITS" })
 			}
 
 			let cost = getVideoPrice()
-			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost } }).exec()
+			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost, videoCount: 1 } }).exec()
 
 			try {
-				let theme
-				try {
-					theme = await Theme.findById(options.theme)
-					if (!theme) {
-						throw "WRONG_THEME"
-					}
-				} catch (e) {
-					return res.status(400).json({ error: "NO_THEME" })
-				}
-
-				let song = options.song ? await Song.findById(options.song, { file: 1 }) : null
-
-				let vid = new Video({
-					theme: theme._id,
-					name: questionData.title,
-					owner: req.user._id,
-					file: uuidFileName(vidExtension)
-				})
-				vid.save()
-
-				let renderOptions = {
-					outPath: toFilesDir(vid.file),
-					transition: toFilesDir(theme.transition),
-					outro: toFilesDir(theme.outro),
-					intro: toFilesDir(theme.intro),
-					song: song && toFilesDir(song.file),
-					voice: theme.voice,
-				}
-
-				let renderPromise = render(questionData, commentData, renderOptions)
+				let { renderPromise, vid } = renderFromRequest(req.body, req.user._id)
 
 				renderQueue.push({
 					promise: renderPromise,
@@ -473,27 +493,37 @@ const init = () => {
 			let theme
 			try {
 				theme = await Theme.findById(options.theme)
+					.populate('intro')
+					.populate('transition')
+					.populate('outro')
+				if (!theme) {
+					throw "WRONG_THEME"
+				}
 			} catch (e) {
 				return res.status(400).json({ error: "NO_THEME" })
 			}
 
-			let song = options.song ? await Song.findById(options.song, { file: 1 }) : null
+			let song = options.song ? await Song.findById(options.song, { file: 1 }).populate('file') : null
+
+			let videoFile = await File.create({
+				filename: uuidFileName(vidExtension),
+			})
 
 			let vid = new Video({
 				theme: theme._id,
 				owner: req.user._id,
 				name: "Preview",
-				file: uuidFileName(vidExtension),
+				file: videoFile._id,
 				preview: true,
 			})
 			await vid.save()
 
 			let renderOptions = {
-				outPath: toFilesDir(vid.file),
-				transition: toFilesDir(theme.transition),
-				outro: toFilesDir(theme.outro),
-				intro: toFilesDir(theme.intro),
-				song: song && toFilesDir(song.file),
+				outPath: toFilesDir(videoFile.filename),
+				intro: toFilesDir(theme.intro && theme.intro.filename),
+				transition: toFilesDir(theme.transition && theme.transition.filename),
+				outro: toFilesDir(theme.outro && theme.outro.filename),
+				song: song && toFilesDir(song.file.filename),
 				voice: theme.voice,
 			}
 
@@ -523,9 +553,10 @@ const init = () => {
 				await vid.promise
 			}
 
-			let video = await Video.findById(id)
+			let video = await Video.findById(id).populate('file')
 
-			res.json({ file: video.file })
+			// Download the file
+			res.json({ url: '/api/files/' + toFilesDir(video.file.filename) })
 		})
 		.get('/videos', async (req, res) => {
 			let vids = await Video.find({ owner: req.user._id }).sort({ created: -1 })
@@ -534,13 +565,15 @@ const init = () => {
 		.get('/videos/:videoName', async (req, res) => {
 			let videoName = req.params.videoName
 
-			Video.findOne({ file: videoName, owner: req.user._id })
+			Video
+				.findOne({ file: videoName, owner: req.user._id })
+				.populate('file')
 				.catch(err => {
 					res.status(404).json({})
 				})
 				.then(vid => {
 					if (vid) {
-						res.download(toFilesDir(vid.file))
+						res.download(toFilesDir(vid.file.filename))
 
 						// Increment downloads by one
 						Video.updateOne({ _id: videoName }, { $inc: { downloads: 1 } })
@@ -550,6 +583,7 @@ const init = () => {
 				})
 		})
 
+	app.use('/api/admin', adminRouter)
 	app.use('/api', apiRouter)
 	app.use('/api/*', (req, res) => {
 		res.status(404).json({ error: "NOT_FOUND" })

@@ -1,20 +1,32 @@
-const { deleteFileCond } = require('./utils')
-
+const { toFilesDir, deleteFileCond } = require('./utils')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 const bcrypt = require('bcrypt')
-const uuid = require('uuid')
 
-const UserSchema = new Schema({
-	email: { type: String, required: true, lowercase: true, unique: true },
-	password: { type: String, set: val => bcrypt.hashSync(val, 10) },
-	credits: { type: Number, default: 0 },
-	videoCount: { type: Number, default: 0 },
-	registered: { type: Date, default: Date.now },
+const FileSchema = new Schema({
+	filename: { type: String, select: 1 },
+	origname: { type: String, select: 1 },
 })
 
-UserSchema.method("comparePassword", function (password) {
+FileSchema.pre('deleteOne', async function (next) {
+	console.log('Deleting file', this.filename, this.origname)
+	await deleteFileCond(toFilesDir(this.filename)) // Delete the file (if it exists)
+	next()
+})
+
+module.exports.File = mongoose.model('File', FileSchema)
+
+const UserSchema = new Schema({
+	email: { type: String, required: true, lowercase: true, unique: true, select: 1 },
+	password: { type: String, set: val => bcrypt.hashSync(val, 10) },
+	credits: { type: Number, default: 0, select: 1 },
+	videoCount: { type: Number, default: 0, select: 1 },
+	registered: { type: Date, default: Date.now },
+	isAdmin: { type: Boolean, default: false, select: 1 },
+})
+
+UserSchema.method('comparePassword', function (password) {
 	// Compare password with current
 	return bcrypt.compare(password, this.password)
 })
@@ -39,23 +51,21 @@ const ThemeSchema = new Schema({
 	public: { type: Boolean, default: false, select: 0 },
 
 	// Filenames:
-	intro: { type: String, select: 1 },
-	transition: { type: String, select: 1 },
-	outro: { type: String, select: 1 },
+	intro: { type: ObjectId, ref: 'File', select: 1 },
+	transition: { type: ObjectId, ref: 'File', select: 1 },
+	outro: { type: ObjectId, ref: 'File', select: 1 },
 
-	songs: { type: [String], select: 0 },
+	voice: { type: String, enum: ['daniel', 'google-us', 'google-uk'], default: 'daniel', select: 1 },
+	voiceSpeed: { type: Number, min: 0.2, max: 5, default: 1 },
 
-	voice: { type: String, enum: ["daniel", "google-us", "google-uk"], default: "daniel", select: 1 },
-
-	owner: { type: ObjectId, select: 0 },
+	owner: { type: ObjectId, select: 0, ref: 'User' },
 	updated: { type: Date, default: Date.now },
 })
 
-ThemeSchema.pre('save', next => {
-	this.wasNew = this.isNew
-	if (this.isNew) {
-		this.path = `${this.name.toLowerCase}-${uuid}`
-	}
+ThemeSchema.pre('deleteOne', async function (next) {
+	module.exports.File.deleteOne({ _id: this.intro })
+	module.exports.File.deleteOne({ _id: this.outro })
+	module.exports.File.deleteOne({ _id: this.transition })
 	next()
 })
 
@@ -63,18 +73,22 @@ module.exports.Theme = mongoose.model('Theme', ThemeSchema)
 
 const SongSchema = new Schema({
 	public: { type: Boolean, default: false, select: 0 },
-	name: { type: String, select: 1 },
-	file: { type: String, select: 0 },
-	owner: { type: ObjectId, select: 0 },
+	file: { type: ObjectId, ref: 'File', select: 1 },
+	owner: { type: ObjectId, select: 0, ref: 'User' },
 	created: { type: Date, default: Date.now },
+})
+
+SongSchema.pre('deleteOne', async function (next) {
+	module.exports.File.deleteOne({ _id: this.file })
+	next()
 })
 
 module.exports.Song = mongoose.model('Song', SongSchema)
 
 const VideoSchema = new Schema({
-	name: { type: String, default: "Video" },
-	file: { type: String, select: 1 },
-	owner: { type: ObjectId, select: 0 },
+	file: { type: ObjectId, select: 1, ref: 'File' },
+	name: { type: String, default: 'Video' },
+	owner: { type: ObjectId, select: 0, ref: 'User' },
 	theme: { type: ObjectId, select: 1 },
 	finished: { type: Date, select: 1 },
 	created: { type: Date, default: Date.now, select: 1 },
@@ -90,7 +104,9 @@ VideoSchema.pre('deleteMany', async function (next) {
 	await mongoose.model('Video')
 		.find(query)
 		.then(videos => {
-			videos.forEach(vid => deleteFileCond(vid.file))
+			videos.forEach(vid => {
+				mongoose.model('File').deleteOne({ _id: vid.file })
+			})
 		})
 
 	next()
@@ -105,7 +121,7 @@ const SwearwordDictSchema = new Schema({
 module.exports.SwearwordDict = mongoose.model('SwearwordDict', SwearwordDictSchema)
 
 const VoiceSchema = new Schema({
-	engine: { type: String, enum: ["daniel", "google"] },
+	engine: { type: String, enum: ['daniel', 'google'] },
 	googleSettings: {
 
 	},

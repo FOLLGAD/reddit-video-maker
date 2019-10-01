@@ -75,7 +75,7 @@ module.exports.concatAndReencode = function (videoPaths, outPath) {
 	})
 }
 
-module.exports.combineImageAudio = function (imagePath, audioPath, outPath, delay = 0) {
+module.exports.combineImageAudio = function (imagePath, audioPath, outPath, delay = -0.35) {
 	return new Promise(async (res, rej) => {
 		let audioInfo = await probe(audioPath)
 		ffmpeg(imagePath)
