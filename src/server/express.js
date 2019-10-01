@@ -347,7 +347,7 @@ const init = () => {
 				name: req.body.name || 'Untitled theme',
 				owner: req.user._id,
 				voice: req.body.voice,
-				voiceSpeed: voiceSpeed,
+				voiceSpeed: req.body.voiceSpeed,
 			})
 			await theme.save()
 
