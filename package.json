@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/api-fetch.js",
   "scripts": {
-    "test": "npx jest"
+    "test": "npx jest",
+	"start": "node src/server/main.js"
   },
   "author": "follgad",
   "license": "ISC",
