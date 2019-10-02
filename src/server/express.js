@@ -292,8 +292,6 @@ const init = () => {
 			res.json(songs)
 		})
 		.post('/songs', upload.single('song'), async (req, res) => {
-			res.json({})
-
 			const origSong = req.file
 
 			let newFileName = uuidFileName('mp3') // Force mp3
@@ -312,11 +310,13 @@ const init = () => {
 				owner: req.user._id,
 			})
 			await songDoc.save()
+
+			res.json({})
 		})
 		.delete('/songs/:songId', async (req, res) => {
 			const songId = req.params.songId
 
-			await Song.deleteOne({ owner: req.user._id, _id: songId })
+			await Song.findOne({ owner: req.user._id, _id: songId }).then(s => s.remove())
 
 			res.json({ song: songId })
 		})
@@ -402,7 +402,7 @@ const init = () => {
 				if (theme[vidPart]) {
 					// If there already exists a video of this type on this theme,
 					// delete it.
-					File.deleteOne({ _id: theme[vidPart] })
+					File.findOne({ _id: theme[vidPart] }).then(d => d.remove)
 				}
 
 				let file = await File.create({
@@ -418,7 +418,7 @@ const init = () => {
 			res.json({})
 		})
 		.delete('/themes/:theme', async (req, res) => {
-			await Theme.deleteOne({ _id: req.params.theme, owner: req.user._id })
+			await Theme.findOne({ _id: req.params.theme, owner: req.user._id }).then(d => d.remove)
 
 			res.json({})
 		})
@@ -431,15 +431,15 @@ const init = () => {
 			})
 
 			if (intro) {
-				File.deleteOne({ _id: theme.intro })
+				File.findOne({ _id: theme.intro }).then(d => d.remove)
 				theme.intro = null
 			}
 			if (transition) {
-				File.deleteOne({ _id: theme.transition })
+				File.findOne({ _id: theme.transition }).then(d => d.remove)
 				theme.transition = null
 			}
 			if (outro) {
-				File.deleteOne({ _id: theme.outro })
+				File.findOne({ _id: theme.outro }).then(d => d.remove)
 				theme.outro = null
 			}
 
@@ -460,20 +460,21 @@ const init = () => {
 			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost, videoCount: 1 } }).exec()
 
 			try {
-				let { renderPromise, vid } = renderFromRequest(req.body, req.user._id)
+				let { renderPromise, vid } = await renderFromRequest(req.body, req.user._id)
 
 				renderQueue.push({
 					promise: renderPromise,
-					id: vid._id,
+					file: vid.file,
 				})
 				renderPromise.then(() => {
-					let index = renderQueue.findIndex(r => r.id === vid._id)
+					let index = renderQueue.findIndex(r => r.file === vid.file)
 					if (index >= 0) {
 						renderQueue.splice(index, 1)
 					}
+					Video.updateOne({ _id: vid._id }, { $set: { finished: new Date() } }).exec()
 				})
 
-				res.json({ message: 'Rendering', id: vid._id })
+				res.json({ message: 'Rendering', file: vid.file })
 			} catch (error) {
 				console.error(error)
 				User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
@@ -488,73 +489,46 @@ const init = () => {
 			// Should wait until rendering is done and then return a link to
 			// where the video is found.
 
-			let { options } = req.body
-
-			let theme
-			try {
-				theme = await Theme.findById(options.theme)
-					.populate('intro')
-					.populate('transition')
-					.populate('outro')
-				if (!theme) {
-					throw "WRONG_THEME"
-				}
-			} catch (e) {
-				return res.status(400).json({ error: "NO_THEME" })
-			}
-
-			let song = options.song ? await Song.findById(options.song, { file: 1 }).populate('file') : null
-
-			let videoFile = await File.create({
-				filename: uuidFileName(vidExtension),
-			})
-
-			let vid = new Video({
-				theme: theme._id,
-				owner: req.user._id,
-				name: "Preview",
-				file: videoFile._id,
-				preview: true,
-			})
-			await vid.save()
-
-			let renderOptions = {
-				outPath: toFilesDir(videoFile.filename),
-				intro: toFilesDir(theme.intro && theme.intro.filename),
-				transition: toFilesDir(theme.transition && theme.transition.filename),
-				outro: toFilesDir(theme.outro && theme.outro.filename),
-				song: song && toFilesDir(song.file.filename),
-				voice: theme.voice,
+			if (await Video.findOne({ finished: null }).countDocuments().exec() > 0) {
+				return res.status(400).json({error: 'ALREADY_RENDERING_PREVIEW'})
 			}
 
 			let { questionData, commentData } = require('../example-data.json') // Warning: require(...) caches the content of this file
 
-			let renderPromise = render(questionData, commentData, renderOptions)
+			try {
+				let options = { ...req.body, questionData, commentData, name: 'Preview', preview: true }
+				let { renderPromise, vid } = await renderFromRequest(options, req.user._id)
 
-			renderQueue.push({
-				promise: renderPromise,
-				id: vid._id,
-			})
-			renderPromise.then(() => {
-				let index = renderQueue.findIndex(r => r.id === vid._id)
-				if (index >= 0) {
-					renderQueue.splice(index, 1)
-				}
-			})
+				renderQueue.push({
+					promise: renderPromise,
+					file: vid.file,
+				})
+				renderPromise
+					.then(() => {
+						let index = renderQueue.findIndex(r => r.file === vid.file)
+						if (index >= 0) {
+							renderQueue.splice(index, 1)
+						}
+						Video.updateOne({ _id: vid._id }, { $set: { finished: new Date() } }).exec()
+					})
 
-			res.json({ message: 'Rendering', id: vid._id, })
+				res.json({ message: 'Rendering', file: vid.file })
+			} catch (error) {
+				console.error(error)
+			}
+
 		})
-		.get('/check-on-video/:videoId', async (req, res) => {
+		.get('/long-poll-video/:videoFileId', async (req, res) => {
 			// Long polling for getting the video state
-			let id = req.params.videoId
+			let file = req.params.videoFileId
 
 			let vid
-			if (vid = renderQueue.find(q => q.id == id)) {
+			if (vid = renderQueue.find(q => q.file == file)) {
 				await vid.promise
 			}
 
 			// Download the file
-			res.json({ url: '/api/files/' + vid._id })
+			res.json({ url: '/api/videos/' + file })
 		})
 		.get('/videos', async (req, res) => {
 			let vids = await Video.find({ owner: req.user._id }).sort({ created: -1 })
@@ -574,7 +548,7 @@ const init = () => {
 						res.download(toFilesDir(vid.file.filename))
 
 						// Increment downloads by one
-						Video.updateOne({ _id: videoName }, { $inc: { downloads: 1 } })
+						Video.updateOne({ file: videoName, owner: req.user._id }, { $inc: { downloads: 1 } }).exec()
 					} else {
 						res.sendStatus(404)
 					}

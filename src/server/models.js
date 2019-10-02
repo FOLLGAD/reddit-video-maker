@@ -1,4 +1,3 @@
-const { toFilesDir, deleteFileCond } = require('./utils')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
@@ -9,10 +8,10 @@ const FileSchema = new Schema({
 	origname: { type: String, select: 1 },
 })
 
-FileSchema.pre('deleteOne', async function (next) {
+FileSchema.post('remove', async function () {
+	const utils = require('./utils')
 	console.log('Deleting file', this.filename, this.origname)
-	await deleteFileCond(toFilesDir(this.filename)) // Delete the file (if it exists)
-	next()
+	await utils.deleteFileCond(this.filename) // Delete the file (if it exists)
 })
 
 module.exports.File = mongoose.model('File', FileSchema)
@@ -62,10 +61,10 @@ const ThemeSchema = new Schema({
 	updated: { type: Date, default: Date.now },
 })
 
-ThemeSchema.pre('deleteOne', async function (next) {
-	module.exports.File.deleteOne({ _id: this.intro })
-	module.exports.File.deleteOne({ _id: this.outro })
-	module.exports.File.deleteOne({ _id: this.transition })
+ThemeSchema.pre('remove', async function (next) {
+	mongoose.model('File').findOne({ _id: this.intro }).then(v => v.remove())
+	mongoose.model('File').findOne({ _id: this.outro }).then(v => v.remove())
+	mongoose.model('File').findOne({ _id: this.transition }).then(v => v.remove())
 	next()
 })
 
@@ -78,9 +77,9 @@ const SongSchema = new Schema({
 	created: { type: Date, default: Date.now },
 })
 
-SongSchema.pre('deleteOne', async function (next) {
-	module.exports.File.deleteOne({ _id: this.file })
-	next()
+SongSchema.post('remove', function () {
+	// Remove the file
+	mongoose.model('File').findOne({ _id: this.file }).then(d => d.remove())
 })
 
 module.exports.Song = mongoose.model('Song', SongSchema)
@@ -90,7 +89,7 @@ const VideoSchema = new Schema({
 	name: { type: String, default: 'Video' },
 	owner: { type: ObjectId, select: 0, ref: 'User' },
 	theme: { type: ObjectId, select: 1 },
-	finished: { type: Date, select: 1 },
+	finished: { type: Date, select: 1, default: null },
 	created: { type: Date, default: Date.now, select: 1 },
 	expiration: { type: Date, default: Date.now() + 1000 * 60 * 60 * 24, select: 1 }, // 24 hours before expiration
 	downloads: { type: Number, default: 0 },
@@ -105,7 +104,7 @@ VideoSchema.pre('deleteMany', async function (next) {
 		.find(query)
 		.then(videos => {
 			videos.forEach(vid => {
-				mongoose.model('File').deleteOne({ _id: vid.file })
+				mongoose.model('File').findOne({ _id: vid.file }).then(v => v.remove())
 			})
 		})
 
