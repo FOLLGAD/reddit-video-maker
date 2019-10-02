@@ -489,8 +489,11 @@ const init = () => {
 			// Should wait until rendering is done and then return a link to
 			// where the video is found.
 
-			if (await Video.findOne({ finished: null }).countDocuments().exec() > 0) {
-				return res.status(400).json({error: 'ALREADY_RENDERING_PREVIEW'})
+			// $type: "null" to not break older models which did not have the "finished" prop
+			let amountOfPreviewsInOrder = await Video.findOne({ finished: { $type: "null" }, preview: true }).countDocuments().exec()
+
+			if (amountOfPreviewsInOrder > 0) {
+				return res.status(400).json({ error: 'ALREADY_RENDERING_PREVIEW' })
 			}
 
 			let { questionData, commentData } = require('../example-data.json') // Warning: require(...) caches the content of this file
