@@ -553,10 +553,8 @@ const init = () => {
 				await vid.promise
 			}
 
-			let video = await Video.findById(id).populate('file')
-
 			// Download the file
-			res.json({ url: '/api/files/' + toFilesDir(video.file.filename) })
+			res.json({ url: '/api/files/' + vid._id })
 		})
 		.get('/videos', async (req, res) => {
 			let vids = await Video.find({ owner: req.user._id }).sort({ created: -1 })
