@@ -4,11 +4,9 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const morgan = require('morgan')
-const fs = require('fs')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 
-const { render } = require('../rendering/render')
 const { normalizeSong, normalizeVideo } = require('../rendering/video')
 const { fetchThread, initAuth } = require('../rendering/reddit-api')
 
@@ -217,8 +215,23 @@ const init = () => {
 			res.json(user)
 		})
 		.put('/me/change-password', async (req, res) => {
-			await User.updateOne({ _id: req.user._id }, { password: req.body.password })
-			res.json({})
+			let { passwordCurrent, passwordNew } = req.body
+
+			// Find the user
+			User.findByEmailPass(req.user.email, passwordCurrent)
+				.then(user => {
+					// Auth succeeded
+
+					// Change password
+					user.password = passwordNew
+					// Save user
+					await user.save()
+					// Return success
+					res.json({})
+				})
+				.catch(err => {
+					res.status(400).json({ error: 'WRONG_PASS' })
+				})
 		})
 		.get('/credits', (req, res) => {
 			res.json({ credits: req.user.credits })
