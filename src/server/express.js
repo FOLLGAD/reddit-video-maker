@@ -219,7 +219,7 @@ const init = () => {
 
 			// Find the user
 			User.findByEmailPass(req.user.email, passwordCurrent)
-				.then(user => {
+				.then(async user => {
 					// Auth succeeded
 
 					// Change password
