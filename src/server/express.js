@@ -23,6 +23,11 @@ const verifyTokenMiddleware = async (req, res, next) => {
 	if (req.cookies && req.cookies.token) {
 		try {
 			const payload = await verifyToken(req.cookies.token)
+
+			if (!payload.email) {
+				throw "INVALID_TOKEN"
+			}
+
 			const user = await User.findOne({ $or: [{ email: payload.email }, { username: payload.email }] })
 
 			if (!user) {
@@ -227,7 +232,13 @@ const init = () => {
 
 			User.findByEmailPass(email, password)
 				.then(user => {
-					return createToken(user.email)
+					let tokenBase = user.email ? user.email : user.username
+
+					if (tokenBase) {
+						return createToken(tokenBase)
+					} else {
+						throw "No username or email"
+					}
 				})
 				.then(token => {
 					res.cookie('token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 365 })
