@@ -299,6 +299,9 @@ const init = () => {
 				return res.status(400).json({ error: 'NO_QUANTITY' })
 			}
 
+			let adjustedPrice = (creditPrice * 100) * req.user.multiplier
+			// Times hundred to make into cents (stripe expects amount to be in cents)
+
 			const session = await stripe.checkout.sessions.create({
 				payment_method_types: ['card'],
 				line_items: [{
@@ -307,7 +310,7 @@ const init = () => {
 					// images: ['https://example.com/t-shirt.png'],
 					currency: 'eur',
 					quantity: req.body.quantity,
-					amount: creditPrice * 100, // TODO: make amount depend on how many you buy (mängdrabatt)
+					amount: adjustedPrice, // TODO: make amount depend on how many you buy (mängdrabatt)
 				}],
 				client_reference_id: req.user._id.toString(),
 				success_url: process.env.DOMAIN_URL + '/credits-success',
