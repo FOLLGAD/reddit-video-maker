@@ -23,7 +23,12 @@ const verifyTokenMiddleware = async (req, res, next) => {
 	if (req.cookies && req.cookies.token) {
 		try {
 			const payload = await verifyToken(req.cookies.token)
-			const user = await User.findOne({ email: payload.email })
+
+			if (!payload.email) {
+				throw "INVALID_TOKEN"
+			}
+
+			const user = await User.findOne({ $or: [{ email: payload.email }, { username: payload.email }] })
 
 			if (!user) {
 				throw "INVALID_TOKEN"
@@ -49,7 +54,6 @@ const verifyAdminMiddleware = async (req, res, next) => {
 
 // Credit price in euros
 const creditPrice = 8
-
 
 const multerStorage = multer.diskStorage({
 	filename(req, file, cb) {
@@ -139,10 +143,26 @@ const init = () => {
 			res.json(user)
 		})
 		.post('/users', async (req, res) => {
-			let user = await User.create({
-				email: req.body.email,
-				password: req.body.password,
-			})
+			let { password, email, username } = req.body
+
+			let emailUsername = {}
+			if (username) {
+				emailUsername.username = username
+				let nm = await User.countDocuments({ username })
+				if (nm > 0) {
+					return res.status(400).json({ error: "USERNAME_IN_USE" })
+				}
+			}
+
+			if (email) {
+				emailUsername.email = email
+				let nm = await User.countDocuments({ email })
+				if (nm > 0) {
+					return res.status(400).json({ error: "EMAIL_IN_USE" })
+				}
+			}
+
+			let user = await User.create({ password, ...emailUsername })
 			res.json(user)
 		})
 		.put('/users/:userId/change-password', async (req, res) => {
@@ -155,21 +175,42 @@ const init = () => {
 			let user = await User.updateOne({ _id: req.params.userId }, { $inc: { credits: req.body.quantity } })
 			res.json(user)
 		})
+		.put('/users/:userId/set-multiplier', async (req, res) => {
+			let user = await User.updateOne({ _id: req.params.userId }, { multiplier: req.body.multiplier })
+			res.json(user)
+		})
 
 	// API router for all api calls
 	const apiRouter = express.Router()
-		.post('/register', (req, res) => {
-			let { password, email } = req.body
+		.post('/register', async (req, res) => {
+			let { password, email, username } = req.body
 			if (!password) {
 				return res.status(400).json({ error: "NO_PASSWORD" })
 			} else if (password.length < 8) {
 				return res.status(400).json({ error: "PASSWORD_TOO_SHORT" })
 			}
-			if (!email) {
-				return res.status(400).json({ error: "NO_EMAIL" })
+			if (!email && !username) {
+				return res.status(400).json({ error: "NO_EMAIL_OR_USERNAME" })
 			}
 
-			new User({ email, password }).save()
+			let emailUsername = {}
+			if (username) {
+				emailUsername.username = username
+				let nm = await User.countDocuments({ username })
+				if (nm > 0) {
+					return res.status(400).json({ error: "USERNAME_IN_USE" })
+				}
+			}
+
+			if (email) {
+				emailUsername.email = email
+				let nm = await User.countDocuments({ email })
+				if (nm > 0) {
+					return res.status(400).json({ error: "EMAIL_IN_USE" })
+				}
+			}
+
+			new User({ password, ...emailUsername }).save()
 				.then(() => {
 					res.status(200).json({})
 				})
@@ -191,7 +232,13 @@ const init = () => {
 
 			User.findByEmailPass(email, password)
 				.then(user => {
-					return createToken(user.email)
+					let tokenBase = user.email ? user.email : user.username
+
+					if (tokenBase) {
+						return createToken(tokenBase)
+					} else {
+						throw "No username or email"
+					}
 				})
 				.then(token => {
 					res.cookie('token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 365 })
@@ -218,7 +265,7 @@ const init = () => {
 			let { passwordCurrent, passwordNew } = req.body
 
 			// Find the user
-			User.findByEmailPass(req.user.email, passwordCurrent)
+			User.findByEmailPass(req.user.email || req.user.username, passwordCurrent)
 				.then(async user => {
 					// Auth succeeded
 
@@ -242,8 +289,8 @@ const init = () => {
 				return res.status(400).json({ error: 'NO_QUANTITY' })
 			}
 
-			// Calculate price
-			let total = quantity * creditPrice
+			// Calculate price (2 digits after decimal point)
+			let total = Math.round((quantity * creditPrice * req.user.multiplier) * 100) / 100
 
 			res.json({ total })
 		})
@@ -255,8 +302,8 @@ const init = () => {
 			const session = await stripe.checkout.sessions.create({
 				payment_method_types: ['card'],
 				line_items: [{
-					name: 'Credits',
-					description: 'Video credits',
+					name: 'Video credits',
+					description: 'Video credits for Reddit Video Maker',
 					// images: ['https://example.com/t-shirt.png'],
 					currency: 'eur',
 					quantity: req.body.quantity,

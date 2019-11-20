@@ -17,11 +17,13 @@ FileSchema.post('remove', async function () {
 module.exports.File = mongoose.model('File', FileSchema)
 
 const UserSchema = new Schema({
-	email: { type: String, required: true, lowercase: true, unique: true, select: 1 },
+	email: { type: String, lowercase: true },
+	username: { type: String, lowercase: true },
 	password: { type: String, set: val => bcrypt.hashSync(val, 10) },
 	credits: { type: Number, default: 0, select: 1 },
 	videoCount: { type: Number, default: 0, select: 1 },
 	registered: { type: Date, default: Date.now },
+	multiplier: { type: Number, default: 1, select: 1 },
 	isAdmin: { type: Boolean, default: false, select: 1 },
 })
 
@@ -30,8 +32,8 @@ UserSchema.method('comparePassword', function (password) {
 	return bcrypt.compare(password, this.password)
 })
 
-UserSchema.statics.findByEmailPass = function (email, password) {
-	return this.findOne({ email })
+UserSchema.statics.findByEmailPass = function (login, password) {
+	return this.findOne({ $or: [{ email: login }, { username: login }] })
 		.then(async user => {
 			let passed = await user.comparePassword(password)
 			if (passed) {
