@@ -472,8 +472,12 @@ const init = () => {
 			let cost = getVideoPrice()
 			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost, videoCount: 1 } }).exec()
 
+			let vid, renderPromise
+
 			try {
-				let { renderPromise, vid } = await renderFromRequest(req.body, req.user._id)
+				res = await renderFromRequest(req.body, req.user._id)
+				vid = res.vid
+				renderPromise = res.renderPromise
 
 				renderQueue.push({
 					promise: renderPromise,
@@ -491,6 +495,7 @@ const init = () => {
 			} catch (error) {
 				console.error(error)
 				User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
+				Video.updateOne({ _id: vid._id }, { $set: { failed: true } }).exec() // Mark video as failed
 			}
 		})
 		.post('/preview', async (req, res) => {

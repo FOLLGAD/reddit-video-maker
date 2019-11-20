@@ -76,6 +76,6 @@ module.exports.render = async function (questionData, commentData, options) {
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
 		console.error(e)
-		console.error("Rendering failed")
+		throw new Error("Rendering failed")
 	}
 }
