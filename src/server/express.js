@@ -112,20 +112,19 @@ const init = () => {
 				let userId = session.client_reference_id
 				console.log(session)
 				if (!userId) {
-					throw new Error("No client reference Id gotten! Can't match payment with payer.")
+					throw new Error("No client_reference_id gotten! Can't match payment with payer.")
 				}
 				session.display_items.forEach(product => {
-					if (product.custom.name === "Credits") {
+					if (product.custom.name === "Credits" || product.custom.name === "Video credits") {
 						User.updateOne({ _id: userId }, { $inc: { credits: product.quantity } }).exec()
 					} else {
 						console.error("Unknown product name", product.custom.name)
 						User.updateOne({ _id: userId }, { $inc: { credits: product.quantity } }).exec()
 					}
 				})
+				// Return a response to acknowledge receipt of the event
+				res.json({ received: true })
 			}
-
-			// Return a response to acknowledge receipt of the event
-			res.json({ received: true })
 		})
 
 	app.use(cookieParser())
