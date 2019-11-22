@@ -478,7 +478,7 @@ const init = () => {
 			res.json({})
 		})
 		.delete('/themes/:theme', async (req, res) => {
-			await Theme.findOne({ _id: req.params.theme, owner: req.user._id }).then(d => d.remove)
+			await Theme.findOne({ _id: req.params.theme, owner: req.user._id }).then(d => d.remove())
 
 			res.json({})
 		})
