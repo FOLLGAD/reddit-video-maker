@@ -92,6 +92,7 @@ const VideoSchema = new Schema({
 	owner: { type: ObjectId, select: 0, ref: 'User' },
 	theme: { type: ObjectId, select: 1 },
 	finished: { type: Date, select: 1, default: null },
+	failed: { type: Boolean, select: 1, default: false },
 	created: { type: Date, default: Date.now, select: 1 },
 	expiration: { type: Date, default: Date.now() + 1000 * 60 * 60 * 24, select: 1 }, // 24 hours before expiration
 	downloads: { type: Number, default: 0 },

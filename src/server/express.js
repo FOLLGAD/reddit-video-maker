@@ -112,20 +112,19 @@ const init = () => {
 				let userId = session.client_reference_id
 				console.log(session)
 				if (!userId) {
-					throw new Error("No client reference Id gotten! Can't match payment with payer.")
+					throw new Error("No client_reference_id gotten! Can't match payment with payer.")
 				}
 				session.display_items.forEach(product => {
-					if (product.custom.name === "Credits") {
+					if (product.custom.name === "Credits" || product.custom.name === "Video credits") {
 						User.updateOne({ _id: userId }, { $inc: { credits: product.quantity } }).exec()
 					} else {
 						console.error("Unknown product name", product.custom.name)
 						User.updateOne({ _id: userId }, { $inc: { credits: product.quantity } }).exec()
 					}
 				})
+				// Return a response to acknowledge receipt of the event
+				res.json({ received: true })
 			}
-
-			// Return a response to acknowledge receipt of the event
-			res.json({ received: true })
 		})
 
 	app.use(cookieParser())
@@ -481,7 +480,7 @@ const init = () => {
 			res.json({})
 		})
 		.delete('/themes/:theme', async (req, res) => {
-			await Theme.findOne({ _id: req.params.theme, owner: req.user._id }).then(d => d.remove)
+			await Theme.findOne({ _id: req.params.theme, owner: req.user._id }).then(d => d.remove())
 
 			res.json({})
 		})
@@ -522,8 +521,12 @@ const init = () => {
 			let cost = getVideoPrice()
 			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost, videoCount: 1 } }).exec()
 
+			let vid, renderPromise
+
 			try {
-				let { renderPromise, vid } = await renderFromRequest(req.body, req.user._id)
+				res = await renderFromRequest(req.body, req.user._id)
+				vid = res.vid
+				renderPromise = res.renderPromise
 
 				renderQueue.push({
 					promise: renderPromise,
@@ -541,6 +544,7 @@ const init = () => {
 			} catch (error) {
 				console.error(error)
 				User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
+				Video.updateOne({ _id: vid._id }, { $set: { failed: true } }).exec() // Mark video as failed
 			}
 		})
 		.post('/preview', async (req, res) => {
