@@ -64,9 +64,13 @@ const ThemeSchema = new Schema({
 })
 
 ThemeSchema.pre('remove', async function (next) {
-	mongoose.model('File').findOne({ _id: this.intro }).then(v => v.remove())
-	mongoose.model('File').findOne({ _id: this.outro }).then(v => v.remove())
-	mongoose.model('File').findOne({ _id: this.transition }).then(v => v.remove())
+	mongoose.model('File').find({
+		_id:
+		{
+			$in: [this.intro, this.outro, this.transition]
+		}
+	})
+		.then(v => v.forEach(f => f.remove()))
 	next()
 })
 
