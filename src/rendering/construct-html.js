@@ -18,9 +18,6 @@ async function sequentialWork(works, { voice, dsf = 2.4 }) {
 			const daniel = synthSpeech({ text: current[1], voice })
 			let todo = [puppet, daniel]
 
-			puppet.then(() => console.log("Puppet took %s", Date.now() - start))
-			daniel.then(() => console.log("Daniel took %s", Date.now() - start))
-
 			let file = tmp.fileSync({ postfix: '.' + vidExtension })
 			let path = file.name
 			let [imgPath, audioPath] = await Promise.all(todo)
