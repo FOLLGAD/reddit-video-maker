@@ -521,9 +521,9 @@ const init = () => {
 			let vid, renderPromise
 
 			try {
-				res = await renderFromRequest(req.body, req.user._id)
-				vid = res.vid
-				renderPromise = res.renderPromise
+				vidRes = await renderFromRequest(req.body, req.user._id)
+				vid = vidRes.vid
+				renderPromise = vidRes.renderPromise
 
 				renderQueue.push({
 					promise: renderPromise,
