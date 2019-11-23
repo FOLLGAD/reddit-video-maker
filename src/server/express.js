@@ -79,7 +79,7 @@ const init = () => {
 		limits: { fileSize: 50000000, files: 5 }, // 50MB file size limit
 	})
 
-	app.use(morgan('[date[iso]] :method :url :status :res[content-length] - :response-time ms'))
+	app.use(morgan('<:date[iso]> :method :url :status :res[content-length] - :response-time ms'))
 
 	if (process.env.NODE_ENV !== "production") {
 		// Enable cors for development mode
