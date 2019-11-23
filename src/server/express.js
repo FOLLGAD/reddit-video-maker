@@ -524,7 +524,7 @@ const init = () => {
 			let vid, renderPromise
 
 			try {
-				vidRes = await renderFromRequest(req.body, req.user._id)
+				let vidRes = await renderFromRequest(req.body, req.user._id)
 				vid = vidRes.vid
 				renderPromise = vidRes.renderPromise
 
