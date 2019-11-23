@@ -12,8 +12,6 @@ async function sequentialWork(works, { voice, dsf = 2.4 }) {
 	let arr = []
 	for (const current of works) {
 		try {
-			let start = Date.now()
-
 			const puppet = launchPuppet(current[0], dsf)
 			const daniel = synthSpeech({ text: current[1], voice })
 			let todo = [puppet, daniel]
