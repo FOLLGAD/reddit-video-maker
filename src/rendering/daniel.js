@@ -66,7 +66,7 @@ module.exports.makeCall = async function (text, engine = 4, language = 1, voice 
 			let t = await timeoutPromise(5000, getTextPromise(engine, language, voice, newtext, acc, checksum))
 			return t
 		} catch (err) {
-			if (err.message == 400) {
+			if (err.message == 400 && tries > 3) {
 				throw err
 			}
 			let retrytime = 1000
