@@ -128,7 +128,7 @@ const init = () => {
 		})
 
 	app.use(cookieParser())
-	app.use(bodyParser.json()) // Use json body parsing
+	app.use(bodyParser.json({ limit: "50mb", extended: true })) // Use json body parsing
 
 	const adminRouter = express.Router()
 		.use(verifyTokenMiddleware)
