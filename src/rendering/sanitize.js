@@ -15,44 +15,14 @@ const foulDict2 = [{
 	regex: /nigg(a|er)/,
 	replace: "n-word",
 }, {
-	regex: /pornography/,
-	replace: "p graphy",
-}, {
-	regex: /porn/,
-	replace: "p rn",
-}, {
 	regex: /(\W|^)rape/,
 	replace: "$1r e",
 }, {
 	regex: /(\W|^)rapist/,
 	replace: "$1r pist",
 }, {
-	regex: /cock/,
-	replace: "c k",
-}, {
-	regex: /whore/,
-	replace: "girl",
-}, {
 	regex: /pussy/,
 	replace: "p s y",
-}, {
-	regex: /dick/,
-	replace: "d ",
-}, {
-	regex: /tits/,
-	replace: "t ts",
-}, {
-	regex: /titties/,
-	replace: "t ts",
-}, {
-	regex: /(\W|^)cum/,
-	replace: "$1c m",
-}, {
-	regex: /sex/,
-	replace: "s ",
-}, {
-	regex: /retard/,
-	replace: "ree",
 }, {
 	regex: /\.com/,
 	replace: " dot com",
@@ -65,18 +35,6 @@ const foulDict2 = [{
 }, {
 	regex: /ass(hat|face|head|burger|hole)/,
 	replace: "a-$1",
-}, {
-	regex: /penis/,
-	replace: "peepee",
-}, {
-	regex: /vagina/,
-	replace: "lady part",
-}, {
-	regex: /drug/,
-	replace: "dog",
-}, {
-	regex: /masturbat/,
-	replace: "mas bat",
 }, {
 	regex: /cocaine/,
 	replace: "coke",
@@ -101,7 +59,6 @@ const foulSpanArray = [
 	/(c)(un)(t)/,
 	/(ni)(gg)(a)/,
 	/(ni)(gge)(r)/,
-	/(p)(o)(rn)/,
 	/((?:\W|^)d)(ic)(k)/,
 	/((?:\W|^)a)(ss)(es)(?!\w)/,
 	/((?:\W|^)a)(ss)(\W|$)/,
@@ -109,7 +66,6 @@ const foulSpanArray = [
 	/((?:\W|^)c)(u)(m)/,
 	/((?:\W|^)t)(i)(ts)/,
 	/(t)(it)(ties)/,
-	/(c)(o)(ck[^an])/, // doesnt match 'cockney', 'cockatrice'
 	/(wh)(or)(e)/,
 	/(p)(us)(sy)/,
 	/(s)(e)(x)/,
@@ -119,9 +75,7 @@ const foulSpanArray = [
 	/((?:\W|^)a)(n)(al[^oy])/,
 	/(pe)(n)(is)/,
 	/(va)(gi)(na)/,
-	/(dr)(u)(gs)/,
 	/(mast)(urb)(at)/,
-	/(dr)(u)(gs)/,
 ]
 
 // These will replace the html with another word in full
@@ -144,11 +98,9 @@ module.exports.sanitizeHtml = function (str) {
 }
 
 const sanitizeUsenameArray = [
-	/(a)(ss)()/, // HAS TO BE FIRST
 	...foulSpanArray,
 	/(d)(ic)(k)/,
 	/(r)(ap)(e|ist|ing)/,
-	/(c)(u)(m)/,
 	/(t)(i)(ts)/,
 	/(a)(n)(al)/,
 ]
