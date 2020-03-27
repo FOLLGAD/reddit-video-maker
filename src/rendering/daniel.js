@@ -62,7 +62,7 @@ module.exports.makeCall = async function (text, engine = 4, language = 1, voice 
 	while (tries < 1000) {
 		tries++
 		try {
-			// Timout at 3 seconds
+			// Timout at 5 seconds
 			let t = await timeoutPromise(5000, getTextPromise(engine, language, voice, newtext, acc, checksum))
 			return t
 		} catch (err) {

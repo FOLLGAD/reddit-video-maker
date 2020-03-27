@@ -557,7 +557,7 @@ const init = () => {
 			// where the video is found.
 
 			// $type: "null" to not break older models which did not have the "finished" prop
-			let amountOfPreviewsInOrder = await Video.findOne({ finished: { $type: "null" }, preview: true }).countDocuments().exec()
+			let amountOfPreviewsInOrder = await Video.findOne({ finished: { $type: "null" }, preview: true, failed: { $ne: true } }).countDocuments().exec()
 
 			if (amountOfPreviewsInOrder > 0) {
 				return res.status(400).json({ error: 'ALREADY_RENDERING_PREVIEW' })
@@ -580,6 +580,11 @@ const init = () => {
 							renderQueue.splice(index, 1)
 						}
 						Video.updateOne({ _id: vid._id }, { $set: { finished: new Date() } }).exec()
+					})
+					.catch((err) => {
+						console.error(err)
+						console.error("Preview failed")
+						Video.updateOne({ _id: vid._id }, { $set: { failed: true } }).exec()
 					})
 
 				res.json({ message: 'Rendering', file: vid.file })
