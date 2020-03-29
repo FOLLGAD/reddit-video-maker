@@ -126,7 +126,6 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
 			.outputOptions([
 				'-map 0:v',
 				'-map [a]',
-				'-shortest', // Cut off when video is done.
 			])
 			.audioChannels(1)
 			.output(outPath)
