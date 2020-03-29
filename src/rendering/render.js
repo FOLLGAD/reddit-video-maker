@@ -67,6 +67,8 @@ module.exports.render = async function (questionData, commentData, options) {
 	try {
 		console.log("Rendering question...")
 		let question = await renderQuestion({ questionData, voice: options.voice })
+		
+		console.log("Concatting...")
 
 		await renderFromComments(question, withTransitions, options.outPath, {
 			outro: options.outro,

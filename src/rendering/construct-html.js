@@ -100,9 +100,9 @@ module.exports.renderQuestion = async function ({ questionData, voice }) {
 	let videos = await sequentialWork(workLine, { voice, dsf: 3 })
 
 	let file = tmp.fileSync({ postfix: '.' + vidExtension })
-	let path = file.name
-	await simpleConcat(videos.filter(v => v != null), path)
-	return path
+	await simpleConcat(videos.filter(v => v != null), file.name)
+
+	return file.name
 }
 
 // Takes in the markup of the question/comment and the tts

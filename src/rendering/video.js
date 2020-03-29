@@ -141,45 +141,6 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
 	})
 }
 
-/* 
-	Overlays audio over a video clip, repeating it ad inifinitum.
-*/
-module.exports.combineVideoNoAudio = function (videoPath, outPath) {
-	return new Promise(async (res, rej) => {
-		let videoInfo = await probe(videoPath)
-		console.log("duration: ", videoInfo.format.duration)
-
-		ffmpeg(videoPath)
-			.videoCodec('libx264')
-			
-			.input('anullsrc=channel_layout=mono:sample_rate=24000')
-			.inputFormat('lavfi')
-			.audioCodec('aac')
-			.inputOptions([
-				'-stream_loop -1', // Repeats audio until it hits the previously set duration [https://stackoverflow.com/a/34280687/6912118]
-			])
-
-			.duration(videoInfo.format.duration) // Run for the duration of the video
-			.complexFilter(['[0:a][1:a] amerge=inputs=2 [a]'])
-			.fpsOutput(25)
-			.outputOptions([
-				'-map 0:v',
-				'-map [a]',
-				// '-shortest', // Cut off when video is done.
-			])
-			.audioChannels(1)
-			.output(outPath)
-			.on('end', () => {
-				res()
-			})
-			.on('error', err => {
-				console.error(err)
-				rej()
-			})
-			.exec()
-	})
-}
-
 module.exports.simpleConcat = function (videoPaths, outPath) {
 	return new Promise((res, rej) => {
 		getConcat(videoPaths)
