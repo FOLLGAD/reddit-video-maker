@@ -532,13 +532,19 @@ const init = () => {
 					promise: renderPromise,
 					file: vid.file,
 				})
-				renderPromise.then(() => {
-					let index = renderQueue.findIndex(r => r.file === vid.file)
-					if (index >= 0) {
-						renderQueue.splice(index, 1)
-					}
-					Video.updateOne({ _id: vid._id }, { $set: { finished: new Date() } }).exec()
-				})
+				renderPromise
+					.then(() => {
+						let index = renderQueue.findIndex(r => r.file === vid.file)
+						if (index >= 0) {
+							renderQueue.splice(index, 1)
+						}
+						Video.updateOne({ _id: vid._id }, { $set: { finished: new Date() } }).exec()
+					})
+					.catch((err) => {
+						console.error(err)
+						User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
+						Video.updateOne({ _id: vid._id }, { $set: { failed: true } }).exec() // Mark video as failed
+					})
 
 				res.json({ message: 'Rendering', file: vid.file })
 			} catch (error) {
