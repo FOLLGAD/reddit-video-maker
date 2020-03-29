@@ -31,7 +31,31 @@ async function renderFromComments(question, videolist, inputPath, {
 	await simpleConcat(queue, inputPath)
 }
 
-function addTransitions(videolist, transitionPath) {
+async function renderQuestionOnly(question, outPath, {
+	intro,
+	outro,
+	song,
+}) {
+	let soundFile
+
+	// Add song to question file
+	if (song) {
+		console.log("Adding sound...")
+		soundFile = tmp.fileSync({ postfix: '.' + vidExtension }).name
+		await combineVideoAudio(question, song, soundFile)
+	} else {
+		console.log("No song selected")
+		soundFile = question
+	}
+
+	let queue = [soundFile]
+	if (intro) queue.unshift(intro) // Insert intro at first pos
+	if (outro) queue.push(outro)
+
+	await simpleConcat(queue, outPath)
+}
+
+function insertTransitions(videolist, transitionPath) {
 	let arr = []
 	videolist.forEach(video => {
 		arr.push(video, transitionPath)
@@ -61,7 +85,7 @@ module.exports.render = async function (questionData, commentData, options) {
 	}
 
 	const withTransitions = options.transition ?
-		addTransitions(videolist, options.transition) :
+		insertTransitions(videolist, options.transition) :
 		videolist
 
 	try {
@@ -70,11 +94,17 @@ module.exports.render = async function (questionData, commentData, options) {
 		
 		console.log("Concatting...")
 
-		await renderFromComments(question, withTransitions, options.outPath, {
+		let vidOptions = {
 			outro: options.outro,
 			intro: options.intro,
 			song: options.song,
-		})
+		}
+
+		if (commentData.length > 0) {	
+			await renderFromComments(question, withTransitions, options.outPath, vidOptions)
+		} else {
+			await renderQuestionOnly(question, options.outPath, vidOptions)
+		}
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
 		console.error(e)
