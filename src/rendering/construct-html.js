@@ -5,6 +5,7 @@ const { launchPuppet, commentTemplate, questionTemplate } = require('./puppet')
 const { combineImageAudio, simpleConcat } = require('./video')
 const { compileHtml, hydrate, compileQuestion } = require('./utils')
 const { fetchAboutSubreddit } = require('./reddit-api')
+const ffmpeg = require('fluent-ffmpeg')
 
 const vidExtension = 'mp4'
 
@@ -14,6 +15,18 @@ async function sequentialWork(works, { voice, dsf = 2.4 }) {
 		try {
 			const puppet = launchPuppet(current[0], dsf)
 			const daniel = synthSpeech({ text: current[1], voice })
+				.then(filepath => {
+					// Speed up by a factor
+					let { name } = tmp.fileSync({ postfix: '.mp3' })
+					return new Promise(res => {
+						ffmpeg(filepath)
+							.audioFilter('atempo=1.15')
+							.output(name)
+							.on('end', () => res(name))
+							.exec()
+					})
+				})
+			
 			let todo = [puppet, daniel]
 
 			let file = tmp.fileSync({ postfix: '.' + vidExtension })
