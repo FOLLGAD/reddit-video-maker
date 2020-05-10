@@ -1,0 +1,115 @@
+let { renderComment, renderQuestion } = require('./construct-html')
+let { combineVideoAudio, simpleConcat } = require('./video')
+let tmp = require('tmp')
+
+const vidExtension = 'mp4'
+
+async function renderFromComments(question, videolist, inputPath, {
+	intro,
+	outro,
+	song,
+}) {
+	console.log("Adding transitions...")
+	let nosoundFile = tmp.fileSync({ postfix: '.' + vidExtension, prefix: 'transitions-' })
+	await simpleConcat(videolist, nosoundFile.name)
+
+	let soundFile
+
+	if (song) {
+		console.log("Adding sound...")
+		soundFile = tmp.fileSync({ postfix: '.' + vidExtension })
+		await combineVideoAudio(nosoundFile.name, song, soundFile.name)
+	} else {
+		console.log("No song selected")
+		soundFile = nosoundFile
+	}
+
+	let queue = [question, soundFile.name]
+	if (outro) queue.push(outro)
+	if (intro) queue.unshift(intro) // Insert as first element
+
+	await simpleConcat(queue, inputPath)
+}
+
+async function renderQuestionOnly(question, outPath, {
+	intro,
+	outro,
+	song,
+}) {
+	let soundFile
+
+	// Add song to question file
+	if (song) {
+		console.log("Adding sound...")
+		soundFile = tmp.fileSync({ postfix: '.' + vidExtension }).name
+		await combineVideoAudio(question, song, soundFile)
+	} else {
+		console.log("No song selected")
+		soundFile = question
+	}
+
+	let queue = [soundFile]
+	if (intro) queue.unshift(intro) // Insert intro at first pos
+	if (outro) queue.push(outro)
+
+	await simpleConcat(queue, outPath)
+}
+
+function insertTransitions(videolist, transitionPath) {
+	let arr = []
+	videolist.forEach(video => {
+		arr.push(video, transitionPath)
+	})
+
+	return arr
+}
+
+module.exports.render = async function (questionData, commentData, options) {
+	console.log('Started rendering')
+	let start = Date.now()
+	let videolist = []
+
+	console.log('Rendering', commentData.length, commentData.length === 1 ? 'comment' : 'comments')
+	for (let i = 0; i < commentData.length; i++) {
+		try {
+			let commentPath = await renderComment({
+				commentData: commentData[i],
+				voice: options.voice,
+				commentIndex: i,
+				callToAction: options.callToAction,
+			})
+			videolist.push(commentPath)
+			console.log("Successfully rendered comment", i)
+		} catch (e) {
+			console.error(e)
+			console.log("Comment number", i, "failed to render. It will not be added.")
+		}
+	}
+
+	const withTransitions = options.transition ?
+		insertTransitions(videolist, options.transition) :
+		videolist
+
+	try {
+		console.log("Rendering question...")
+		let question = await renderQuestion({ questionData, voice: options.voice })
+		
+		console.log("Concatting...")
+
+		let vidOptions = {
+			outro: options.outro,
+			intro: options.intro,
+			song: options.song,
+		}
+
+		if (commentData.length > 0) {	
+			await renderFromComments(question, withTransitions, options.outPath, vidOptions)
+		} else {
+			await renderQuestionOnly(question, options.outPath, vidOptions)
+		}
+		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
+	} catch (e) {
+		console.error(e)
+		throw new Error("Rendering failed")
+	}
+}

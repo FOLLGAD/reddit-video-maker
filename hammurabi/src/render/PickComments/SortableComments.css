@@ -1,0 +1,22 @@
+.draggable {
+	height: 15px;
+	margin-bottom: 3px;
+	border-radius: 999px;
+	background: rgb(225, 231, 234);
+	text-align: center;
+	line-height: 15px;
+	color: rgba(0, 0, 0, .70);
+	font-size: 0.8em;
+}
+.draggable.enabled {
+	color: white;
+	background-color: rgb(124, 211, 141);
+}
+.draggable.current {
+	color: white;
+	background-color: rgb(73, 152, 255);
+}
+.draggable-container {
+	width: 40px;
+	flex-shrink: 0;
+}
