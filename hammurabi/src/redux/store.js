@@ -17,7 +17,7 @@ const defaultState = {
 	user: {},
 
 
-	// Admin
+	// If Admin
 	users: [],
 
 	loggedIn: localStorage.getItem('loggedIn') === 'true',
@@ -26,7 +26,7 @@ const defaultState = {
 function state(state = defaultState, action) {
 	switch (action.type) {
 		case 'RESET_VIDEOSTATE':
-			return { ...state, question: null, processed: null, comments: [], theme: null, song: null }
+			return { ...state, question: null, processed: null, comments: [], theme: state.themes[0] ? state.themes[0]._id : undefined, song: null }
 		case 'SET_COMMENTS':
 			return Object.assign({}, state, {
 				comments: action.val,

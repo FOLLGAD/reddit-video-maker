@@ -403,36 +403,6 @@ const init = () => {
 
 			res.json(themes)
 		})
-		.get('/themes/:themeId/edit', async (req, res) => {
-			let theme = await Theme.findOne({
-				_id: req.params.themeId,
-				$or: [{ public: 'true' }, { owner: req.user._id }]
-			})
-				.populate('intro')
-				.populate('outro')
-				.populate('transition')
-
-			res.send(`
-				<form method="POST" enctype="application/x-www-form-urlencoded">
-					<label>
-						Call to action?
-						<select name="callToAction">
-							<option ${theme.callToAction && "selected"} value="true">Enabled</option>
-							<option ${!theme.callToAction && "selected"} value="false">Disabled</option>
-						</select>
-					</label>
-					<input type="submit" value="Save" />
-				</form>
-			`)
-		})
-		.post('/themes/:themeId/edit', bodyParser.urlencoded({ extended: true }), async (req, res) => {
-			let obj = {}
-			if (req.body.callToAction) {
-				obj.callToAction = req.body.callToAction == "true" ? true : false
-			}
-			await Theme.updateOne({ _id: req.params.themeId }, obj)
-			res.sendStatus(200)
-		})
 		// Create new theme
 		.post('/themes', async (req, res) => {
 			let theme = new Theme({
@@ -449,18 +419,15 @@ const init = () => {
 		.put('/themes/:theme', async (req, res) => {
 			let themeId = req.params.theme
 
-			let obj = {}
-			if (req.body.name) {
-				obj.name = req.body.name
-			}
-			if (req.body.voice) {
-				obj.voice = req.body.voice
-			}
-			if (req.body.voiceSpeed) {
-				obj.voiceSpeed = req.body.voiceSpeed
-			}
+			// DoBody extracts only the allowed params from the body object
+			let doBody = (allowed, body) => allowed.reduce((obj, p) =>
+				body[p] != undefined
+					? Object.assign(obj, { [p]: body[p] })
+					: obj, {})
 
-			await Theme.updateOne({ _id: themeId, owner: req.user._id }, obj)
+			let body = doBody(["name", "voice", "voiceSpeed", "callToAction"], req.body)
+
+			await Theme.updateOne({ _id: themeId, owner: req.user._id }, body)
 
 			res.json({ theme: themeId })
 		})
