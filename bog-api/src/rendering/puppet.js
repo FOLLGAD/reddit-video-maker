@@ -81,9 +81,12 @@ async function launchComment(markup, dsf) {
 
 		let topPadding = focus.y + focus.height // top padding required to focus the current element
 
-		let terracedTopPadding = topPadding - topPadding % (pageHeight * 0.8) - pageHeight * 0.1 // "Terrace" the top padding, causing it to only move when it needs to
+		let terracedTopPadding = topPadding - topPadding % (pageHeight * 0.8) - pageHeight * 0.05 * dsf // "Terrace" the top padding, causing it to only move when it needs to
 
-		let y = Math.max(Math.min(terracedTopPadding, height - pageHeight), 0)
+		// Min, x, max
+		let clamp = (min, x, max) => Math.min(max, Math.max(min, x))
+
+		let y = clamp(0, terracedTopPadding, height - pageHeight)
 
 		await page.screenshot({
 			encoding: 'binary',
