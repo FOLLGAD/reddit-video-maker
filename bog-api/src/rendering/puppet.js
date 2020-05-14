@@ -44,27 +44,27 @@ async function launchComment(markup, dsf) {
 
 	await page.setContent(markup)
 
-	let pageWidth = 1920 / dsf,
-		pageHeight = 1080 / dsf
+	let screenWidth = 1920 / dsf,
+		screenHeight = 1080 / dsf
 
 	await page.setViewport({
-		width: pageWidth,
-		height: pageHeight,
+		width: screenWidth,
+		height: screenHeight,
 		deviceScaleFactor: dsf,
 	})
 
-	let height = await page.$eval('.main-content', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
+	let pageHeight = await page.$eval('.main-content', e => e.scrollHeight) // warning: 'body' doesn't work for some reason, gives the same value almost always
 
 	await page.setViewport({
-		width: pageWidth,
-		height: height,
+		width: screenWidth,
+		height: pageHeight,
 		deviceScaleFactor: dsf,
 	})
 
 	let file = tmp.fileSync({ postfix: '.png' })
 	let filepath = file.name
 
-	if (height * dsf > 1080) {
+	if (pageHeight * dsf > 1080) {
 		// Expects there to be an element with class "center-elem", which is where it will put focus.
 		let focus = { y: 0, height: 0 }
 		try {
@@ -81,12 +81,12 @@ async function launchComment(markup, dsf) {
 
 		let topPadding = focus.y + focus.height // top padding required to focus the current element
 
-		let terracedTopPadding = topPadding - topPadding % (pageHeight * 0.8) - pageHeight * 0.05 * dsf // "Terrace" the top padding, causing it to only move when it needs to
+		let yCoord = topPadding - topPadding % (screenHeight * 0.7) - screenHeight * 0.05 * dsf // "Terrace" the top padding, causing it to only move when it needs to
 
 		// Min, x, max
 		let clamp = (min, x, max) => Math.min(max, Math.max(min, x))
 
-		let y = clamp(0, terracedTopPadding, height - pageHeight)
+		let y = clamp(0, yCoord, pageHeight - screenHeight)
 
 		await page.screenshot({
 			encoding: 'binary',
@@ -95,8 +95,8 @@ async function launchComment(markup, dsf) {
 			clip: {
 				x: 0,
 				y: y,
-				width: pageWidth,
-				height: pageHeight,
+				width: screenWidth,
+				height: screenHeight,
 			},
 		})
 	} else {
@@ -105,9 +105,9 @@ async function launchComment(markup, dsf) {
 			type: 'png',
 			clip: {
 				x: 0,
-				y: -(pageHeight - height) / 2, // Center on screen
-				width: pageWidth,
-				height: pageHeight,
+				y: -(screenHeight - pageHeight) / 2, // Center on screen
+				width: screenWidth,
+				height: screenHeight,
 			},
 		})
 		fs.writeFileSync(filepath, sc, "binary")
