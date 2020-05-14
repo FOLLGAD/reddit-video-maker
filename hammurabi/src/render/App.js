@@ -11,11 +11,24 @@ import PickComments from './PickComments/index'
 import Question from './Question'
 import SelfText from './SelfText'
 
-
 class App extends Component {
+	constructor(props) {
+		super(props)
+
+		this.beforeUnload = this.beforeUnload.bind(this)
+	}
 	componentDidMount() {
 		getThemes()
 		getSongs()
+		window.addEventListener('beforeunload', this.beforeUnload)
+	}
+	componentWillUnmount() {
+		window.removeEventListener('beforeunload', this.beforeUnload)
+	}
+	beforeUnload(e) {
+		if (this.props.question) {
+			e.preventDefault()
+		}
 	}
 	render() {
 		return (
