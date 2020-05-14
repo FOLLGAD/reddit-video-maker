@@ -31,7 +31,6 @@ class AuthedRouter extends React.Component {
                     <ThemeEdit path="/themes/:themeId" />
                     <Logout path="/logout" />
                     <Account path="/account" />
-                    <Testing path="/__testing_ground" />
                     <AdminPath path="/admin">
                         <Admin path="/" />
                     </AdminPath>
