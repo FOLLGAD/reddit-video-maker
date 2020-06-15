@@ -1,4 +1,4 @@
-# Au service de la Bogge
+# Project BOG
 
 Monorepo for BOG and Hammurabi
 
