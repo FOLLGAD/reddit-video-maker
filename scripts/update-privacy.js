@@ -1,4 +1,5 @@
 const fs = require("fs")
+const path = require("path")
 const readline = require("readline")
 const { google } = require("googleapis")
 const OAuth2 = google.auth.OAuth2
@@ -17,7 +18,7 @@ const TOKEN_PATH = TOKEN_DIR + "youtube-nodejs-quickstart.json"
 function authC() {
 	return new Promise((res) => {
 		// Load client secrets from a local file.
-		fs.readFile(__dirname + "/client_secret.json", (err, content) => {
+		fs.readFile(path.join(__dirname, "../secrets/client_secret.json", (err, content) => {
 			if (err) {
 				console.log("Error loading client secret file: " + err)
 				return
