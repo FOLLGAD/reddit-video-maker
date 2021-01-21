@@ -7,6 +7,8 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 
+require("./cronjob")
+
 const { normalizeSong, normalizeVideo } = require('../rendering/video')
 const { fetchThread, initAuth } = require('../rendering/reddit-api')
 
@@ -600,8 +602,8 @@ const init = () => {
 			// Long polling for getting the video state
 			let file = req.params.videoFileId
 
-			let vid
-			if (vid = renderQueue.find(q => q.file == file)) {
+			let vid = renderQueue.find(q => q.file == file)
+			if (vid) {
 				await vid.promise
 			}
 
