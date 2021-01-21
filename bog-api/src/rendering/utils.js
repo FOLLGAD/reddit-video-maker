@@ -42,7 +42,7 @@ module.exports.getBestName = function (origFileName, dir) {
 	let thread = lastDotIndex !== -1 ? origFileName.slice(0, lastDotIndex) : origFileName
 
 	let count = 0
-	while (true) {
+	while (count < 10000) {
 		count++
 		let finalName = (count === 0 ? thread : `${thread}-${count}`) + fileExt
 		let exists = fs.existsSync(path.join(dir, finalName))
@@ -55,7 +55,7 @@ module.exports.getBestName = function (origFileName, dir) {
 }
 
 // Reddit-style points formatting
-formatPoints = function (num) {
+const formatPoints = function (num) {
 	let d = parseInt(num)
 	if (d >= 1000) {
 		return (Math.round(d / 100) / 10).toFixed(1) + 'k'
@@ -227,11 +227,13 @@ module.exports.hydrate = function hydrate(comment, upvoteProb) {
 	if (comment.replies) {
 		comment.replies = comment.replies.map(reply => hydrate(reply, upvoteProb))
 	}
-	comment.all_awardings = comment.all_awardings.map(d => ({
-		is_enabled: d.is_enabled,
-		count: d.count,
-		icon_url: d.resized_icons[1].url, // Pick the 32x32 image (has index of 1)
-	}))
+	comment.all_awardings = comment.all_awardings
+		.slice(0, 2) // Only display the 3 first awards
+		.map(d => ({
+			is_enabled: d.is_enabled,
+			count: d.count,
+			icon_url: d.resized_icons[1].url, // Pick the 32x32 image (has index of 1)
+		}))
 	comment.showBottom = true
 	comment.upvoted = Math.random() < upvoteProb // Some of the posts will randomly be seen as upvoted
 	comment.authorHtml = sanitizeUsername(comment.author)
