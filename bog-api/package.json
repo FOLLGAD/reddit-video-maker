@@ -28,7 +28,7 @@
     "node-time-ago": "^1.0.0",
     "open": "^6.3.0",
     "pre-commit": "^1.2.2",
-    "puppeteer": "^1.18.1",
+    "puppeteer": "^5.5.0",
     "stripe": "^7.9.1",
     "tmp": "^0.1.0",
     "uuid": "^3.3.3"
