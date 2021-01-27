@@ -11,7 +11,7 @@ let tempFolderInfo = tmp.dirSync()
 let tempFolder = tempFolderInfo.name
 
 function getConcat(videoPaths) {
-	let txt = tmp.fileSync()
+	let txt = tmp.fileSync({ postfix: ".txt" })
 	let tempPath = txt.name
 
 	fs.writeFileSync(tempPath, videoPaths.map(d => `file '${d}'\n`).join(''))
