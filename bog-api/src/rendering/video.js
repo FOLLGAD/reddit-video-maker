@@ -31,6 +31,8 @@ const probe = function (path) {
 	})
 }
 
+module.exports.probe = probe
+
 // Make the song into the correct type for conformity
 module.exports.normalizeSong = function (songPath, outputPath) {
 	return new Promise((res, rej) => {
@@ -109,19 +111,36 @@ module.exports.combineImageAudio = function (imagePath, audioPath, outPath, dela
 /* 
 	Overlays audio over a video clip, repeating it ad inifinitum.
 */
-module.exports.combineVideoAudio = function (videoPath, audioPath, outPath) {
+module.exports.combineVideoAudio = function (videoPath, audioPath, outPath, volume = 1.00, skipSeconds = 0) {
 	return new Promise(async (res, rej) => {
-		let videoInfo = await probe(videoPath)
+		const videoInfo = await probe(videoPath)
+		const audioExists = videoInfo.streams.some(s => s.codec_type === "audio")
 
-		ffmpeg(videoPath)
+		let query = ffmpeg(videoPath)
 			.videoCodec('libx264')
 			.input(audioPath)
+
+		if (skipSeconds > 0) {
+			query.seekInput(skipSeconds) // Skip the audio
+		}
+
+		query
 			.audioCodec('aac')
 			.inputOptions([
 				'-stream_loop -1', // Repeats audio until it hits the previously set duration [https://stackoverflow.com/a/34280687/6912118]
 			])
 			.duration(videoInfo.format.duration) // Run for the duration of the video
-			.complexFilter(['[0:a][1:a] amerge=inputs=2 [a]'])
+
+		if (audioExists) {
+			// https://superuser.com/a/1348093
+			query.complexFilter([`[1:a]volume=${volume},apad[A];[0:a][A]amerge[a]`])
+		} else {
+			// An audiostream doesn't exist for the video, so amerge will give an error.
+			// Instead, just use the audio from the song.
+			query.complexFilter([`[1:a]volume=${volume},apad[a]`])
+		}
+
+		query
 			.fpsOutput(25)
 			.outputOptions([
 				'-map 0:v',
