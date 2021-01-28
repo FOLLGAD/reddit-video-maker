@@ -43,7 +43,7 @@ async function renderFromComments(question, videolist, outPath, {
 			const wholeDuration = videoInfo.format.duration
 			const outroTimestamp = wholeDuration - outroDuration
 
-			const volume = (parseFloat(volume) || 20) / 100
+			const realVolume = (parseFloat(volume) || 20) / 100
 
 			return await new Promise((res, rej) =>
 				Ffmpeg(withoutSong.name)
@@ -57,7 +57,7 @@ async function renderFromComments(question, videolist, outPath, {
 					// If t <= endTime(intro) then vol = 0, 
 					// else if t > startTime(outro) then vol = loweredVol, 
 					// else vol = 1.00
-					.complexFilter([`[1:a]volume=eval=frame:volume='if(lte(t, ${introDuration}), 0.00, if(gt(t, ${outroTimestamp}), 1.00, ${volume}))' , apad[A] ; [0:a][A]amerge[a]`])
+					.complexFilter([`[1:a]volume=eval=frame:volume='if(lte(t, ${introDuration}), 0.00, if(gt(t, ${outroTimestamp}), 1.00, ${realVolume}))' , apad[A] ; [0:a][A]amerge[a]`])
 					// .complexFilter([`[0:a][1:a]amerge[a]`])
 					.outputOptions([
 						'-map 0:v',
