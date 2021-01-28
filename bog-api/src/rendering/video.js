@@ -134,18 +134,27 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath, volu
 		if (audioExists) {
 			// https://superuser.com/a/1348093
 			query.complexFilter([`[1:a]volume=${volume},apad[A];[0:a][A]amerge[a]`])
-		} else {
+				.outputOptions([
+					'-map 0:v',
+					'-map [a]',
+				])
+		} else if (volume !== 1.00) {
 			// An audiostream doesn't exist for the video, so amerge will give an error.
 			// Instead, just use the audio from the song.
 			query.complexFilter([`[1:a]volume=${volume}[a]`])
+				.outputOptions([
+					'-map 0:v',
+					'-map [a]',
+				])
+		} else {
+			query.outputOptions([
+				'-map 0:v',
+				'-map 1:a',
+			])
 		}
 
 		query
 			.fpsOutput(25)
-			.outputOptions([
-				'-map 0:v',
-				'-map [a]',
-			])
 			.audioChannels(1)
 			.output(outPath)
 			.on('end', () => {
