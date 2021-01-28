@@ -358,7 +358,7 @@ const init = () => {
 		.post('/songs', upload.single('song'), async (req, res) => {
 			const origSong = req.file
 
-			let newFileName = uuidFileName('mp3') // Force mp3
+			let newFileName = uuidFileName('aac') // Force aac file format
 			let newFilePath = toFilesDir(newFileName)
 			await normalizeSong(origSong.path, newFilePath)
 
