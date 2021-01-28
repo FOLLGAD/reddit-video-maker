@@ -73,14 +73,18 @@ async function renderFromRequest({ options, questionData, commentData, name = nu
 	})
 	await vid.save()
 
-	let renderOptions = {
-		...theme,
+	let renderOptions = Object.assign({}, theme, {
 		outPath: toFilesDir(videoFile.filename),
 		intro: toFilesDir(theme.intro && theme.intro.filename),
 		transition: toFilesDir(theme.transition && theme.transition.filename),
 		outro: toFilesDir(theme.outro && theme.outro.filename),
 		song: song && toFilesDir(song.file.filename),
-	}
+		name: theme.name,
+		voice: theme.voice,
+		voiceSpeed: theme.voiceSpeed,
+		volume: theme.volume,
+		callToAction: theme.callToAction,
+	})
 
 	let renderPromise = render(questionData, commentData, renderOptions)
 
