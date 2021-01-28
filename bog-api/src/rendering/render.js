@@ -1,47 +1,88 @@
 let { renderComment, renderQuestion } = require('./construct-html')
 let { combineVideoAudio, simpleConcat, probe } = require('./video')
 let tmp = require('tmp')
+const Ffmpeg = require('fluent-ffmpeg')
+const fs = require('fs/promises')
 
 const vidExtension = 'mp4'
 
-async function renderFromComments(question, videolist, inputPath, {
+async function renderFromComments(question, videolist, outPath, {
 	intro,
 	outro,
 	song,
 }) {
 	let dir = tmp.dirSync({ unsafeCleanup: true })
-	console.log("Adding transitions...")
-	let noSongFile = tmp.fileSync({ dir: dir.name, postfix: '.' + vidExtension, prefix: 'transitions-' })
-	await simpleConcat(videolist, noSongFile.name)
 
-	let withSongFile
+	console.log("Adding transitions, intro and outro...")
+	let withoutSong = tmp.fileSync({ tmpdir: dir.name, postfix: '.' + vidExtension, prefix: 'transitions-' })
 
-	let songVolDuringComments = 0.5
+	let fullList = [question, ...videolist]
+
+	let introDuration = 0
+	if (intro) {
+		let introProbe = await probe(intro)
+		introDuration = parseFloat(introProbe.format.duration)
+		fullList.unshift(intro)
+	}
+
+	let outroDuration = 0
+	if (outro) {
+		let outroProbe = await probe(outro)
+		outroDuration = parseFloat(outroProbe.format.duration)
+		fullList.push(outro)
+	}
+
+	await simpleConcat(fullList, withoutSong.name)
+
+	let loweredVol = 0.5
 
 	if (song) {
-		// Add song to comments at a lowered volume
-		console.log("Adding sound...")
-		withSongFile = tmp.fileSync({ dir: dir.name, postfix: '.' + vidExtension })
-		await combineVideoAudio(noSongFile.name, song, withSongFile.name, songVolDuringComments)
+		console.log("Adding song...")
+
+		const f = async () => {
+			const videoInfo = await probe(withoutSong.name)
+			const wholeDuration = videoInfo.format.duration
+			const outroTimestamp = wholeDuration - outroDuration
+
+			return await new Promise((res, rej) =>
+				Ffmpeg(withoutSong.name)
+					.videoCodec('libx264')
+					.input(song)
+					.audioCodec('aac')
+					.inputOptions([
+						'-stream_loop -1', // Repeats audio until it hits the previously set duration [https://stackoverflow.com/a/34280687/6912118]
+					])
+					.duration(wholeDuration) // Run for the duration of the video
+					// If t <= endTime(intro) then vol = 0, 
+					// else if t > startTime(outro) then vol = loweredVol, 
+					// else vol = 1.00
+					.complexFilter([`[1:a]volume=eval=frame:volume='if(lte(t, ${introDuration}), 0.00, if(gt(t, ${outroTimestamp}), 1.00, ${loweredVol}))' , apad[A] ; [0:a][A]amerge[a]`])
+					// .complexFilter([`[0:a][1:a]amerge[a]`])
+					.outputOptions([
+						'-map 0:v',
+						'-map [a]',
+					])
+					.fpsOutput(25)
+					.audioFrequency(24000)
+					.audioChannels(1)
+					.output(outPath)
+					.on('end', () => {
+						res()
+					})
+					.on('error', err => {
+						console.error(err)
+						rej()
+					})
+					.exec()
+			)
+		}
+
+		f()
 	} else {
-		// Don't add song to file
 		console.log("No song selected")
-		withSongFile = noSongFile
+		await fs.rename(withoutSong.name, outPath)
 	}
 
-	let queue = [question, withSongFile.name]
-	if (outro) {
-		let commentsProbe = await probe(withSongFile.name)
-		let commentsDuration = parseFloat(commentsProbe.format.duration)
-		let outroWithSong = tmp.fileSync({ tmpdir: dir.name, postfix: "." + vidExtension, prefix: "outro-" })
-
-		await combineVideoAudio(outro, song, outroWithSong.name, 1.00, commentsDuration)
-
-		queue.push(outroWithSong.name)
-	}
-	if (intro) queue.unshift(intro) // Insert as first element
-
-	await simpleConcat(queue, inputPath)
 	dir.removeCallback()
 }
 

@@ -49,12 +49,23 @@ module.exports.normalizeSong = function (songPath, outputPath) {
 
 // Same as normalizeSong but for video
 module.exports.normalizeVideo = function (songPath, outputPath) {
+	console.log("normalizing video")
 	return new Promise((res, rej) => {
 		ffmpeg(songPath)
+			// Add a silent audio track (in case there is no audio already)
+			// https://stackoverflow.com/a/12375018
+			.inputOptions([
+				'-f lavfi',
+				'-i anullsrc=channel_layout=mono:sample_rate=24000',
+			])
 			.audioCodec('aac')
 			.audioFrequency(24000)
 			.audioChannels(1)
 			.fps(25)
+			.outputOptions([
+				'-pix_fmt yuv420p',
+				'-shortest',
+			])
 			.videoCodec('libx264')
 			.on('end', () => {
 				res()
@@ -93,6 +104,7 @@ module.exports.combineImageAudio = function (imagePath, audioPath, outPath, dela
 			.input(audioPath)
 			.audioCodec('aac')
 			.audioFrequency(24000)
+			.audioChannels(1)
 			.outputOptions([
 				'-pix_fmt yuv420p',
 			])
@@ -155,6 +167,7 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath, volu
 
 		query
 			.fpsOutput(25)
+			.audioFrequency(24000)
 			.audioChannels(1)
 			.output(outPath)
 			.on('end', () => {
