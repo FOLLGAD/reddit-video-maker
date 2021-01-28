@@ -85,6 +85,7 @@ class Theme extends React.Component {
 						<Form.Input
 							name="name"
 							type="text"
+							label="Theme name"
 							placeholder="Name"
 							value={this.state.form.name}
 							onChange={this.handleChange}>
@@ -92,17 +93,29 @@ class Theme extends React.Component {
 						<Form.Select
 							name="voice"
 							placeholder="Voice"
+							label="TTS voice engine"
 							value={this.state.form.voice}
 							options={voices}
 							onChange={this.handleChange}>
 						</Form.Select>
+						<Form.Input
+							name="volume"
+							type="number"
+							placeholder="Volume"
+							label="Music volume while tts is reading (in percent)"
+							min={0}
+							max={100}
+							step={1}
+							value={this.state.form.volume}
+							onChange={this.handleChange}
+						/>
 						{this.props.isAdmin &&
 							<Form.Checkbox
-							name="callToAction"
-							placeholder="Call to action?"
-							label="Call to action"
-							checked={this.state.form.callToAction}
-							onChange={this.handleCheckboxChange}>
+								name="callToAction"
+								placeholder="Call to action?"
+								label="Call to action"
+								checked={this.state.form.callToAction}
+								onChange={this.handleCheckboxChange}>
 							</Form.Checkbox>
 						}
 

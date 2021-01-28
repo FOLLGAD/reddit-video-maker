@@ -58,6 +58,7 @@ const ThemeSchema = new Schema({
 
 	voice: { type: String, enum: ['daniel', 'google-us', 'google-uk'], default: 'daniel', select: 1 },
 	voiceSpeed: { type: Number, min: 0.2, max: 5, default: 1 },
+	volume: { type: Number, min: 0.0, max: 100.0, default: 20.0 },
 
 	owner: { type: ObjectId, select: 0, ref: 'User' },
 	updated: { type: Date, default: Date.now },
