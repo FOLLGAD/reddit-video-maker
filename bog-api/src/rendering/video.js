@@ -93,6 +93,7 @@ module.exports.combineImageAudio = function (imagePath, audioPath, outPath, dela
 			.input(audioPath)
 			.audioCodec('aac')
 			.audioFrequency(24000)
+			.audioChannels(1)
 			.outputOptions([
 				'-pix_fmt yuv420p',
 			])
@@ -155,6 +156,7 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath, volu
 
 		query
 			.fpsOutput(25)
+			.audioFrequency(24000)
 			.audioChannels(1)
 			.output(outPath)
 			.on('end', () => {
