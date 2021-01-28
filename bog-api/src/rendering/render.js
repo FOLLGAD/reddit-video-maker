@@ -43,6 +43,8 @@ async function renderFromComments(question, videolist, outPath, {
 			const wholeDuration = videoInfo.format.duration
 			const outroTimestamp = wholeDuration - outroDuration
 
+			const volume = (parseFloat(volume) || 20) / 100
+
 			return await new Promise((res, rej) =>
 				Ffmpeg(withoutSong.name)
 					.videoCodec('libx264')
