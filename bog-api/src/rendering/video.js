@@ -137,7 +137,7 @@ module.exports.combineVideoAudio = function (videoPath, audioPath, outPath, volu
 		} else {
 			// An audiostream doesn't exist for the video, so amerge will give an error.
 			// Instead, just use the audio from the song.
-			query.complexFilter([`[1:a]volume=${volume},apad[a]`])
+			query.complexFilter([`[1:a]volume=${volume}[a]`])
 		}
 
 		query

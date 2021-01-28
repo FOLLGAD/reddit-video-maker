@@ -9,7 +9,7 @@ async function renderFromComments(question, videolist, inputPath, {
 	outro,
 	song,
 }) {
-	let dir = tmp.dirSync()
+	let dir = tmp.dirSync({ unsafeCleanup: true })
 	console.log("Adding transitions...")
 	let noSongFile = tmp.fileSync({ dir: dir.name, postfix: '.' + vidExtension, prefix: 'transitions-' })
 	await simpleConcat(videolist, noSongFile.name)
@@ -33,7 +33,7 @@ async function renderFromComments(question, videolist, inputPath, {
 	if (outro) {
 		let commentsProbe = await probe(withSongFile.name)
 		let commentsDuration = parseFloat(commentsProbe.format.duration)
-		let outroWithSong = tmp.fileSync({ dir: dir.name, postfix: "." + vidExtension, prefix: "outro-" })
+		let outroWithSong = tmp.fileSync({ tmpdir: dir.name, postfix: "." + vidExtension, prefix: "outro-" })
 
 		await combineVideoAudio(outro, song, outroWithSong.name, 1.00, commentsDuration)
 
@@ -74,8 +74,11 @@ async function renderQuestionOnly(question, outPath, {
 
 function insertTransitions(videolist, transitionPath) {
 	let arr = []
-	videolist.forEach(video => {
-		arr.push(video, transitionPath)
+	videolist.forEach((video, i, a) => {
+		arr.push(video)
+		if (i !== a.length - 1) {
+			arr.push(transitionPath)
+		}
 	})
 
 	return arr
