@@ -77,7 +77,7 @@ async function renderFromComments(question, videolist, outPath, {
 			)
 		}
 
-		f()
+		await f()
 	} else {
 		console.log("No song selected")
 		await fs.rename(withoutSong.name, outPath)
