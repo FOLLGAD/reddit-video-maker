@@ -427,7 +427,7 @@ const init = () => {
 					? Object.assign(obj, { [p]: body[p] })
 					: obj, {})
 
-			let body = doBody(["name", "voice", "voiceSpeed", "callToAction"], req.body)
+			let body = doBody(["name", "voice", "voiceSpeed", "callToAction", "volume"], req.body)
 
 			await Theme.updateOne({ _id: themeId, owner: req.user._id }, body)
 

@@ -10,6 +10,7 @@ async function renderFromComments(question, videolist, outPath, {
 	intro,
 	outro,
 	song,
+	volume,
 }) {
 	let dir = tmp.dirSync({ unsafeCleanup: true })
 
@@ -34,8 +35,6 @@ async function renderFromComments(question, videolist, outPath, {
 
 	await simpleConcat(fullList, withoutSong.name)
 
-	let loweredVol = 0.5
-
 	if (song) {
 		console.log("Adding song...")
 
@@ -56,7 +55,7 @@ async function renderFromComments(question, videolist, outPath, {
 					// If t <= endTime(intro) then vol = 0, 
 					// else if t > startTime(outro) then vol = loweredVol, 
 					// else vol = 1.00
-					.complexFilter([`[1:a]volume=eval=frame:volume='if(lte(t, ${introDuration}), 0.00, if(gt(t, ${outroTimestamp}), 1.00, ${loweredVol}))' , apad[A] ; [0:a][A]amerge[a]`])
+					.complexFilter([`[1:a]volume=eval=frame:volume='if(lte(t, ${introDuration}), 0.00, if(gt(t, ${outroTimestamp}), 1.00, ${volume}))' , apad[A] ; [0:a][A]amerge[a]`])
 					// .complexFilter([`[0:a][1:a]amerge[a]`])
 					.outputOptions([
 						'-map 0:v',
@@ -157,16 +156,10 @@ module.exports.render = async function (questionData, commentData, options) {
 
 		console.log("Concatting...")
 
-		let vidOptions = {
-			outro: options.outro,
-			intro: options.intro,
-			song: options.song,
-		}
-
 		if (commentData.length > 0) {
-			await renderFromComments(question, withTransitions, options.outPath, vidOptions)
+			await renderFromComments(question, withTransitions, options.outPath, options)
 		} else {
-			await renderQuestionOnly(question, options.outPath, vidOptions)
+			await renderQuestionOnly(question, options.outPath, options)
 		}
 		console.log("Finished render in", (Date.now() - start) / 1000 + "s")
 	} catch (e) {
