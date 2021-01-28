@@ -43,7 +43,10 @@ async function renderFromComments(question, videolist, outPath, {
 			const wholeDuration = videoInfo.format.duration
 			const outroTimestamp = (wholeDuration - outroDuration) || 9999
 
-			const realVolume = (parseFloat(volume) || 20) / 100
+			let realVolume = (parseFloat(volume)) / 100
+			if (isNaN(realVolume)) realVolume = 0.2
+
+			console.log("vol:", realVolume, volume)
 
 			return await new Promise((res, rej) =>
 				Ffmpeg(withoutSong.name)
