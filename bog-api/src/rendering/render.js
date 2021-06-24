@@ -3,6 +3,7 @@ let { combineVideoAudio, simpleConcat, probe } = require("./video");
 let tmp = require("tmp");
 const Ffmpeg = require("fluent-ffmpeg");
 const fs = require("fs/promises");
+const fstest = require("fs");
 
 const vidExtension = "mp4";
 
@@ -54,6 +55,7 @@ async function renderFromComments(
 
       return await new Promise((res, rej) =>
         Ffmpeg(withoutSong.name)
+          .outputOptions("-c:s mov_text")
           .videoCodec("libx264")
           .input(song)
           .audioCodec("aac")
@@ -68,7 +70,7 @@ async function renderFromComments(
             `[1:a]volume=eval=frame:volume='if(lte(t, ${introDuration}), 0.00, if(gt(t, ${outroTimestamp}), max(0.0, min(1.0, ${realVolume} + (t-${outroTimestamp}) / 2)), ${realVolume}))' , apad[A] ; [0:a][A]amerge[a]`,
           ])
           // .complexFilter([`[0:a][1:a]amerge[a]`])
-          .outputOptions(["-map 0:v", "-map [a]", "-c:s mov_text"])
+          .outputOptions(["-map 0:v", "-map [a]", "-map 0:s"])
           .fpsOutput(25)
           .audioFrequency(24000)
           .audioChannels(1)
