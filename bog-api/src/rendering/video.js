@@ -174,6 +174,7 @@ module.exports.combineVideoAudio = function (
       .inputOptions([
         "-stream_loop -1", // Repeats audio until it hits the previously set duration [https://stackoverflow.com/a/34280687/6912118]
       ])
+      .outputOptions("-c:s mov_text")
       .duration(videoInfo.format.duration); // Run for the duration of the video
 
     if (audioExists) {
