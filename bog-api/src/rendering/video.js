@@ -100,8 +100,8 @@ module.exports.combineImageAudio = function (
   text = null
 ) {
   return new Promise(async (res, rej) => {
+    const audioInfo = await probe(audioPath);
     const totalTime = audioInfo.format.duration + delay;
-    let audioInfo = await probe(audioPath);
     const f = ffmpeg(imagePath)
       .inputOptions(["-stream_loop 1"])
       .videoCodec("libx264")
