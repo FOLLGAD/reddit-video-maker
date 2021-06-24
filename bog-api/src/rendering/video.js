@@ -130,7 +130,7 @@ module.exports.combineImageAudio = function (
         .padStart(2, "0");
       const m = (Math.floor(endTime / 60) % 60).toString().padStart(2, "0");
       const s = (Math.floor(endTime) % 60).toString().padStart(2, "0");
-      const ms = (endTime - Math.floor(endtime))
+      const ms = (endTime - Math.floor(endTime))
         .toString()
         .padEnd(3, "0")
         .slice(0, 3);
