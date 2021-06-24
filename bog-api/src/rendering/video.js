@@ -137,12 +137,12 @@ module.exports.combineImageAudio = function (
 
       // Typical SRT file format
       fs.writeFileSync(
-        subFile,
+        subFile.name,
         `1
 00:00:00,000 --> ${h}:${m}:${s},${ms}
 ${text}`
       );
-      f.input(subFile).outputOptions("-c:s mov_text");
+      f.input(subFile.name).outputOptions("-c:s mov_text");
     }
 
     f.exec();
