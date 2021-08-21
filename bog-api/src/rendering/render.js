@@ -70,7 +70,7 @@ async function renderFromComments(
             `[1:a]volume=eval=frame:volume='if(lte(t, ${introDuration}), 0.00, if(gt(t, ${outroTimestamp}), max(0.0, min(1.0, ${realVolume} + (t-${outroTimestamp}) / 2)), ${realVolume}))' , apad[A] ; [0:a][A]amerge[a]`,
           ])
           // .complexFilter([`[0:a][1:a]amerge[a]`])
-          .outputOptions(["-map 0:v", "-map [a]", "-map 0:s"])
+          .outputOptions(["-map 0:v", "-map [a]", "-map 0:s?"])
           .fpsOutput(25)
           .audioFrequency(24000)
           .audioChannels(1)
