@@ -119,7 +119,7 @@ const VideoSchema = new Schema({
   }, // 24 hours before expiration
   downloads: { type: Number, default: 0 },
   preview: { type: Boolean, default: false },
-  request_body: Object,
+  request_body: { type: Object, select: 0 },
 });
 
 VideoSchema.pre("deleteMany", async function (next) {
