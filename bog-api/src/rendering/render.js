@@ -3,7 +3,6 @@ let { combineVideoAudio, simpleConcat, probe } = require("./video");
 let tmp = require("tmp");
 const Ffmpeg = require("fluent-ffmpeg");
 const fs = require("fs/promises");
-const fstest = require("fs");
 
 const vidExtension = "mp4";
 
