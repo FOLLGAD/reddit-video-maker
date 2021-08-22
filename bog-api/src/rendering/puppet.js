@@ -30,7 +30,7 @@ module.exports.startInstance = async function startInstance() {
   if (!browser) {
     browser = await puppeteer.launch({
       args: ["font-render-hinting=none"],
-      executablePath: "/opt/homebrew/bin/chromium",
+      // executablePath: "/opt/homebrew/bin/chromium",
     });
   } else {
     console.log("Puppeteer already started");
