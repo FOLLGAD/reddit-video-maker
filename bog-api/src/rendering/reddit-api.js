@@ -19,8 +19,11 @@ async function getAuth() {
 
 let access_token
 module.exports.initAuth = () => {
-	updateAuth()
-	setInterval(() => updateAuth(), 1000 * 60 * 60) // Update access token every hour
+  if (!access_token) {
+    setInterval(() => updateAuth(), 1000 * 60 * 60) // Update access token every hour
+    return updateAuth()
+  }
+  return Promise.resolve(access_token)
 }
 
 async function updateAuth() {
@@ -61,6 +64,8 @@ module.exports.fetchSubreddit = function (subreddit, options = defaultOpts) {
 }
 
 module.exports.fetchAboutSubreddit = async function (subreddit) {
+  await module.exports.initAuth()
+
 	if (subreddit.indexOf('r/') === 0) {
 		subreddit = subreddit.slice(2)
 	}

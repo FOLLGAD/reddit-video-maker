@@ -1,11 +1,22 @@
 const { User, Theme, Video, Song, File } = require('./models')
-const { createToken, verifyToken, uuidFileName, vidExtension, renderFromRequest, toFilesDir } = require('./utils')
+const { createToken, verifyToken, uuidFileName, vidExtension, toFilesDir, legacyRenderFromRequest } = require('./utils')
 const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const { promisify } = require("util")
+
+const workerFarm = require('worker-farm')
+const workers = workerFarm({
+  maxCallsPerWorker: 4,
+  maxConcurrentWorkers: require('os').cpus().length,
+  maxConcurrentCallsPerWorker: 1,
+  autoStart: true,
+  maxRetries: 5,
+}, require.resolve('./utils'), ["syncRenderFromRequest"])
+const workersAsync = promisify(workers.syncRenderFromRequest)
 
 require("./cronjob")
 
@@ -517,39 +528,29 @@ const init = () => {
 				return res.status(400).json({ error: "NOT_ENOUGH_CREDITS" })
 			}
 
+      let vid = await Video.create({
+        name: (req.body.name || req.body.questionData?.title) + " (Not started)",
+        owner: req.user._id,
+        preview: false,
+      });
+
 			let cost = getVideoPrice()
 			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost, videoCount: 1 } }).exec()
 
-			let vid, renderPromise
-
 			try {
-				let vidRes = await renderFromRequest(req.body, req.user._id)
-				vid = vidRes.vid
-				renderPromise = vidRes.renderPromise
-
-				renderQueue.push({
-					promise: renderPromise,
-					file: vid.file,
-				})
-				renderPromise
+        workersAsync(vid._id, req.body, req.user._id)
 					.then(() => {
-						let index = renderQueue.findIndex(r => r.file === vid.file)
-						if (index >= 0) {
-							renderQueue.splice(index, 1)
-						}
-						Video.updateOne({ _id: vid._id }, { $set: { finished: new Date() } }).exec()
-					})
-					.catch((err) => {
-						console.error(err)
-						User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
-						Video.updateOne({ _id: vid._id }, { $set: { failed: true } }).exec() // Mark video as failed
-					})
+            Video.updateOne({ _id: vid._id }, { $set: { finished: new Date() } }).exec()
+          })
+          .catch(() => {
+            User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
+            Video.updateOne({ _id: vid._id }, { $set: { failed: true } }).exec() // Mark video as failed
+          })
 
-				res.json({ message: 'Rendering', file: vid.file })
+				res.json({ message: 'Rendering' })
 			} catch (error) {
-				console.error(error)
+				console.error("Something third went wrong:", error)
 				User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
-				Video.updateOne({ _id: vid._id }, { $set: { failed: true } }).exec() // Mark video as failed
 			}
 		})
 		.post('/preview', async (req, res) => {
@@ -572,7 +573,7 @@ const init = () => {
 
 			try {
 				let options = { ...req.body, questionData, commentData, name: 'Preview', preview: true }
-				let { renderPromise, vid } = await renderFromRequest(options, req.user._id)
+				let { renderPromise, vid } = await legacyRenderFromRequest(options, req.user._id)
 
 				renderQueue.push({
 					promise: renderPromise,
