@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
 						</Segment>
 						<Divider horizontal>Videos</Divider>
 						<Segment>
-							<Videos limit={8} />
+							<Videos limit={20} />
 							<Divider />
 							<Button as={Link} to="/video">Make video</Button>
 						</Segment>
