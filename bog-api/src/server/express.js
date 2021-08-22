@@ -532,6 +532,7 @@ const init = () => {
         name: (req.body.name || req.body.questionData?.title) + " (Not started)",
         owner: req.user._id,
         preview: false,
+        request_body: req.body,
       });
 
 			let cost = getVideoPrice()
