@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const { makeCall } = require('./daniel')
+const { synthDaniel } = require('./our-daniel')
 const { spawn } = require('child_process')
 const tmp = require('tmp')
 
@@ -17,7 +18,8 @@ module.exports.synthSpeech = function ({ text, voice }) {
 				return module.exports.macTTSToFile(text)
 			}
 			// Else, fall back on the epic Oddcast api
-			return module.exports.synthOddcast(text)
+			// return module.exports.synthOddcast(text)
+      return synthDaniel(text).then(p => p.path)
 
 		case "linux":
 			// Don't use
