@@ -66,24 +66,40 @@ module.exports.synthDaniel = async function synthDaniel(text) {
 
     let tries = 0
     while (true) {
+        let url = process.env.TTS_URL
+        let body = JSON.stringify({
+            string: wrapStringsInDanielSSML(ssml),
+        })
         try {
-            data = await fetch(process.env.TTS_URL, {
+            data = await fetch(url, {
                 method: "POST",
-                body: JSON.stringify({
-                    string: wrapStringsInDanielSSML(ssml),
-                }),
+                body: body,
                 headers: {
                     "Content-Type": "application/json",
                 },
-                timeout: 10000, // 10 second timeout
+                timeout: 20000, // 20 second timeout
             }).then((r) => r.json())
+
+            if (!data.base64audio || data.base64audio.length === 0) {
+                console.error("Got base64audio length of ZERO")
+                tries++
+                if (tries > 10)
+                    throw new Error("Got a lot of zero-length responses")
+                continue
+            }
 
             break
         } catch (error) {
             tries++
             if (tries > 5) throw new Error("Daniel failed a lot")
-            console.error("Daniel failed for some reason")
-            console.error(error)
+
+            console.error(
+                "Daniel failed for some reason: ",
+                { url, body },
+                "\nwith error:",
+                error
+            )
+            url = "http://tts.redditvideomaker.com/synthesize"
             await new Promise((r) => setTimeout(r, 500)) // wait 500ms before retrying
         }
     }

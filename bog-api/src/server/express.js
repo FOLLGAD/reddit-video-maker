@@ -528,22 +528,31 @@ const init = () => {
 				return res.status(400).json({ error: "NOT_ENOUGH_CREDITS" })
 			}
 
-      let vid = await Video.create({
-        name: (req.body.name || req.body.questionData?.title) + " (Not started)",
-        owner: req.user._id,
-        preview: false,
-        request_body: req.body,
-      });
+      let body = req.body;
+      let vid;
+
+      if (body.rerenderVideo) {
+        vid = await Video.findOne({ _id: body.rerenderVideo }).select({ request_body: 1 });
+        body = vid.request_body;
+      } else {
+        vid = await Video.create({
+          name: (body.name || body.questionData?.title) + " (Not started)",
+          owner: req.user._id,
+          preview: false,
+          request_body: body,
+        });
+      }
 
 			let cost = getVideoPrice()
 			User.updateOne({ _id: req.user._id }, { $inc: { credits: -cost, videoCount: 1 } }).exec()
 
 			try {
-        workersAsync(vid._id, req.body, req.user._id)
+        workersAsync(vid._id, body, req.user._id)
 					.then(() => {
             Video.updateOne({ _id: vid._id }, { $set: { finished: new Date() } }).exec()
           })
           .catch(() => {
+            console.error("Video failed in express.js")
             User.updateOne({ _id: req.user._id }, { $inc: { credits: cost } }).exec() // Refund credits
             Video.updateOne({ _id: vid._id }, { $set: { failed: true } }).exec() // Mark video as failed
           })

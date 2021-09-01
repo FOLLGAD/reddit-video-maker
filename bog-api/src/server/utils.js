@@ -49,8 +49,12 @@ function deleteFileCond(filename) {
 }
 
 async function syncRenderFromRequest(video, options, owner, callback) {
-  const ret = await renderFromRequest(video, options, owner);
-  callback(null, ret);
+  try {
+    const ret = await renderFromRequest(video, options, owner);
+    callback(null, ret);
+  } catch (err) {
+    callback(err, null)
+  }
 }
 
 async function renderFromRequest(
@@ -111,7 +115,7 @@ async function renderFromRequest(
 
     return { vid: video };
   } catch (err) {
-    console.error(err);
+    console.error("WHole video failed:", err);
     throw { vid: video };
   }
 }

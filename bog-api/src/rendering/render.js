@@ -161,6 +161,9 @@ module.exports.render = async function (questionData, commentData, options) {
       );
     }
   }
+  if (videolist.length < commentData.length) {
+    throw new Error("At least one comment failed :( Throwing.")
+  }
 
   const withTransitions = options.transition
     ? insertTransitions(videolist, options.transition)
