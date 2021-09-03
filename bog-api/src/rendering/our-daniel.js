@@ -77,7 +77,6 @@ module.exports.synthDaniel = async function synthDaniel(text) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                timeout: 20000, // 20 second timeout
             }).then((r) => r.json())
 
             if (!data.base64audio || data.base64audio.length === 0) {
