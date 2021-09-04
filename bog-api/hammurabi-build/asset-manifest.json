@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.9016f006.chunk.css",
-    "main.js": "/static/js/main.c2c5099d.chunk.js",
-    "main.js.map": "/static/js/main.c2c5099d.chunk.js.map",
-    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
-    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/css/2.57fb0317.chunk.css": "/static/css/2.57fb0317.chunk.css",
-    "static/js/2.451973a3.chunk.js": "/static/js/2.451973a3.chunk.js",
-    "static/js/2.451973a3.chunk.js.map": "/static/js/2.451973a3.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.f56aea2895a4652ed6603ab2b2a4e5e0.js": "/precache-manifest.f56aea2895a4652ed6603ab2b2a4e5e0.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.57fb0317.chunk.css.map": "/static/css/2.57fb0317.chunk.css.map",
-    "static/css/main.9016f006.chunk.css.map": "/static/css/main.9016f006.chunk.css.map",
-    "static/media/semantic.min.css": "/static/media/outline-icons.ef60a4f6.woff"
+    "main.css": "http://localhost:8000/static/css/main.9016f006.chunk.css",
+    "main.js": "http://localhost:8000/static/js/main.d2df8602.chunk.js",
+    "main.js.map": "http://localhost:8000/static/js/main.d2df8602.chunk.js.map",
+    "runtime~main.js": "http://localhost:8000/static/js/runtime~main.7982038e.js",
+    "runtime~main.js.map": "http://localhost:8000/static/js/runtime~main.7982038e.js.map",
+    "static/css/2.855b38e5.chunk.css": "http://localhost:8000/static/css/2.855b38e5.chunk.css",
+    "static/js/2.451973a3.chunk.js": "http://localhost:8000/static/js/2.451973a3.chunk.js",
+    "static/js/2.451973a3.chunk.js.map": "http://localhost:8000/static/js/2.451973a3.chunk.js.map",
+    "index.html": "http://localhost:8000/index.html",
+    "precache-manifest.7164bab7754ec514eeec3e6ced3de919.js": "http://localhost:8000/precache-manifest.7164bab7754ec514eeec3e6ced3de919.js",
+    "service-worker.js": "http://localhost:8000/service-worker.js",
+    "static/css/2.855b38e5.chunk.css.map": "http://localhost:8000/static/css/2.855b38e5.chunk.css.map",
+    "static/css/main.9016f006.chunk.css.map": "http://localhost:8000/static/css/main.9016f006.chunk.css.map",
+    "static/media/semantic.min.css": "http://localhost:8000/static/media/outline-icons.ef60a4f6.woff"
   }
 }

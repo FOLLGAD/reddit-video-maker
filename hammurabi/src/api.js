@@ -21,7 +21,7 @@ let apiurl = process.env.NODE_ENV === "development" ?
 // It returns the response in json, and removes the "loggedIn" item
 // from localStorage if the response status code is 401.
 // Returns a promise that throws if the status code is not in the 200-399 range
-const jsonFetch = (RequestInfo, RequestInit = {}) => {
+export const jsonFetch = (RequestInfo, RequestInit = {}) => {
 	if (typeof RequestInfo === 'string') {
 		RequestInfo = apiurl + RequestInfo
 	}

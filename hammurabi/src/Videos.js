@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Container, List, Loader } from 'semantic-ui-react'
-import { getVideos } from './api'
+import { getVideos ,jsonFetch} from './api'
 
 function formatDate(date) {
     let datePad = date => ("0" + date).slice(-2)
@@ -16,6 +16,19 @@ class VideosList extends React.Component {
     getVideos = () => {
         return isNaN(this.props.limit) ? this.props.videos : this.props.videos.slice(0, this.props.limit)
     }
+    retry = async (videoId) => {
+      await jsonFetch('/videos', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          rerenderVideo: videoId,
+        })
+      })
+      window.location.reload()
+    }
     render() {
         return (
             <Container>
@@ -25,7 +38,10 @@ class VideosList extends React.Component {
                             <List.Item disabled={!video.finished || video.failed} key={video._id} as="a" href={"/api/videos/" + video.file}>
                                 <List.Content>
                                     <List.Header>{video.name || "Unnamed video"}</List.Header>
-                                    {video.failed ? "Failed rendering" : (video.finished ? formatDate(video.finished) : "Rendering...")}
+                                    <List.Description>
+                                      {video.failed ? "Failed rendering" : (video.finished ? formatDate(video.finished) : "Rendering...")}
+                                    </List.Description>
+                                    {video.failed && <List.Icon onClick={() => this.retry(video._id)} style={{cursor:"pointer"}} name="undo" title="Try again"></List.Icon>}
                                 </List.Content>
                             </List.Item>
                         )
