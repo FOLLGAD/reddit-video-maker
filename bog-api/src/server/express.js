@@ -534,6 +534,7 @@ const init = () => {
       if (body.rerenderVideo) {
         vid = await Video.findOne({ _id: body.rerenderVideo }).select({ request_body: 1 });
         body = vid.request_body;
+        Video.updateOne({ _id: body.rerenderVideo }, { failed: null })
       } else {
         vid = await Video.create({
           name: (body.name || body.questionData?.title) + " (Not started)",
