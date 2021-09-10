@@ -1,7 +1,7 @@
-import React from 'react';
-import { Grid, Header, Segment, Form, Message } from 'semantic-ui-react'
-import { authorize } from './api'
-import { Link, redirectTo } from '@reach/router'
+import React from "react"
+import { Grid, Header, Segment, Form, Message } from "semantic-ui-react"
+import { authorize } from "./api"
+import { Link, redirectTo } from "@reach/router"
 
 class App extends React.Component {
     constructor(props) {
@@ -19,7 +19,7 @@ class App extends React.Component {
     login() {
         this.setState({ error: null, loading: true })
         authorize(this.state.email, this.state.password)
-            .catch(err => {
+            .catch((err) => {
                 this.setState({ loading: false })
                 if (typeof err === "string") {
                     this.setState({ error: err })
@@ -27,13 +27,17 @@ class App extends React.Component {
                     console.error(err)
                 }
             })
-            .then(d => {
-                redirectTo('/dashboard')
+            .then((d) => {
+                redirectTo("/dashboard")
             })
     }
     render() {
         return (
-            <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+            <Grid
+                textAlign="center"
+                style={{ height: "100vh" }}
+                verticalAlign="middle"
+            >
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <Header as="h2">Log in</Header>
                     <Form onSubmit={this.login}>
@@ -44,33 +48,42 @@ class App extends React.Component {
                                 disabled={this.state.loading}
                                 type="text"
                                 value={this.state.email}
-                                onChange={d => this.setState({ email: d.target.value })}>
-                            </Form.Input>
+                                onChange={(d) =>
+                                    this.setState({ email: d.target.value })
+                                }
+                            ></Form.Input>
                             <Form.Input
                                 fluid
                                 placeholder="Password"
                                 disabled={this.state.loading}
                                 type="password"
                                 value={this.state.password}
-                                onChange={d => this.setState({ password: d.target.value })}>
-                            </Form.Input>
+                                onChange={(d) =>
+                                    this.setState({ password: d.target.value })
+                                }
+                            ></Form.Input>
                             <Form.Button
                                 fluid
                                 type="submit"
                                 size="large"
                                 disabled={this.state.loading}
-                                color="teal">
+                                color="teal"
+                            >
                                 Log in
                             </Form.Button>
-                            <div><Link to="/register">Register</Link></div>
+                            <div>
+                                <Link to="/register">Register</Link>
+                            </div>
                         </Segment>
                     </Form>
                     <Message size="small">Forgot password?</Message>
-                    {this.state.error && <Message error>{this.state.error}</Message>}
+                    {this.state.error && (
+                        <Message error>{this.state.error}</Message>
+                    )}
                 </Grid.Column>
             </Grid>
         )
     }
 }
 
-export default App;
+export default App

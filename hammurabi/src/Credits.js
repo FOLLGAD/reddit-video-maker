@@ -1,7 +1,7 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { Header, Segment, Loader } from 'semantic-ui-react'
-import { getCredits } from './api'
+import React from "react"
+import { connect } from "react-redux"
+import { Header, Segment, Loader } from "semantic-ui-react"
+import { getCredits } from "./api"
 
 class Credits extends React.Component {
     handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -14,9 +14,11 @@ class Credits extends React.Component {
                 <Header size="huge">
                     <Header.Subheader>Your Credits</Header.Subheader>
                     <Header.Content>
-                        {this.props.credits != null ?
-                            this.props.credits :
-                            <Loader active />}
+                        {this.props.credits != null ? (
+                            this.props.credits
+                        ) : (
+                            <Loader active />
+                        )}
                     </Header.Content>
                 </Header>
             </Segment>
@@ -24,10 +26,10 @@ class Credits extends React.Component {
     }
 }
 
-let mapStateToProps = store => {
+let mapStateToProps = (store) => {
     return {
         credits: store.credits,
     }
 }
 
-export default connect(mapStateToProps)(Credits);
+export default connect(mapStateToProps)(Credits)

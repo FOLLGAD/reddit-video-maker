@@ -1,6 +1,6 @@
-import React from 'react';
-import { Container, Form, Message, Segment } from 'semantic-ui-react';
-import { _postRender } from './api';
+import React from "react"
+import { Container, Form, Message, Segment } from "semantic-ui-react"
+import { _postRender } from "./api"
 
 class Testing extends React.Component {
     state = { text: "", message: null }
@@ -17,9 +17,17 @@ class Testing extends React.Component {
             <Container>
                 <Segment>
                     <Form>
-                        <Form.TextArea value={this.state.text} name="text" onChange={this.onChange} />
-                        <Form.Button onClick={this.sendRender}>Render</Form.Button>
-                        {this.state.message && <Message>{this.state.message}</Message>}
+                        <Form.TextArea
+                            value={this.state.text}
+                            name="text"
+                            onChange={this.onChange}
+                        />
+                        <Form.Button onClick={this.sendRender}>
+                            Render
+                        </Form.Button>
+                        {this.state.message && (
+                            <Message>{this.state.message}</Message>
+                        )}
                     </Form>
                 </Segment>
             </Container>

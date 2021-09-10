@@ -1,9 +1,9 @@
 .song-item .song-icon {
     opacity: 0;
-    transition: .1s opacity ease;
+    transition: 0.1s opacity ease;
 }
 .song-item:hover .song-icon {
-    opacity: .5;
+    opacity: 0.5;
 }
 .song-item .song-icon:hover {
     opacity: 1;
