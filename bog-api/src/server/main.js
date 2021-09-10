@@ -1,7 +1,6 @@
-const initRoutes = require('./express')
-const { connect } = require('./db')
+const initRoutes = require("./express")
+const { connect } = require("./db")
 
-connect()
-	.then(() => {
-		initRoutes()
-	})
+connect().then(() => {
+    initRoutes()
+})

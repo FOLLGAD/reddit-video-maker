@@ -1,1005 +1,1062 @@
 <html>
-    
     <head>
-        <meta charset="utf-8">
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,500,700&display=swap');
-
-        .main-content {
-            /* height: 107px; */
-            /* width: 604px; */
-
-            padding: 0 5px;
-        }
-
-        .DIV_2 {
-            bottom: 0px;
-            box-sizing: border-box;
-            /* height: 107px; */
-            left: 0px;
-            position: relative;
-            right: 0px;
-            top: 0px;
-            /* width: 604px; */
-            padding: 0px 0px 0px 16px;
-        }
-
-        .DIV_3 {
-            bottom: 0px;
-            /* height: 107px; */
-            left: 0px;
-            position: absolute;
-            right: 604px;
-            top: 0px;
-            width: 0px;
-            z-index: 2;
-        }
-
-        .DIV_4 {
-            box-sizing: border-box;
-            display: inline-block;
-            /* height: 107px; */
-            vertical-align: top;
-            width: 0px;
-        }
-
-        .DIV_5 {
-            bottom: 0px;
-            box-sizing: border-box;
-            /* height: 51px; */
-            left: 0px;
-            position: absolute;
-            right: -21px;
-            top: 48px;
-            vertical-align: top;
-            /* width: 16px; */
-            margin: 0px 0px 0px 5px;
-        }
-
-        .I_6 {
-            display: block;
-            height: 100%;
-            width: 8px;
-            border-right: 2px solid rgb(237, 239, 241);
-        }
-
-        .DIV_7 {
-            bottom: 0px;
-            display: flex;
-            /* height: 99px; */
-            left: 0px;
-            position: relative;
-            right: 0px;
-            top: 0px;
-            /* width: 607px; */
-            border-radius: 4px 4px 4px 4px;
-            margin: 0px 0px 0px -23px;
-            padding: 0px 4px 0px 0px;
-        }
-
-        .DIV_8 {
-            display: flex;
-            /* height: 40px; */
-            max-height: 40px;
-            min-width: 24px;
-            text-align: center;
-            /* width: 24px; */
-            z-index: 3;
-            align-items: center;
-            flex-flow: column nowrap;
-            margin: 6px -1px -2px 9px;
-        }
-
-        .BUTTON_UPVOTE,
-        .BUTTON_12 {
-            display: block;
-            height: 20px;
-            /* width: 24px; */
-            padding: 0px;
-        }
-
-        .DIV_UPVOTE {
-            color: rgb(135, 138, 140);
-            display: inline-block;
-            /* height: 16px; */
-            text-align: center;
-            text-decoration: none;
-            /* width: 16px; */
-            border-radius: 2px 2px 2px 2px;
-            overflow: hidden;
-            padding: 2px;
-        }
-
-        /*#DIV_UPVOTE*/
-
-        .DIV_UPVOTE:after {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none;
-        }
-
-        /*#DIV_UPVOTE:after*/
-
-        .DIV_UPVOTE:before {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none;
-        }
-
-        /*#DIV_UPVOTE:before*/
-
-        .I_UPVOTE {
-            bottom: 0px;
-            color: rgb(135, 138, 140);
-            left: 0px;
-            position: relative;
-            right: 0px;
-            text-align: center;
-            text-decoration: none;
-            top: 0px;
-        }
-
-        /*#I_UPVOTE*/
-
-        .I_UPVOTE:after {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none;
-        }
-
-        /*#I_UPVOTE:after*/
-
-        .I_UPVOTE:before {
-            color: rgb(135, 138, 140);
-            content: '';
-            text-align: center;
-            text-decoration: none;
-            font: normal normal 400 normal 16px / 16px redesignFont;
-        }
-
-        /*#I_UPVOTE:before*/
-
-        .DIV_13 {
-            color: rgb(135, 138, 140);
-            display: inline-block;
-            /* height: 18px; */
-            text-align: center;
-            text-decoration: none;
-            /* width: 16px; */
-            border-radius: 2px 2px 2px 2px;
-            overflow: hidden;
-            padding: 2px;
-        }
-
-        /*#DIV_13*/
-
-        .DIV_13:after {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none;
-        }
-
-        /*#DIV_13:after*/
-
-        .DIV_13:before {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none;
-        }
-
-        /*#DIV_13:before*/
-
-        .I_14 {
-            bottom: 0px;
-            color: rgb(135, 138, 140);
-            left: 0px;
-            position: relative;
-            right: 0px;
-            text-align: center;
-            text-decoration: none;
-            top: 0px;
-        }
-
-        /*#I_14*/
-
-        .I_14:after {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none;
-        }
-
-        /*#I_14:after*/
-
-        .I_14:before {
-            color: rgb(135, 138, 140);
-            content: '';
-            text-align: center;
-            text-decoration: none;
-            font: normal normal 400 normal 16px / 16px redesignFont;
-        }
-
-        /*#I_14:before*/
-
-        .DIV_15 {
-            box-sizing: border-box;
-            /* height: 99px; */
-            /* width: 571px; */
-            border: 1px solid rgba(0, 0, 0, 0);
-            border-radius: 4px 4px 4px 4px;
-            margin: 0px 0px 0px 4px;
-            padding: 4px 0px 0px 4px;
-        }
-
-        .DIV_17 {
-            display: flex;
-            height: 18px;
-            min-height: 18px;
-            /* width: 565px; */
-            align-items: center;
-        }
-
-        .DIV_18 {
-            height: 18px;
-            /* width: 36.2188px; */
-            flex: 0 0 auto;
-        }
-
-        .A_19 {
-            color: rgb(68, 78, 89);
-            text-decoration: none solid rgb(68, 78, 89);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(68, 78, 89) none 0px;
-        }
-
-        /*#A_19*/
-
-        .A_19:after {
-            color: rgb(68, 78, 89);
-            text-decoration: none solid rgb(68, 78, 89);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(68, 78, 89) none 0px;
-        }
-
-        /*#A_19:after*/
-
-        .A_19:before {
-            color: rgb(68, 78, 89);
-            text-decoration: none solid rgb(68, 78, 89);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(68, 78, 89) none 0px;
-        }
-
-        /*#A_19:before*/
-
-        .DIV_20 {
-            height: 0px;
-            /* width: 31.2188px; */
-            margin: 0px 0px 0px 5px;
-        }
-
-        .SPAN_21 {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16px;
-            text-decoration: none;
-            /* width: 60.375px; */
-            flex: 0 0 auto;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-            padding: 0px 0px 0px 8px;
-        }
-
-        /*#SPAN_21*/
-
-        .SPAN_21:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_21:after*/
-
-        .SPAN_21:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_21:before*/
-
-        .SPAN_22,
-        .SPAN_25 {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16px;
-            text-decoration: none;
-            width: 3.92188px;
-            flex: 0 0 auto;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-            padding: 0px 0px 0px 8px;
-        }
-
-        /*#SPAN_22, #SPAN_25*/
-
-        .SPAN_22:after,
-        .SPAN_25:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_22:after, #SPAN_25:after*/
-
-        .SPAN_22:before,
-        .SPAN_25:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_22:before, #SPAN_25:before*/
-
-        .A_23 {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16px;
-            text-decoration: none;
-            /* width: 62.8594px; */
-            flex: 0 0 auto;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-            padding: 0px 0px 0px 8px;
-        }
-
-        /*#A_23*/
-
-        .A_23:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#A_23:after*/
-
-        .A_23:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#A_23:before*/
-
-        .SPAN_24 {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_24*/
-
-        .SPAN_24:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_24:after*/
-
-        .SPAN_24:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_24:before*/
-
-        .SPAN_26 {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16px;
-            text-decoration: none;
-            /* width: 94.1094px; */
-            flex: 0 0 auto;
-            font: italic normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            margin: 0;
-            margin-left: 1px;
-            outline: rgb(124, 124, 124) none 0px;
-            padding: 0;
-        }
-
-        /*#SPAN_26*/
-
-        .SPAN_26:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: italic normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_26:after*/
-
-        .SPAN_26:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            font: italic normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_26:before*/
-
-        .DIV_27 {
-            bottom: 0px;
-            display: flex;
-            height: 0px;
-            left: 0px;
-            position: relative;
-            right: 0px;
-            top: 0px;
-            width: 0px;
-            align-items: center;
-        }
-
-        /*#DIV_27*/
-
-        .DIV_27:after {
-        }
-
-        /*#DIV_27:after*/
-
-        .DIV_27:before {
-        }
-
-        /*#DIV_27:before*/
-
-        .DIV_28 {
-            /* height: 42px; */
-            /* width: 565px; */
-            padding: 2px 0px;
-        }
-
-        /*#DIV_28*/
-
-        .DIV_28:after {
-        }
-
-        /*#DIV_28:after*/
-
-        .DIV_28:before {
-        }
-
-        /*#DIV_28:before*/
-
-        .DIV_29 {
-            color: rgb(26, 26, 27);
-            /* height: 42px; */
-            text-decoration: none solid rgb(26, 26, 27);
-            /* width: 565px; */
-            column-rule-color: rgb(26, 26, 27);
-            caret-color: rgb(26, 26, 27);
-            font: normal normal 400 normal 14px / 21px "Noto Sans", Arial, sans-serif;
-            outline: rgb(26, 26, 27) none 0px;
-            overflow: auto;
-        }
-
-        /*#DIV_29*/
-
-        .DIV_29:after {
-            color: rgb(26, 26, 27);
-            text-decoration: none solid rgb(26, 26, 27);
-            column-rule-color: rgb(26, 26, 27);
-            caret-color: rgb(26, 26, 27);
-            font: normal normal 400 normal 14px / 21px "Noto Sans", Arial, sans-serif;
-            outline: rgb(26, 26, 27) none 0px;
-        }
-
-        /*#DIV_29:after*/
-
-        .DIV_29:before {
-            color: rgb(26, 26, 27);
-            text-decoration: none solid rgb(26, 26, 27);
-            column-rule-color: rgb(26, 26, 27);
-            caret-color: rgb(26, 26, 27);
-            font: normal normal 400 normal 14px / 21px "Noto Sans", Arial, sans-serif;
-            outline: rgb(26, 26, 27) none 0px;
-        }
-
-        /*#DIV_29:before*/
-
-        .P_30 {
-            color: rgb(26, 26, 27);
-            /* height: 42px; */
-            text-decoration: none solid rgb(26, 26, 27);
-            /* width: 565px; */
-            column-rule-color: rgb(26, 26, 27);
-            caret-color: rgb(26, 26, 27);
-            font: normal normal 400 normal 14px / 21px "Noto Sans", Arial, sans-serif;
-            margin: 0px;
-            outline: rgb(26, 26, 27) none 0px;
-        }
-
-        /*#P_30*/
-
-        .P_30:after {
-            color: rgb(26, 26, 27);
-            text-decoration: none solid rgb(26, 26, 27);
-            column-rule-color: rgb(26, 26, 27);
-            caret-color: rgb(26, 26, 27);
-            font: normal normal 400 normal 14px / 21px "Noto Sans", Arial, sans-serif;
-            outline: rgb(26, 26, 27) none 0px;
-        }
-
-        /*#P_30:after*/
-
-        .P_30:before {
-            color: rgb(26, 26, 27);
-            text-decoration: none solid rgb(26, 26, 27);
-            column-rule-color: rgb(26, 26, 27);
-            caret-color: rgb(26, 26, 27);
-            font: normal normal 400 normal 14px / 21px "Noto Sans", Arial, sans-serif;
-            outline: rgb(26, 26, 27) none 0px;
-        }
-
-        /*#P_30:before*/
-
-        .DIV_31 {
-            display: flex;
-            flex-direction: row;
-            -moz-box-align: center;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 16px;
-            color: rgb(129, 131, 132);
-            margin: 4px 0px 8px;
-            color: rgb(135, 138, 140);
-            display: flex;
-            /* height: 17px; */
-            text-decoration: none;
-            /* width: 565px; */
-            align-items: center;
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            margin: 4px 0px 8px;
-        }
-
-        /*#DIV_31*/
-
-        .DIV_31:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none;
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        /*#DIV_31:after*/
-
-        .DIV_31:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none;
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        /*#DIV_31:before*/
-
-        .BUTTON_32 {
-            color: rgb(135, 138, 140);
-            display: block;
-            /* height: 17px; */
-            text-decoration: none;
-            /* width: 52.9219px; */
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 12px 0px 0px;
-            padding: 0px;
-        }
-
-        /*#BUTTON_32*/
-
-        .BUTTON_32:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none;
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        /*#BUTTON_32:after*/
-
-        .BUTTON_32:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none;
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        /*#BUTTON_32:before*/
-
-        .I_33 {
-            /* LIGHT MODE */
-            /* color: rgb(183, 185, 186); */
-            /* fill: rgb(183, 185, 186); */
-
-            /* DARK MODE */
-            color: rgb(129, 131, 132);
-            fill: rgb(129, 131, 132);
-
-            margin-bottom: -2px !important;
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            font-size: 16px;
-            line-height: 16px;
-            vertical-align: text-bottom;
-            display: inline-block;
-            height: 16px;
-            text-align: center;
-            text-decoration: none;
-            vertical-align: text-bottom;
-            /* width: 16px; */
-            margin: 0px 6px 0px -1px;
-            outline: none;
-        }
-
-        /*#I_33:after*/
-
-        .I_33:before {
-            /* LIGHT MODE */
-            /* color: rgb(183, 185, 186); */
-            /* fill: rgb(183, 185, 186); */
-
-            /* DARK MODE */
-            color: rgb(129, 131, 132);
-            fill: rgb(129, 131, 132);
-
-            content: '';
-            font: normal normal 400 normal 16px / 16px redesignFont;
-            text-decoration: none;
-        }
-
-        /*#I_33:before*/
-
-        .DIV_34 {
-            color: rgb(135, 138, 140);
-            /* height: 16px; */
-            text-decoration: none;
-            /* width: 45.0156px; */
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        .BUTTON_35 {
-            color: rgb(135, 138, 140);
-            height: 16px;
-            text-decoration: none;
-            /* width: 33.0156px; */
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 12px 0px 0px;
-            padding: 0px;
-        }
-
-        .BUTTON_36 {
-            color: rgb(135, 138, 140);
-            display: block;
-            height: 16px;
-            text-decoration: none;
-            /* width: 38.4063px; */
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 12px 0px 0px;
-            padding: 0px;
-        }
-
-        .BUTTON_37 {
-            color: rgb(135, 138, 140);
-            display: block;
-            height: 16px;
-            text-decoration: none;
-            /* width: 27.3125px; */
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 12px 0px 0px;
-            padding: 0px;
-        }
-
-        /*#BUTTON_37*/
-
-        .BUTTON_37:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none;
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        /*#BUTTON_37:after*/
-
-        .BUTTON_37:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none;
-            font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        @font-face {
-            font-family: redesignFont;
-            src: url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.woff), url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.ttf), url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.svg);
-        }
-
-        /*#DIV_20:before*/
-
-        .DIV_GILDS {
-            bottom: 0px;
-            color: rgb(135, 138, 140);
-            display: inline-flex;
-            height: 16.9063px;
-            left: 0px;
-            position: relative;
-            right: 0px;
-            text-decoration: none;
-            top: 0px;
-            /* width: 44px; */
-            align-items: center;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        /*#DIV_GILDS*/
-
-        .DIV_GILDS:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        /*#DIV_GILDS:after*/
-
-        .DIV_GILDS:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-        }
-
-        /*#DIV_GILDS:before*/
-
-        .SPAN_SILVER,
-        .SPAN_GOLD {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16.9063px;
-            text-decoration: none;
-            /* width: 22px; */
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.SPAN_SILVER, .SPAN_GOLD*/
-
-        .SPAN_SILVER:after,
-        .SPAN_GOLD:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.SPAN_SILVER:after, .SPAN_GOLD:after*/
-
-        .SPAN_SILVER:before,
-        .SPAN_GOLD:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.SPAN_SILVER:before, .SPAN_GOLD:before*/
-
-        .I_SILVER,
-        .I_GOLD {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.I_SILVER, .I_GOLD*/
-
-        .I_SILVER:after,
-        .I_GOLD:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.I_SILVER:after, .I_GOLD:after*/
-
-        .I_SILVER:before,
-        .I_GOLD:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.I_SILVER:before, .I_GOLD:before*/
-
-        .IMG_SILVER,
-        .IMG_GOLD {
-            color: rgb(124, 124, 124);
-            height: 16px;
-            max-height: 16px;
-            max-width: 16px;
-            text-decoration: none;
-            vertical-align: middle;
-            width: 16px;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 2px 0px 4px;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.IMG_SILVER, .IMG_GOLD*/
-
-        .IMG_SILVER:after,
-        .IMG_GOLD:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.IMG_SILVER:after, .IMG_GOLD:after*/
-
-        .IMG_SILVER:before,
-        .IMG_GOLD:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none;
-            fill: rgb(135, 138, 140);
-            font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        p {
-            margin: 0;
-            padding: 0;
-            padding-bottom: 0.25em;
-        }
-
-        .hide,
-        .hide-until-active {
-            /* color: rgba(0, 0, 0, 0) !important;
+        <meta charset="utf-8" />
+        <style>
+            @import url("https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,500,700&display=swap");
+
+            .main-content {
+                /* height: 107px; */
+                /* width: 604px; */
+
+                padding: 0 5px;
+            }
+
+            .DIV_2 {
+                bottom: 0px;
+                box-sizing: border-box;
+                /* height: 107px; */
+                left: 0px;
+                position: relative;
+                right: 0px;
+                top: 0px;
+                /* width: 604px; */
+                padding: 0px 0px 0px 16px;
+            }
+
+            .DIV_3 {
+                bottom: 0px;
+                /* height: 107px; */
+                left: 0px;
+                position: absolute;
+                right: 604px;
+                top: 0px;
+                width: 0px;
+                z-index: 2;
+            }
+
+            .DIV_4 {
+                box-sizing: border-box;
+                display: inline-block;
+                /* height: 107px; */
+                vertical-align: top;
+                width: 0px;
+            }
+
+            .DIV_5 {
+                bottom: 0px;
+                box-sizing: border-box;
+                /* height: 51px; */
+                left: 0px;
+                position: absolute;
+                right: -21px;
+                top: 48px;
+                vertical-align: top;
+                /* width: 16px; */
+                margin: 0px 0px 0px 5px;
+            }
+
+            .I_6 {
+                display: block;
+                height: 100%;
+                width: 8px;
+                border-right: 2px solid rgb(237, 239, 241);
+            }
+
+            .DIV_7 {
+                bottom: 0px;
+                display: flex;
+                /* height: 99px; */
+                left: 0px;
+                position: relative;
+                right: 0px;
+                top: 0px;
+                /* width: 607px; */
+                border-radius: 4px 4px 4px 4px;
+                margin: 0px 0px 0px -23px;
+                padding: 0px 4px 0px 0px;
+            }
+
+            .DIV_8 {
+                display: flex;
+                /* height: 40px; */
+                max-height: 40px;
+                min-width: 24px;
+                text-align: center;
+                /* width: 24px; */
+                z-index: 3;
+                align-items: center;
+                flex-flow: column nowrap;
+                margin: 6px -1px -2px 9px;
+            }
+
+            .BUTTON_UPVOTE,
+            .BUTTON_12 {
+                display: block;
+                height: 20px;
+                /* width: 24px; */
+                padding: 0px;
+            }
+
+            .DIV_UPVOTE {
+                color: rgb(135, 138, 140);
+                display: inline-block;
+                /* height: 16px; */
+                text-align: center;
+                text-decoration: none;
+                /* width: 16px; */
+                border-radius: 2px 2px 2px 2px;
+                overflow: hidden;
+                padding: 2px;
+            }
+
+            /*#DIV_UPVOTE*/
+
+            .DIV_UPVOTE:after {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none;
+            }
+
+            /*#DIV_UPVOTE:after*/
+
+            .DIV_UPVOTE:before {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none;
+            }
+
+            /*#DIV_UPVOTE:before*/
+
+            .I_UPVOTE {
+                bottom: 0px;
+                color: rgb(135, 138, 140);
+                left: 0px;
+                position: relative;
+                right: 0px;
+                text-align: center;
+                text-decoration: none;
+                top: 0px;
+            }
+
+            /*#I_UPVOTE*/
+
+            .I_UPVOTE:after {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none;
+            }
+
+            /*#I_UPVOTE:after*/
+
+            .I_UPVOTE:before {
+                color: rgb(135, 138, 140);
+                content: "";
+                text-align: center;
+                text-decoration: none;
+                font: normal normal 400 normal 16px / 16px redesignFont;
+            }
+
+            /*#I_UPVOTE:before*/
+
+            .DIV_13 {
+                color: rgb(135, 138, 140);
+                display: inline-block;
+                /* height: 18px; */
+                text-align: center;
+                text-decoration: none;
+                /* width: 16px; */
+                border-radius: 2px 2px 2px 2px;
+                overflow: hidden;
+                padding: 2px;
+            }
+
+            /*#DIV_13*/
+
+            .DIV_13:after {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none;
+            }
+
+            /*#DIV_13:after*/
+
+            .DIV_13:before {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none;
+            }
+
+            /*#DIV_13:before*/
+
+            .I_14 {
+                bottom: 0px;
+                color: rgb(135, 138, 140);
+                left: 0px;
+                position: relative;
+                right: 0px;
+                text-align: center;
+                text-decoration: none;
+                top: 0px;
+            }
+
+            /*#I_14*/
+
+            .I_14:after {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none;
+            }
+
+            /*#I_14:after*/
+
+            .I_14:before {
+                color: rgb(135, 138, 140);
+                content: "";
+                text-align: center;
+                text-decoration: none;
+                font: normal normal 400 normal 16px / 16px redesignFont;
+            }
+
+            /*#I_14:before*/
+
+            .DIV_15 {
+                box-sizing: border-box;
+                /* height: 99px; */
+                /* width: 571px; */
+                border: 1px solid rgba(0, 0, 0, 0);
+                border-radius: 4px 4px 4px 4px;
+                margin: 0px 0px 0px 4px;
+                padding: 4px 0px 0px 4px;
+            }
+
+            .DIV_17 {
+                display: flex;
+                height: 18px;
+                min-height: 18px;
+                /* width: 565px; */
+                align-items: center;
+            }
+
+            .DIV_18 {
+                height: 18px;
+                /* width: 36.2188px; */
+                flex: 0 0 auto;
+            }
+
+            .A_19 {
+                color: rgb(68, 78, 89);
+                text-decoration: none solid rgb(68, 78, 89);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(68, 78, 89) none 0px;
+            }
+
+            /*#A_19*/
+
+            .A_19:after {
+                color: rgb(68, 78, 89);
+                text-decoration: none solid rgb(68, 78, 89);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(68, 78, 89) none 0px;
+            }
+
+            /*#A_19:after*/
+
+            .A_19:before {
+                color: rgb(68, 78, 89);
+                text-decoration: none solid rgb(68, 78, 89);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(68, 78, 89) none 0px;
+            }
+
+            /*#A_19:before*/
+
+            .DIV_20 {
+                height: 0px;
+                /* width: 31.2188px; */
+                margin: 0px 0px 0px 5px;
+            }
+
+            .SPAN_21 {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16px;
+                text-decoration: none;
+                /* width: 60.375px; */
+                flex: 0 0 auto;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+                padding: 0px 0px 0px 8px;
+            }
+
+            /*#SPAN_21*/
+
+            .SPAN_21:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_21:after*/
+
+            .SPAN_21:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_21:before*/
+
+            .SPAN_22,
+            .SPAN_25 {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16px;
+                text-decoration: none;
+                width: 3.92188px;
+                flex: 0 0 auto;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+                padding: 0px 0px 0px 8px;
+            }
+
+            /*#SPAN_22, #SPAN_25*/
+
+            .SPAN_22:after,
+            .SPAN_25:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_22:after, #SPAN_25:after*/
+
+            .SPAN_22:before,
+            .SPAN_25:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_22:before, #SPAN_25:before*/
+
+            .A_23 {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16px;
+                text-decoration: none;
+                /* width: 62.8594px; */
+                flex: 0 0 auto;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+                padding: 0px 0px 0px 8px;
+            }
+
+            /*#A_23*/
+
+            .A_23:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#A_23:after*/
+
+            .A_23:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#A_23:before*/
+
+            .SPAN_24 {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_24*/
+
+            .SPAN_24:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_24:after*/
+
+            .SPAN_24:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_24:before*/
+
+            .SPAN_26 {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16px;
+                text-decoration: none;
+                /* width: 94.1094px; */
+                flex: 0 0 auto;
+                font: italic normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0;
+                margin-left: 1px;
+                outline: rgb(124, 124, 124) none 0px;
+                padding: 0;
+            }
+
+            /*#SPAN_26*/
+
+            .SPAN_26:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: italic normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_26:after*/
+
+            .SPAN_26:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                font: italic normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_26:before*/
+
+            .DIV_27 {
+                bottom: 0px;
+                display: flex;
+                height: 0px;
+                left: 0px;
+                position: relative;
+                right: 0px;
+                top: 0px;
+                width: 0px;
+                align-items: center;
+            }
+
+            /*#DIV_27*/
+
+            .DIV_27:after {
+            }
+
+            /*#DIV_27:after*/
+
+            .DIV_27:before {
+            }
+
+            /*#DIV_27:before*/
+
+            .DIV_28 {
+                /* height: 42px; */
+                /* width: 565px; */
+                padding: 2px 0px;
+            }
+
+            /*#DIV_28*/
+
+            .DIV_28:after {
+            }
+
+            /*#DIV_28:after*/
+
+            .DIV_28:before {
+            }
+
+            /*#DIV_28:before*/
+
+            .DIV_29 {
+                color: rgb(26, 26, 27);
+                /* height: 42px; */
+                text-decoration: none solid rgb(26, 26, 27);
+                /* width: 565px; */
+                column-rule-color: rgb(26, 26, 27);
+                caret-color: rgb(26, 26, 27);
+                font: normal normal 400 normal 14px / 21px "Noto Sans", Arial,
+                    sans-serif;
+                outline: rgb(26, 26, 27) none 0px;
+                overflow: auto;
+            }
+
+            /*#DIV_29*/
+
+            .DIV_29:after {
+                color: rgb(26, 26, 27);
+                text-decoration: none solid rgb(26, 26, 27);
+                column-rule-color: rgb(26, 26, 27);
+                caret-color: rgb(26, 26, 27);
+                font: normal normal 400 normal 14px / 21px "Noto Sans", Arial,
+                    sans-serif;
+                outline: rgb(26, 26, 27) none 0px;
+            }
+
+            /*#DIV_29:after*/
+
+            .DIV_29:before {
+                color: rgb(26, 26, 27);
+                text-decoration: none solid rgb(26, 26, 27);
+                column-rule-color: rgb(26, 26, 27);
+                caret-color: rgb(26, 26, 27);
+                font: normal normal 400 normal 14px / 21px "Noto Sans", Arial,
+                    sans-serif;
+                outline: rgb(26, 26, 27) none 0px;
+            }
+
+            /*#DIV_29:before*/
+
+            .P_30 {
+                color: rgb(26, 26, 27);
+                /* height: 42px; */
+                text-decoration: none solid rgb(26, 26, 27);
+                /* width: 565px; */
+                column-rule-color: rgb(26, 26, 27);
+                caret-color: rgb(26, 26, 27);
+                font: normal normal 400 normal 14px / 21px "Noto Sans", Arial,
+                    sans-serif;
+                margin: 0px;
+                outline: rgb(26, 26, 27) none 0px;
+            }
+
+            /*#P_30*/
+
+            .P_30:after {
+                color: rgb(26, 26, 27);
+                text-decoration: none solid rgb(26, 26, 27);
+                column-rule-color: rgb(26, 26, 27);
+                caret-color: rgb(26, 26, 27);
+                font: normal normal 400 normal 14px / 21px "Noto Sans", Arial,
+                    sans-serif;
+                outline: rgb(26, 26, 27) none 0px;
+            }
+
+            /*#P_30:after*/
+
+            .P_30:before {
+                color: rgb(26, 26, 27);
+                text-decoration: none solid rgb(26, 26, 27);
+                column-rule-color: rgb(26, 26, 27);
+                caret-color: rgb(26, 26, 27);
+                font: normal normal 400 normal 14px / 21px "Noto Sans", Arial,
+                    sans-serif;
+                outline: rgb(26, 26, 27) none 0px;
+            }
+
+            /*#P_30:before*/
+
+            .DIV_31 {
+                display: flex;
+                flex-direction: row;
+                -moz-box-align: center;
+                align-items: center;
+                font-size: 12px;
+                font-weight: 700;
+                line-height: 16px;
+                color: rgb(129, 131, 132);
+                margin: 4px 0px 8px;
+                color: rgb(135, 138, 140);
+                display: flex;
+                /* height: 17px; */
+                text-decoration: none;
+                /* width: 565px; */
+                align-items: center;
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 4px 0px 8px;
+            }
+
+            /*#DIV_31*/
+
+            .DIV_31:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none;
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            /*#DIV_31:after*/
+
+            .DIV_31:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none;
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            /*#DIV_31:before*/
+
+            .BUTTON_32 {
+                color: rgb(135, 138, 140);
+                display: block;
+                /* height: 17px; */
+                text-decoration: none;
+                /* width: 52.9219px; */
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 12px 0px 0px;
+                padding: 0px;
+            }
+
+            /*#BUTTON_32*/
+
+            .BUTTON_32:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none;
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            /*#BUTTON_32:after*/
+
+            .BUTTON_32:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none;
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            /*#BUTTON_32:before*/
+
+            .I_33 {
+                /* LIGHT MODE */
+                /* color: rgb(183, 185, 186); */
+                /* fill: rgb(183, 185, 186); */
+
+                /* DARK MODE */
+                color: rgb(129, 131, 132);
+                fill: rgb(129, 131, 132);
+
+                margin-bottom: -2px !important;
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                font-size: 16px;
+                line-height: 16px;
+                vertical-align: text-bottom;
+                display: inline-block;
+                height: 16px;
+                text-align: center;
+                text-decoration: none;
+                vertical-align: text-bottom;
+                /* width: 16px; */
+                margin: 0px 6px 0px -1px;
+                outline: none;
+            }
+
+            /*#I_33:after*/
+
+            .I_33:before {
+                /* LIGHT MODE */
+                /* color: rgb(183, 185, 186); */
+                /* fill: rgb(183, 185, 186); */
+
+                /* DARK MODE */
+                color: rgb(129, 131, 132);
+                fill: rgb(129, 131, 132);
+
+                content: "";
+                font: normal normal 400 normal 16px / 16px redesignFont;
+                text-decoration: none;
+            }
+
+            /*#I_33:before*/
+
+            .DIV_34 {
+                color: rgb(135, 138, 140);
+                /* height: 16px; */
+                text-decoration: none;
+                /* width: 45.0156px; */
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            .BUTTON_35 {
+                color: rgb(135, 138, 140);
+                height: 16px;
+                text-decoration: none;
+                /* width: 33.0156px; */
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 12px 0px 0px;
+                padding: 0px;
+            }
+
+            .BUTTON_36 {
+                color: rgb(135, 138, 140);
+                display: block;
+                height: 16px;
+                text-decoration: none;
+                /* width: 38.4063px; */
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 12px 0px 0px;
+                padding: 0px;
+            }
+
+            .BUTTON_37 {
+                color: rgb(135, 138, 140);
+                display: block;
+                height: 16px;
+                text-decoration: none;
+                /* width: 27.3125px; */
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 12px 0px 0px;
+                padding: 0px;
+            }
+
+            /*#BUTTON_37*/
+
+            .BUTTON_37:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none;
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            /*#BUTTON_37:after*/
+
+            .BUTTON_37:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none;
+                font: normal normal 700 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            @font-face {
+                font-family: redesignFont;
+                src: url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.woff),
+                    url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.ttf),
+                    url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.svg);
+            }
+
+            /*#DIV_20:before*/
+
+            .DIV_GILDS {
+                bottom: 0px;
+                color: rgb(135, 138, 140);
+                display: inline-flex;
+                height: 16.9063px;
+                left: 0px;
+                position: relative;
+                right: 0px;
+                text-decoration: none;
+                top: 0px;
+                /* width: 44px; */
+                align-items: center;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            /*#DIV_GILDS*/
+
+            .DIV_GILDS:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            /*#DIV_GILDS:after*/
+
+            .DIV_GILDS:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            /*#DIV_GILDS:before*/
+
+            .SPAN_SILVER,
+            .SPAN_GOLD {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16.9063px;
+                text-decoration: none;
+                /* width: 22px; */
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.SPAN_SILVER, .SPAN_GOLD*/
+
+            .SPAN_SILVER:after,
+            .SPAN_GOLD:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.SPAN_SILVER:after, .SPAN_GOLD:after*/
+
+            .SPAN_SILVER:before,
+            .SPAN_GOLD:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.SPAN_SILVER:before, .SPAN_GOLD:before*/
+
+            .I_SILVER,
+            .I_GOLD {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.I_SILVER, .I_GOLD*/
+
+            .I_SILVER:after,
+            .I_GOLD:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.I_SILVER:after, .I_GOLD:after*/
+
+            .I_SILVER:before,
+            .I_GOLD:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.I_SILVER:before, .I_GOLD:before*/
+
+            .IMG_SILVER,
+            .IMG_GOLD {
+                color: rgb(124, 124, 124);
+                height: 16px;
+                max-height: 16px;
+                max-width: 16px;
+                text-decoration: none;
+                vertical-align: middle;
+                width: 16px;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 2px 0px 4px;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.IMG_SILVER, .IMG_GOLD*/
+
+            .IMG_SILVER:after,
+            .IMG_GOLD:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.IMG_SILVER:after, .IMG_GOLD:after*/
+
+            .IMG_SILVER:before,
+            .IMG_GOLD:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none;
+                fill: rgb(135, 138, 140);
+                font: normal normal 400 normal 12px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+                padding-bottom: 0.25em;
+            }
+
+            .hide,
+            .hide-until-active {
+                /* color: rgba(0, 0, 0, 0) !important;
             text-shadow: none !important;
             visibility: hidden; */
-        }
+            }
 
-        .hide .span {
-            color: rgba(0, 0, 0, 0) !important;
-            text-shadow: none !important;
-        }
+            .hide .span {
+                color: rgba(0, 0, 0, 0) !important;
+                text-shadow: none !important;
+            }
 
-        .blur {
-            color: transparent;
-            text-shadow: 0 0 6px rgb(255, 255, 255);
-        }
+            .blur {
+                color: transparent;
+                text-shadow: 0 0 6px rgb(255, 255, 255);
+            }
 
-        body {
-            /* DARK MODE BRUH!!!! */
-            background-color: #19191a;
+            body {
+                /* DARK MODE BRUH!!!! */
+                background-color: #19191a;
 
-            margin: 0;
-            padding: 0;
-            font: normal normal 400 normal 16px / 16px IBMPlexSans, Arial, sans-serif;
-        }
+                margin: 0;
+                padding: 0;
+                font: normal normal 400 normal 16px / 16px IBMPlexSans, Arial,
+                    sans-serif;
+            }
 
-        * {
-            border: none;
-            outline: none;
-            word-break: break-word;
-            font: inherit;
-        }
+            * {
+                border: none;
+                outline: none;
+                word-break: break-word;
+                font: inherit;
+            }
 
-        button {
-            background: none;
-        }
+            button {
+                background: none;
+            }
 
-        .dark-mode-text {
-            color: rgb(215, 218, 220) !important;
-        }
+            .dark-mode-text {
+                color: rgb(215, 218, 220) !important;
+            }
 
-        .dark-mode-bottom button {
-            color: rgb(129, 131, 132) !important;
-        }
+            .dark-mode-bottom button {
+                color: rgb(129, 131, 132) !important;
+            }
 
-        .dark-mode-meta {
-            color: rgb(129, 131, 132) !important;
-        }
+            .dark-mode-meta {
+                color: rgb(129, 131, 132) !important;
+            }
 
-        .dark-mode-user {
-            color: rgb(79, 188, 255) !important;
-        }
+            .dark-mode-user {
+                color: rgb(79, 188, 255) !important;
+            }
 
-        .dark-mode-thread {
-            border-right: 2px solid rgb(52, 53, 54) !important;
-        }
+            .dark-mode-thread {
+                border-right: 2px solid rgb(52, 53, 54) !important;
+            }
 
-        .is_upvoted,
-        .is_upvoted::before {
-            color: rgb(255, 69, 0) !important;
-        }
+            .is_upvoted,
+            .is_upvoted::before {
+                color: rgb(255, 69, 0) !important;
+            }
 
-        .main-content .main-content {
-            /* All child-comments should have negative margin */
-            margin-left: -13px;
-        }
+            .main-content .main-content {
+                /* All child-comments should have negative margin */
+                margin-left: -13px;
+            }
 
-        blockquote {
-            border-left: 4px solid rgba(215, 218, 220, 0.2);
-            margin: 4px 0px 4px 8px;
-            padding-left: 8px;
-            quotes: none;
-        }
+            blockquote {
+                border-left: 4px solid rgba(215, 218, 220, 0.2);
+                margin: 4px 0px 4px 8px;
+                padding-left: 8px;
+                quotes: none;
+            }
 
-        .DIV_28 a {
-            color: rgb(79, 188, 255) !important;
-            text-decoration: underline !important;
-        }
-    </style>
-</head>
+            .DIV_28 a {
+                color: rgb(79, 188, 255) !important;
+                text-decoration: underline !important;
+            }
+        </style>
+    </head>
 
-<body>
-    <div class="main-content hide-until-active">
-        <div class="DIV_2">
-            <div class="DIV_3">
-                <div class="DIV_4">
-                    <div class="DIV_5">
-                        <i class="I_6 dark-mode-thread"></i>
+    <body>
+        <div class="main-content hide-until-active">
+            <div class="DIV_2">
+                <div class="DIV_3">
+                    <div class="DIV_4">
+                        <div class="DIV_5">
+                            <i class="I_6 dark-mode-thread"></i>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="DIV_7">
-                <!-- Upvote/downvote -->
-                <div class="DIV_8">
-                    <button class="BUTTON_UPVOTE">
-                        <div class="DIV_UPVOTE">
-                            <!-- <i class="I_UPVOTE {{#if upvoted}}is_upvoted{{/if}}"></i> -->
-                            <i class="I_UPVOTE is_upvoted"></i>
-                        </div>
-                    </button>
-                    <button class="BUTTON_12">
-                        <div class="DIV_13">
-                            <i class="I_14"></i>
-                        </div>
-                    </button>
-                </div>
-                <!-- Body -->
-                <div class="DIV_15">
-                    <div class="DIV_17 dark-mode-meta">
-                        <div class="DIV_18">
-                            <!-- <a href="/user/bdkrzy" class="A_19 dark-mode-user">{{{authorHtml}}}</a> -->
-                            <a href="/user/bdkrzy" class="A_19 dark-mode-user">Bruhskij123</a>
-                            <div class="DIV_20">
+                <div class="DIV_7">
+                    <!-- Upvote/downvote -->
+                    <div class="DIV_8">
+                        <button class="BUTTON_UPVOTE">
+                            <div class="DIV_UPVOTE">
+                                <!-- <i class="I_UPVOTE {{#if upvoted}}is_upvoted{{/if}}"></i> -->
+                                <i class="I_UPVOTE is_upvoted"></i>
                             </div>
-                        <!-- </div><span class="SPAN_21">{{ score }} points</span> <span class="SPAN_22">·</span> <a -->
-                            <!-- class="A_23" rel="nofollow"><span class="SPAN_24">{{ created }}</span></a>{{#if edited}} <span -->
-                    </div><span class="SPAN_21">5554 points</span> <span class="SPAN_22">·</span> <a
-                            href="/r/AskReddit/comments/ba30oe/whats_a_video_game_you_dislike_that_everybody/ek8p9mu/"
-                            class="A_23" rel="nofollow"><span class="SPAN_24">2 days ago</span></a><span
-                            class="SPAN_25">·</span>
+                        </button>
+                        <button class="BUTTON_12">
+                            <div class="DIV_13">
+                                <i class="I_14"></i>
+                            </div>
+                        </button>
+                    </div>
+                    <!-- Body -->
+                    <div class="DIV_15">
+                        <div class="DIV_17 dark-mode-meta">
+                            <div class="DIV_18">
+                                <!-- <a href="/user/bdkrzy" class="A_19 dark-mode-user">{{{authorHtml}}}</a> -->
+                                <a
+                                    href="/user/bdkrzy"
+                                    class="A_19 dark-mode-user"
+                                    >Bruhskij123</a
+                                >
+                                <div class="DIV_20"></div>
+                                <!-- </div><span class="SPAN_21">{{ score }} points</span> <span class="SPAN_22">·</span> <a -->
+                                <!-- class="A_23" rel="nofollow"><span class="SPAN_24">{{ created }}</span></a>{{#if edited}} <span -->
+                            </div>
+                            <span class="SPAN_21">5554 points</span>
+                            <span class="SPAN_22">·</span>
+                            <a
+                                href="/r/AskReddit/comments/ba30oe/whats_a_video_game_you_dislike_that_everybody/ek8p9mu/"
+                                class="A_23"
+                                rel="nofollow"
+                                ><span class="SPAN_24">2 days ago</span></a
+                            ><span class="SPAN_25">·</span>
                             <span class="SPAN_26">edited 1 day ago</span>
-                        <!-- <span class="SPAN_26">edited {{ edited }}</span>{{/if}} -->
-                        <div class="DIV_27">
-                        </div>
-                        <div class="DIV_GILDS">
-                            <!-- Print all Awards -->
-                            <!-- {{#each all_awardings}}
+                            <!-- <span class="SPAN_26">edited {{ edited }}</span>{{/if}} -->
+                            <div class="DIV_27"></div>
+                            <div class="DIV_GILDS">
+                                <!-- Print all Awards -->
+                                <!-- {{#each all_awardings}}
                                 {{#if is_enabled}}
                                     <span class="SPAN_SILVER">
                                         <i class="I_SILVER">
@@ -1008,42 +1065,43 @@
                                     </span>
                                 {{/if}}
                             {{/each}} -->
+                            </div>
                         </div>
-                    </div>
-                    <div class="DIV_28">
-                        <div class="DIV_29 dark-mode-text">
-                            I went to the car... there was a guy lol. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. Bamboo-boozlerbog. 
+                        <div class="DIV_28">
+                            <div class="DIV_29 dark-mode-text">
+                                I went to the car... there was a guy lol.
+                                Bamboo-boozlerbog. Bamboo-boozlerbog.
+                                Bamboo-boozlerbog. Bamboo-boozlerbog.
+                                Bamboo-boozlerbog. Bamboo-boozlerbog.
+                                Bamboo-boozlerbog. Bamboo-boozlerbog.
+                                Bamboo-boozlerbog. Bamboo-boozlerbog.
+                                Bamboo-boozlerbog. Bamboo-boozlerbog.
+                                Bamboo-boozlerbog. Bamboo-boozlerbog.
+                            </div>
                         </div>
-                    </div>
-                    <div class="DIV_31 dark-mode-bottom hide-until-active">
-                        <button class="BUTTON_32" style="display: inline-block;">
-                            <i class="I_33"></i>Reply
-                        </button>
-                        <div class="DIV_34">
-                            <button class="BUTTON_35">
-                                Give Award
+                        <div class="DIV_31 dark-mode-bottom hide-until-active">
+                            <button
+                                class="BUTTON_32"
+                                style="display: inline-block"
+                            >
+                                <i class="I_33"></i>Reply
                             </button>
+                            <div class="DIV_34">
+                                <button class="BUTTON_35">Give Award</button>
+                            </div>
+                            <div class="DIV_34">
+                                <button class="BUTTON_35">Share</button>
+                            </div>
+                            <button class="BUTTON_36">Report</button>
+                            <button class="BUTTON_37">Save</button>
                         </div>
-                        <div class="DIV_34">
-                            <button class="BUTTON_35">
-                                Share
-                            </button>
-                        </div>
-                        <button class="BUTTON_36">
-                            Report
-                        </button>
-                        <button class="BUTTON_37">
-                            Save
-                        </button>
-                    </div>
-                    <!-- Recursively create all child-comments under this one -->
-                    <!-- {{#each replies as |reply|}}
+                        <!-- Recursively create all child-comments under this one -->
+                        <!-- {{#each replies as |reply|}}
                         {{> comment reply}}
                     {{/ each}} -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
-
+    </body>
 </html>

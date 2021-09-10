@@ -1,1133 +1,1160 @@
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,500,700&display=swap');
-
-        .main-content {
-            /* height: 107px; */
-            /* width: 604px; */
-            padding: 0 5px;
-			word-break: break-word;
-            font: normal normal 400 normal 12px IBMPlexSans, Arial, sans-serif;
-        }
-
-        .DIV_2 {
-            bottom: 0px;
-            box-sizing: border-box;
-            /* height: 107px; */
-            left: 0px;
-            position: relative;
-            right: 0px;
-            top: 0px;
-            /* width: 604px; */
-			padding: 0px 0px 0px 16px;
-            transition: background 1s ease 0s;
-        }
-
-        .DIV_3 {
-            bottom: 0px;
-            /* height: 107px; */
-            left: 0px;
-            position: absolute;
-            right: 604px;
-            top: 0px;
-            width: 0px;
-            z-index: 2;
-			}
-
-        .DIV_4 {
-            box-sizing: border-box;
-            display: inline-block;
-            /* height: 107px; */
-            vertical-align: top;
-            width: 0px;
-			}
-
-        .DIV_5 {
-            bottom: 0px;
-            box-sizing: border-box;
-            /* height: 51px; */
-            left: 0px;
-            position: absolute;
-            right: -21px;
-            top: 48px;
-            vertical-align: top;
-            /* width: 16px; */
-			    margin: 0px 0px 0px 5px;
-        }
-
-        .I_6 {
-            display: block;
-            height: 100%;
-            width: 8px;
-            border-right: 2px solid rgb(237, 239, 241);
-			}
-
-        .DIV_7 {
-            bottom: 0px;
-            display: flex;
-            /* height: 99px; */
-            left: 0px;
-            position: relative;
-            right: 0px;
-            top: 0px;
-            /* width: 607px; */
-            border-radius: 4px 4px 4px 4px;
-			    margin: 0px 0px 0px -23px;
-            padding: 0px 4px 0px 0px;
-            transition: color 0.5s ease 0s, fill 0.5s ease 0s, background 1s ease 0s;
-        }
-
-        .DIV_8 {
-            display: flex;
-            /* height: 40px; */
-            max-height: 40px;
-            min-width: 24px;
-            text-align: center;
-            /* width: 24px; */
-            z-index: 3;
-            align-items: center;
-            flex-flow: column nowrap;
-			    margin: 6px -1px -2px 9px;
-        }
-
-        /*#DIV_8*/
-
-        .DIV_8:after {
-            text-align: center;
-			}
-
-        /*#DIV_8:after*/
-
-        .DIV_8:before {
-            text-align: center;
-			}
-
-        /*#DIV_8:before*/
-
-        .BUTTON_UPVOTE,
-        .BUTTON_12 {
-            display: block;
-            height: 20px;
-            /* width: 24px; */
-            background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box;
-            border: 0px none rgb(0, 0, 0);
-			    padding: 0px;
-        }
-
-        .DIV_UPVOTE {
-            color: rgb(135, 138, 140);
-            display: inline-block;
-            /* height: 16px; */
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            /* width: 16px; */
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            border-radius: 2px 2px 2px 2px;
-			    outline: rgb(135, 138, 140) none 0px;
-            overflow: hidden;
-            padding: 2px;
-        }
-
-        /*#DIV_UPVOTE*/
-
-        .DIV_UPVOTE:after {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-			    outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_UPVOTE:after*/
-
-        .DIV_UPVOTE:before {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-			    outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_UPVOTE:before*/
-
-        .I_UPVOTE {
-            bottom: 0px;
-            color: rgb(135, 138, 140);
-            left: 0px;
-            position: relative;
-            right: 0px;
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            top: 0px;
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-			    outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#I_UPVOTE*/
-
-        .I_UPVOTE:after {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-			    outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#I_UPVOTE:after*/
-
-        .I_UPVOTE:before {
-            color: rgb(135, 138, 140);
-            content: '';
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 400 normal 16px redesignFont;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#I_UPVOTE:before*/
-
-        .DIV_13 {
-            color: rgb(135, 138, 140);
-            display: inline-block;
-            /* height: 18px; */
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            /* width: 16px; */
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            border-radius: 2px 2px 2px 2px;
-			    outline: rgb(135, 138, 140) none 0px;
-            overflow: hidden;
-            padding: 2px;
-        }
-
-        /*#DIV_13*/
-
-        .DIV_13:after {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-			    outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_13:after*/
-
-        .DIV_13:before {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-			    outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_13:before*/
-
-        .I_14 {
-            bottom: 0px;
-            color: rgb(135, 138, 140);
-            left: 0px;
-            position: relative;
-            right: 0px;
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            top: 0px;
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-			    outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#I_14*/
-
-        .I_14:after {
-            color: rgb(135, 138, 140);
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-			    outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#I_14:after*/
-
-        .I_14:before {
-            color: rgb(135, 138, 140);
-            content: '';
-            text-align: center;
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 400 normal 16px redesignFont;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#I_14:before*/
-
-        .DIV_15 {
-            box-sizing: border-box;
-            /* height: 99px; */
-            /* width: 571px; */
-            border: 1px solid rgba(0, 0, 0, 0);
-            border-radius: 4px 4px 4px 4px;
-			    margin: 0px 0px 0px 4px;
-            padding: 4px 0px 0px 4px;
-        }
-
-        .SPAN_16 {
-            bottom: 78px;
-            clip: rect(1px, 1px, 1px, 1px);
-            display: block;
-            height: 16px;
-            left: 41px;
-            position: absolute;
-            right: 522.734px;
-            top: 13px;
-            /* width: 47.2656px; */
-			}
-
-        .DIV_17 {
-            display: flex;
-            height: 18px;
-            min-height: 18px;
-            /* width: 565px; */
-            align-items: center;
-			    transition: opacity 0.2s ease 0s;
-        }
-
-        .DIV_18 {
-            height: 18px;
-            /* width: 36.2188px; */
-            flex: 0 0 auto;
-			}
-
-        .A_19 {
-            color: rgb(68, 78, 89);
-            text-decoration: none solid rgb(68, 78, 89);
-            border: 0px none rgb(68, 78, 89);
-            outline: rgb(68, 78, 89) none 0px;
-        }
-
-        /*#A_19*/
-
-        .A_19:after {
-            color: rgb(68, 78, 89);
-            text-decoration: none solid rgb(68, 78, 89);
-            border: 0px none rgb(68, 78, 89);
-            outline: rgb(68, 78, 89) none 0px;
-        }
-
-        /*#A_19:after*/
-
-        .A_19:before {
-            color: rgb(68, 78, 89);
-            text-decoration: none solid rgb(68, 78, 89);
-            border: 0px none rgb(68, 78, 89);
-            outline: rgb(68, 78, 89) none 0px;
-        }
-
-        /*#A_19:before*/
-
-        .DIV_20 {
-            height: 0px;
-            /* width: 31.2188px; */
-			    margin: 0px 0px 0px 5px;
-        }
-
-        .SPAN_21 {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16px;
-            text-decoration: none solid rgb(124, 124, 124);
-            /* width: 60.375px; */
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            flex: 0 0 auto;
-            outline: rgb(124, 124, 124) none 0px;
-            padding: 0px 0px 0px 8px;
-        }
-
-        /*#SPAN_21*/
-
-        .SPAN_21:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_21:after*/
-
-        .SPAN_21:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_21:before*/
-
-        .SPAN_22,
-        .SPAN_25 {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16px;
-            text-decoration: none solid rgb(124, 124, 124);
-            width: 3.92188px;
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            flex: 0 0 auto;
-            outline: rgb(124, 124, 124) none 0px;
-            padding: 0px 0px 0px 8px;
-        }
-
-        /*#SPAN_22, #SPAN_25*/
-
-        .SPAN_22:after,
-        .SPAN_25:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_22:after, #SPAN_25:after*/
-
-        .SPAN_22:before,
-        .SPAN_25:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_22:before, #SPAN_25:before*/
-
-        .A_23 {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16px;
-            text-decoration: none solid rgb(124, 124, 124);
-            /* width: 62.8594px; */
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            flex: 0 0 auto;
-            outline: rgb(124, 124, 124) none 0px;
-            padding: 0px 0px 0px 8px;
-        }
-
-        /*#A_23*/
-
-        .A_23:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#A_23:after*/
-
-        .A_23:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#A_23:before*/
-
-        .SPAN_24 {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_24*/
-
-        .SPAN_24:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_24:after*/
-
-        .SPAN_24:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*#SPAN_24:before*/
-
-        .SPAN_26 {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16px;
-            text-decoration: none solid rgb(124, 124, 124);
-            /* width: 94.1094px; */
-            column-rule-color: rgb(124, 124, 124);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            flex: 0 0 auto;
-			font-style: italic;
-            font: italic normal 400 normal 12px IBMPlexSans, Arial, sans-serif;
-            margin: 0;
-            margin-left: 1px;
-            outline: rgb(124, 124, 124) none 0px;
-            padding: 0;
-        }
-
-        .DIV_27 {
-            bottom: 0px;
-            display: flex;
-            height: 0px;
-            left: 0px;
-            position: relative;
-            right: 0px;
-            top: 0px;
-            width: 0px;
-            align-items: center;
-			}
-
-        .DIV_28 {
-            /* height: 42px; */
-            /* width: 565px; */
-			    padding: 2px 0px;
-        }
-
-        .DIV_29 {
-            color: rgb(26, 26, 27);
-            /* height: 42px; */
-            text-decoration: none solid rgb(26, 26, 27);
-            /* width: 565px; */
-            column-rule-color: rgb(26, 26, 27);
-            caret-color: rgb(26, 26, 27);
-            border: 0px none rgb(26, 26, 27);
-            font: normal normal 400 normal 14px / 21px "Noto Sans", Arial, sans-serif;
-            outline: rgb(26, 26, 27) none 0px;
-            overflow: auto;
-        }
-
-        .DIV_31 {
-            display: flex;
-            flex-direction: row;
-            -moz-box-align: center;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 700;
-            line-height: 16px;
-            color: rgb(129, 131, 132);
-            margin: 4px 0px 8px;
-            color: rgb(135, 138, 140);
-            display: flex;
-            /* height: 17px; */
-            text-decoration: none solid rgb(135, 138, 140);
-            /* width: 565px; */
-            column-rule-color: rgb(135, 138, 140);
-            align-items: center;
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            margin: 4px 0px 8px;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_31*/
-
-        .DIV_31:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_31:after*/
-
-        .DIV_31:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_31:before*/
-
-        .BUTTON_32 {
-            color: rgb(135, 138, 140);
-            display: block;
-            /* height: 17px; */
-            text-decoration: none solid rgb(135, 138, 140);
-            /* width: 52.9219px; */
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box;
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 12px 0px 0px;
-            outline: rgb(135, 138, 140) none 0px;
-            padding: 0px;
-            transition: color 0.1s ease 0s;
-        }
-
-        /*#BUTTON_32*/
-
-        .BUTTON_32:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#BUTTON_32:after*/
-
-        .BUTTON_32:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#BUTTON_32:before*/
-
-        .I_33 {
-            /* LIGHT MODE */
-            /* color: rgb(183, 185, 186); */
-            /* fill: rgb(183, 185, 186); */
-
-            /* DARK MODE */
-            color: rgb(129, 131, 132);
-            fill: rgb(129, 131, 132);
-
-            margin-bottom: -2px !important;
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            font-size: 16px;
-            line-height: 16px;
-            vertical-align: text-bottom;
-            display: inline-block;
-            height: 16px;
-            text-align: center;
-            text-decoration: none;
-            vertical-align: text-bottom;
-            /* width: 16px; */
-            border: none;
-			    margin: 0px 6px 0px -1px;
-            outline: none;
-        }
-
-        /*#I_33*/
-
-        .I_33:after {
-            color: rgb(183, 185, 186);
-            fill: rgb(183, 185, 186);
-            text-align: center;
-            text-decoration: none;
-            border: none;
-			    outline: none;
-        }
-
-        /*#I_33:after*/
-
-        .I_33:before {
-            /* LIGHT MODE */
-            /* color: rgb(183, 185, 186); */
-            /* fill: rgb(183, 185, 186); */
-
-            /* DARK MODE */
-            color: rgb(129, 131, 132);
-            fill: rgb(129, 131, 132);
-
-            content: '';
-            text-align: center;
-            font: normal normal 400 normal 16px redesignFont;
-            text-decoration: none;
-            border: none;
-            outline: none;
-        }
-
-        /*#I_33:before*/
-
-        .DIV_34 {
-            color: rgb(135, 138, 140);
-            /* height: 16px; */
-            text-decoration: none solid rgb(135, 138, 140);
-            /* width: 45.0156px; */
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_34*/
-
-        .DIV_34:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_34:after*/
-
-        .DIV_34:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_34:before*/
-
-        .BUTTON_35 {
-            color: rgb(135, 138, 140);
-            height: 16px;
-            text-decoration: none solid rgb(135, 138, 140);
-            /* width: 33.0156px; */
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box;
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 12px 0px 0px;
-            outline: rgb(135, 138, 140) none 0px;
-            padding: 0px;
-            transition: color 0.1s ease 0s;
-        }
-
-        /*#BUTTON_35*/
-
-        .BUTTON_35:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#BUTTON_35:after*/
-
-        .BUTTON_35:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#BUTTON_35:before*/
-
-        .BUTTON_36 {
-            color: rgb(135, 138, 140);
-            display: block;
-            height: 16px;
-            text-decoration: none solid rgb(135, 138, 140);
-            /* width: 38.4063px; */
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box;
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 12px 0px 0px;
-            outline: rgb(135, 138, 140) none 0px;
-            padding: 0px;
-            transition: color 0.1s ease 0s;
-        }
-
-        /*#BUTTON_36*/
-
-        .BUTTON_36:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#BUTTON_36:after*/
-
-        .BUTTON_36:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#BUTTON_36:before*/
-
-        .BUTTON_37 {
-            color: rgb(135, 138, 140);
-            display: block;
-            height: 16px;
-            text-decoration: none solid rgb(135, 138, 140);
-            /* width: 27.3125px; */
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box;
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            margin: 0px 12px 0px 0px;
-            outline: rgb(135, 138, 140) none 0px;
-            padding: 0px;
-            transition: color 0.1s ease 0s;
-        }
-
-        /*#BUTTON_37*/
-
-        .BUTTON_37:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#BUTTON_37:after*/
-
-        .BUTTON_37:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            font: normal normal 700 normal 12px IBMPlexSans, Arial, sans-serif;
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        @font-face {
-            font-family: redesignFont;
-            src: url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.woff), url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.ttf), url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.svg);
-        }
-
-        /*#DIV_20:before*/
-
-        .DIV_GILDS {
-            bottom: 0px;
-            color: rgb(135, 138, 140);
-            display: inline-flex;
-            height: 16.9063px;
-            left: 0px;
-            position: relative;
-            right: 0px;
-            text-decoration: none solid rgb(135, 138, 140);
-            top: 0px;
-            /* width: 44px; */
-            column-rule-color: rgb(135, 138, 140);
-            align-items: center;
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_GILDS*/
-
-        .DIV_GILDS:after {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_GILDS:after*/
-
-        .DIV_GILDS:before {
-            color: rgb(135, 138, 140);
-            text-decoration: none solid rgb(135, 138, 140);
-            column-rule-color: rgb(135, 138, 140);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(135, 138, 140);
-            border: 0px none rgb(135, 138, 140);
-            outline: rgb(135, 138, 140) none 0px;
-        }
-
-        /*#DIV_GILDS:before*/
-
-        .SPAN_SILVER,
-        .SPAN_GOLD {
-            color: rgb(124, 124, 124);
-            display: block;
-            height: 16.9063px;
-            text-decoration: none solid rgb(124, 124, 124);
-            /* width: 22px; */
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.SPAN_SILVER, .SPAN_GOLD*/
-
-        .SPAN_SILVER:after,
-        .SPAN_GOLD:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.SPAN_SILVER:after, .SPAN_GOLD:after*/
-
-        .SPAN_SILVER:before,
-        .SPAN_GOLD:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.SPAN_SILVER:before, .SPAN_GOLD:before*/
-
-        .I_SILVER,
-        .I_GOLD {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.I_SILVER, .I_GOLD*/
-
-        .I_SILVER:after,
-        .I_GOLD:after {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.I_SILVER:after, .I_GOLD:after*/
-
-        .I_SILVER:before,
-        .I_GOLD:before {
-            color: rgb(124, 124, 124);
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.I_SILVER:before, .I_GOLD:before*/
-
-        .IMG_SILVER,
-        .IMG_GOLD {
-            color: rgb(124, 124, 124);
-            cursor: default;
-            height: 16px;
-            max-height: 16px;
-            max-width: 16px;
-            text-decoration: none solid rgb(124, 124, 124);
-            vertical-align: middle;
-            width: 16px;
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            margin: 0px 2px 0px 4px;
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.IMG_SILVER, .IMG_GOLD*/
-
-        .IMG_SILVER:after,
-        .IMG_GOLD:after {
-            color: rgb(124, 124, 124);
-            cursor: default;
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        /*.IMG_SILVER:after, .IMG_GOLD:after*/
-
-        .IMG_SILVER:before,
-        .IMG_GOLD:before {
-            color: rgb(124, 124, 124);
-            cursor: default;
-            text-decoration: none solid rgb(124, 124, 124);
-            column-rule-color: rgb(124, 124, 124);
-            fill: rgb(135, 138, 140);
-            caret-color: rgb(124, 124, 124);
-            border: 0px none rgb(124, 124, 124);
-            outline: rgb(124, 124, 124) none 0px;
-        }
-
-        p {
-            margin: 0;
-            padding: 0;
-            padding-bottom: 0.25em;
-        }
-
-        .hide,
-        .hide-until-active {
-            color: rgba(0, 0, 0, 0) !important;
-            text-shadow: none !important;
-            visibility: hidden;
-        }
-
-        .hide .span {
-            color: rgba(0, 0, 0, 0) !important;
-            text-shadow: none !important;
-        }
-
-        .blur {
-            color: transparent;
-            text-shadow: 0 0 6px rgb(255, 255, 255);
-        }
-
-        body {
-            /* DARK MODE BRUH!!!! */
-            background-color: #19191a;
-
-            margin: 0;
-            padding: 0;
-        }
-
-        .dark-mode-text {
-            color: rgb(215, 218, 220) !important;
-        }
-
-        .dark-mode-bottom button {
-            color: rgb(129, 131, 132) !important;
-        }
-
-        .dark-mode-meta {
-            color: rgb(129, 131, 132) !important;
-        }
-
-        .dark-mode-user {
-            color: rgb(79, 188, 255) !important;
-        }
-
-        .dark-mode-thread {
-            border-right: 2px solid rgb(52, 53, 54) !important;
-        }
-
-        .is_upvoted,
-        .is_upvoted::before {
-            color: rgb(255, 69, 0) !important;
-        }
-
-        .main-content .main-content {
-            /* All child-comments should have negative margin */
-            margin-left: -13px;
-        }
-
-        blockquote {
-            border-left: 4px solid rgba(215, 218, 220, 0.2);
-            margin: 4px 0px 4px 8px;
-            padding-left: 8px;
-            quotes: none;
-        }
-
-        .DIV_28 a {
-            color: rgb(79, 188, 255) !important;
-            text-decoration: underline !important;
-        }
-    </style>
-</head>
-
-<body>
-    {{> comment this}}
-</body>
-
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            @import url("https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,500,700&display=swap");
+
+            .main-content {
+                /* height: 107px; */
+                /* width: 604px; */
+                padding: 0 5px;
+                word-break: break-word;
+                font: normal normal 400 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+            }
+
+            .DIV_2 {
+                bottom: 0px;
+                box-sizing: border-box;
+                /* height: 107px; */
+                left: 0px;
+                position: relative;
+                right: 0px;
+                top: 0px;
+                /* width: 604px; */
+                padding: 0px 0px 0px 16px;
+                transition: background 1s ease 0s;
+            }
+
+            .DIV_3 {
+                bottom: 0px;
+                /* height: 107px; */
+                left: 0px;
+                position: absolute;
+                right: 604px;
+                top: 0px;
+                width: 0px;
+                z-index: 2;
+            }
+
+            .DIV_4 {
+                box-sizing: border-box;
+                display: inline-block;
+                /* height: 107px; */
+                vertical-align: top;
+                width: 0px;
+            }
+
+            .DIV_5 {
+                bottom: 0px;
+                box-sizing: border-box;
+                /* height: 51px; */
+                left: 0px;
+                position: absolute;
+                right: -21px;
+                top: 48px;
+                vertical-align: top;
+                /* width: 16px; */
+                margin: 0px 0px 0px 5px;
+            }
+
+            .I_6 {
+                display: block;
+                height: 100%;
+                width: 8px;
+                border-right: 2px solid rgb(237, 239, 241);
+            }
+
+            .DIV_7 {
+                bottom: 0px;
+                display: flex;
+                /* height: 99px; */
+                left: 0px;
+                position: relative;
+                right: 0px;
+                top: 0px;
+                /* width: 607px; */
+                border-radius: 4px 4px 4px 4px;
+                margin: 0px 0px 0px -23px;
+                padding: 0px 4px 0px 0px;
+                transition: color 0.5s ease 0s, fill 0.5s ease 0s,
+                    background 1s ease 0s;
+            }
+
+            .DIV_8 {
+                display: flex;
+                /* height: 40px; */
+                max-height: 40px;
+                min-width: 24px;
+                text-align: center;
+                /* width: 24px; */
+                z-index: 3;
+                align-items: center;
+                flex-flow: column nowrap;
+                margin: 6px -1px -2px 9px;
+            }
+
+            /*#DIV_8*/
+
+            .DIV_8:after {
+                text-align: center;
+            }
+
+            /*#DIV_8:after*/
+
+            .DIV_8:before {
+                text-align: center;
+            }
+
+            /*#DIV_8:before*/
+
+            .BUTTON_UPVOTE,
+            .BUTTON_12 {
+                display: block;
+                height: 20px;
+                /* width: 24px; */
+                background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto
+                    padding-box border-box;
+                border: 0px none rgb(0, 0, 0);
+                padding: 0px;
+            }
+
+            .DIV_UPVOTE {
+                color: rgb(135, 138, 140);
+                display: inline-block;
+                /* height: 16px; */
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                /* width: 16px; */
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                border-radius: 2px 2px 2px 2px;
+                outline: rgb(135, 138, 140) none 0px;
+                overflow: hidden;
+                padding: 2px;
+            }
+
+            /*#DIV_UPVOTE*/
+
+            .DIV_UPVOTE:after {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_UPVOTE:after*/
+
+            .DIV_UPVOTE:before {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_UPVOTE:before*/
+
+            .I_UPVOTE {
+                bottom: 0px;
+                color: rgb(135, 138, 140);
+                left: 0px;
+                position: relative;
+                right: 0px;
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                top: 0px;
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#I_UPVOTE*/
+
+            .I_UPVOTE:after {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#I_UPVOTE:after*/
+
+            .I_UPVOTE:before {
+                color: rgb(135, 138, 140);
+                content: "";
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 400 normal 16px redesignFont;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#I_UPVOTE:before*/
+
+            .DIV_13 {
+                color: rgb(135, 138, 140);
+                display: inline-block;
+                /* height: 18px; */
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                /* width: 16px; */
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                border-radius: 2px 2px 2px 2px;
+                outline: rgb(135, 138, 140) none 0px;
+                overflow: hidden;
+                padding: 2px;
+            }
+
+            /*#DIV_13*/
+
+            .DIV_13:after {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_13:after*/
+
+            .DIV_13:before {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_13:before*/
+
+            .I_14 {
+                bottom: 0px;
+                color: rgb(135, 138, 140);
+                left: 0px;
+                position: relative;
+                right: 0px;
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                top: 0px;
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#I_14*/
+
+            .I_14:after {
+                color: rgb(135, 138, 140);
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#I_14:after*/
+
+            .I_14:before {
+                color: rgb(135, 138, 140);
+                content: "";
+                text-align: center;
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 400 normal 16px redesignFont;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#I_14:before*/
+
+            .DIV_15 {
+                box-sizing: border-box;
+                /* height: 99px; */
+                /* width: 571px; */
+                border: 1px solid rgba(0, 0, 0, 0);
+                border-radius: 4px 4px 4px 4px;
+                margin: 0px 0px 0px 4px;
+                padding: 4px 0px 0px 4px;
+            }
+
+            .SPAN_16 {
+                bottom: 78px;
+                clip: rect(1px, 1px, 1px, 1px);
+                display: block;
+                height: 16px;
+                left: 41px;
+                position: absolute;
+                right: 522.734px;
+                top: 13px;
+                /* width: 47.2656px; */
+            }
+
+            .DIV_17 {
+                display: flex;
+                height: 18px;
+                min-height: 18px;
+                /* width: 565px; */
+                align-items: center;
+                transition: opacity 0.2s ease 0s;
+            }
+
+            .DIV_18 {
+                height: 18px;
+                /* width: 36.2188px; */
+                flex: 0 0 auto;
+            }
+
+            .A_19 {
+                color: rgb(68, 78, 89);
+                text-decoration: none solid rgb(68, 78, 89);
+                border: 0px none rgb(68, 78, 89);
+                outline: rgb(68, 78, 89) none 0px;
+            }
+
+            /*#A_19*/
+
+            .A_19:after {
+                color: rgb(68, 78, 89);
+                text-decoration: none solid rgb(68, 78, 89);
+                border: 0px none rgb(68, 78, 89);
+                outline: rgb(68, 78, 89) none 0px;
+            }
+
+            /*#A_19:after*/
+
+            .A_19:before {
+                color: rgb(68, 78, 89);
+                text-decoration: none solid rgb(68, 78, 89);
+                border: 0px none rgb(68, 78, 89);
+                outline: rgb(68, 78, 89) none 0px;
+            }
+
+            /*#A_19:before*/
+
+            .DIV_20 {
+                height: 0px;
+                /* width: 31.2188px; */
+                margin: 0px 0px 0px 5px;
+            }
+
+            .SPAN_21 {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16px;
+                text-decoration: none solid rgb(124, 124, 124);
+                /* width: 60.375px; */
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                flex: 0 0 auto;
+                outline: rgb(124, 124, 124) none 0px;
+                padding: 0px 0px 0px 8px;
+            }
+
+            /*#SPAN_21*/
+
+            .SPAN_21:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_21:after*/
+
+            .SPAN_21:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_21:before*/
+
+            .SPAN_22,
+            .SPAN_25 {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16px;
+                text-decoration: none solid rgb(124, 124, 124);
+                width: 3.92188px;
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                flex: 0 0 auto;
+                outline: rgb(124, 124, 124) none 0px;
+                padding: 0px 0px 0px 8px;
+            }
+
+            /*#SPAN_22, #SPAN_25*/
+
+            .SPAN_22:after,
+            .SPAN_25:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_22:after, #SPAN_25:after*/
+
+            .SPAN_22:before,
+            .SPAN_25:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_22:before, #SPAN_25:before*/
+
+            .A_23 {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16px;
+                text-decoration: none solid rgb(124, 124, 124);
+                /* width: 62.8594px; */
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                flex: 0 0 auto;
+                outline: rgb(124, 124, 124) none 0px;
+                padding: 0px 0px 0px 8px;
+            }
+
+            /*#A_23*/
+
+            .A_23:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#A_23:after*/
+
+            .A_23:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#A_23:before*/
+
+            .SPAN_24 {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_24*/
+
+            .SPAN_24:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_24:after*/
+
+            .SPAN_24:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*#SPAN_24:before*/
+
+            .SPAN_26 {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16px;
+                text-decoration: none solid rgb(124, 124, 124);
+                /* width: 94.1094px; */
+                column-rule-color: rgb(124, 124, 124);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                flex: 0 0 auto;
+                font-style: italic;
+                font: italic normal 400 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0;
+                margin-left: 1px;
+                outline: rgb(124, 124, 124) none 0px;
+                padding: 0;
+            }
+
+            .DIV_27 {
+                bottom: 0px;
+                display: flex;
+                height: 0px;
+                left: 0px;
+                position: relative;
+                right: 0px;
+                top: 0px;
+                width: 0px;
+                align-items: center;
+            }
+
+            .DIV_28 {
+                /* height: 42px; */
+                /* width: 565px; */
+                padding: 2px 0px;
+            }
+
+            .DIV_29 {
+                color: rgb(26, 26, 27);
+                /* height: 42px; */
+                text-decoration: none solid rgb(26, 26, 27);
+                /* width: 565px; */
+                column-rule-color: rgb(26, 26, 27);
+                caret-color: rgb(26, 26, 27);
+                border: 0px none rgb(26, 26, 27);
+                font: normal normal 400 normal 14px / 21px "Noto Sans", Arial,
+                    sans-serif;
+                outline: rgb(26, 26, 27) none 0px;
+                overflow: auto;
+            }
+
+            .DIV_31 {
+                display: flex;
+                flex-direction: row;
+                -moz-box-align: center;
+                align-items: center;
+                font-size: 12px;
+                font-weight: 700;
+                line-height: 16px;
+                color: rgb(129, 131, 132);
+                margin: 4px 0px 8px;
+                color: rgb(135, 138, 140);
+                display: flex;
+                /* height: 17px; */
+                text-decoration: none solid rgb(135, 138, 140);
+                /* width: 565px; */
+                column-rule-color: rgb(135, 138, 140);
+                align-items: center;
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 4px 0px 8px;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_31*/
+
+            .DIV_31:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_31:after*/
+
+            .DIV_31:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_31:before*/
+
+            .BUTTON_32 {
+                color: rgb(135, 138, 140);
+                display: block;
+                /* height: 17px; */
+                text-decoration: none solid rgb(135, 138, 140);
+                /* width: 52.9219px; */
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto
+                    padding-box border-box;
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 12px 0px 0px;
+                outline: rgb(135, 138, 140) none 0px;
+                padding: 0px;
+                transition: color 0.1s ease 0s;
+            }
+
+            /*#BUTTON_32*/
+
+            .BUTTON_32:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#BUTTON_32:after*/
+
+            .BUTTON_32:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#BUTTON_32:before*/
+
+            .I_33 {
+                /* LIGHT MODE */
+                /* color: rgb(183, 185, 186); */
+                /* fill: rgb(183, 185, 186); */
+
+                /* DARK MODE */
+                color: rgb(129, 131, 132);
+                fill: rgb(129, 131, 132);
+
+                margin-bottom: -2px !important;
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                font-size: 16px;
+                line-height: 16px;
+                vertical-align: text-bottom;
+                display: inline-block;
+                height: 16px;
+                text-align: center;
+                text-decoration: none;
+                vertical-align: text-bottom;
+                /* width: 16px; */
+                border: none;
+                margin: 0px 6px 0px -1px;
+                outline: none;
+            }
+
+            /*#I_33*/
+
+            .I_33:after {
+                color: rgb(183, 185, 186);
+                fill: rgb(183, 185, 186);
+                text-align: center;
+                text-decoration: none;
+                border: none;
+                outline: none;
+            }
+
+            /*#I_33:after*/
+
+            .I_33:before {
+                /* LIGHT MODE */
+                /* color: rgb(183, 185, 186); */
+                /* fill: rgb(183, 185, 186); */
+
+                /* DARK MODE */
+                color: rgb(129, 131, 132);
+                fill: rgb(129, 131, 132);
+
+                content: "";
+                text-align: center;
+                font: normal normal 400 normal 16px redesignFont;
+                text-decoration: none;
+                border: none;
+                outline: none;
+            }
+
+            /*#I_33:before*/
+
+            .DIV_34 {
+                color: rgb(135, 138, 140);
+                /* height: 16px; */
+                text-decoration: none solid rgb(135, 138, 140);
+                /* width: 45.0156px; */
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_34*/
+
+            .DIV_34:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_34:after*/
+
+            .DIV_34:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_34:before*/
+
+            .BUTTON_35 {
+                color: rgb(135, 138, 140);
+                height: 16px;
+                text-decoration: none solid rgb(135, 138, 140);
+                /* width: 33.0156px; */
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto
+                    padding-box border-box;
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 12px 0px 0px;
+                outline: rgb(135, 138, 140) none 0px;
+                padding: 0px;
+                transition: color 0.1s ease 0s;
+            }
+
+            /*#BUTTON_35*/
+
+            .BUTTON_35:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#BUTTON_35:after*/
+
+            .BUTTON_35:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#BUTTON_35:before*/
+
+            .BUTTON_36 {
+                color: rgb(135, 138, 140);
+                display: block;
+                height: 16px;
+                text-decoration: none solid rgb(135, 138, 140);
+                /* width: 38.4063px; */
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto
+                    padding-box border-box;
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 12px 0px 0px;
+                outline: rgb(135, 138, 140) none 0px;
+                padding: 0px;
+                transition: color 0.1s ease 0s;
+            }
+
+            /*#BUTTON_36*/
+
+            .BUTTON_36:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#BUTTON_36:after*/
+
+            .BUTTON_36:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#BUTTON_36:before*/
+
+            .BUTTON_37 {
+                color: rgb(135, 138, 140);
+                display: block;
+                height: 16px;
+                text-decoration: none solid rgb(135, 138, 140);
+                /* width: 27.3125px; */
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto
+                    padding-box border-box;
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                margin: 0px 12px 0px 0px;
+                outline: rgb(135, 138, 140) none 0px;
+                padding: 0px;
+                transition: color 0.1s ease 0s;
+            }
+
+            /*#BUTTON_37*/
+
+            .BUTTON_37:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#BUTTON_37:after*/
+
+            .BUTTON_37:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                font: normal normal 700 normal 12px IBMPlexSans, Arial,
+                    sans-serif;
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            @font-face {
+                font-family: redesignFont;
+                src: url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.woff),
+                    url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.ttf),
+                    url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.da087541a3f91c4af004a7c765fb21f4.svg);
+            }
+
+            /*#DIV_20:before*/
+
+            .DIV_GILDS {
+                bottom: 0px;
+                color: rgb(135, 138, 140);
+                display: inline-flex;
+                height: 16.9063px;
+                left: 0px;
+                position: relative;
+                right: 0px;
+                text-decoration: none solid rgb(135, 138, 140);
+                top: 0px;
+                /* width: 44px; */
+                column-rule-color: rgb(135, 138, 140);
+                align-items: center;
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_GILDS*/
+
+            .DIV_GILDS:after {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_GILDS:after*/
+
+            .DIV_GILDS:before {
+                color: rgb(135, 138, 140);
+                text-decoration: none solid rgb(135, 138, 140);
+                column-rule-color: rgb(135, 138, 140);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(135, 138, 140);
+                border: 0px none rgb(135, 138, 140);
+                outline: rgb(135, 138, 140) none 0px;
+            }
+
+            /*#DIV_GILDS:before*/
+
+            .SPAN_SILVER,
+            .SPAN_GOLD {
+                color: rgb(124, 124, 124);
+                display: block;
+                height: 16.9063px;
+                text-decoration: none solid rgb(124, 124, 124);
+                /* width: 22px; */
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.SPAN_SILVER, .SPAN_GOLD*/
+
+            .SPAN_SILVER:after,
+            .SPAN_GOLD:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.SPAN_SILVER:after, .SPAN_GOLD:after*/
+
+            .SPAN_SILVER:before,
+            .SPAN_GOLD:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.SPAN_SILVER:before, .SPAN_GOLD:before*/
+
+            .I_SILVER,
+            .I_GOLD {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.I_SILVER, .I_GOLD*/
+
+            .I_SILVER:after,
+            .I_GOLD:after {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.I_SILVER:after, .I_GOLD:after*/
+
+            .I_SILVER:before,
+            .I_GOLD:before {
+                color: rgb(124, 124, 124);
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.I_SILVER:before, .I_GOLD:before*/
+
+            .IMG_SILVER,
+            .IMG_GOLD {
+                color: rgb(124, 124, 124);
+                cursor: default;
+                height: 16px;
+                max-height: 16px;
+                max-width: 16px;
+                text-decoration: none solid rgb(124, 124, 124);
+                vertical-align: middle;
+                width: 16px;
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                margin: 0px 2px 0px 4px;
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.IMG_SILVER, .IMG_GOLD*/
+
+            .IMG_SILVER:after,
+            .IMG_GOLD:after {
+                color: rgb(124, 124, 124);
+                cursor: default;
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            /*.IMG_SILVER:after, .IMG_GOLD:after*/
+
+            .IMG_SILVER:before,
+            .IMG_GOLD:before {
+                color: rgb(124, 124, 124);
+                cursor: default;
+                text-decoration: none solid rgb(124, 124, 124);
+                column-rule-color: rgb(124, 124, 124);
+                fill: rgb(135, 138, 140);
+                caret-color: rgb(124, 124, 124);
+                border: 0px none rgb(124, 124, 124);
+                outline: rgb(124, 124, 124) none 0px;
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+                padding-bottom: 0.25em;
+            }
+
+            .hide,
+            .hide-until-active {
+                color: rgba(0, 0, 0, 0) !important;
+                text-shadow: none !important;
+                visibility: hidden;
+            }
+
+            .hide .span {
+                color: rgba(0, 0, 0, 0) !important;
+                text-shadow: none !important;
+            }
+
+            .blur {
+                color: transparent;
+                text-shadow: 0 0 6px rgb(255, 255, 255);
+            }
+
+            body {
+                /* DARK MODE BRUH!!!! */
+                background-color: #19191a;
+
+                margin: 0;
+                padding: 0;
+            }
+
+            .dark-mode-text {
+                color: rgb(215, 218, 220) !important;
+            }
+
+            .dark-mode-bottom button {
+                color: rgb(129, 131, 132) !important;
+            }
+
+            .dark-mode-meta {
+                color: rgb(129, 131, 132) !important;
+            }
+
+            .dark-mode-user {
+                color: rgb(79, 188, 255) !important;
+            }
+
+            .dark-mode-thread {
+                border-right: 2px solid rgb(52, 53, 54) !important;
+            }
+
+            .is_upvoted,
+            .is_upvoted::before {
+                color: rgb(255, 69, 0) !important;
+            }
+
+            .main-content .main-content {
+                /* All child-comments should have negative margin */
+                margin-left: -13px;
+            }
+
+            blockquote {
+                border-left: 4px solid rgba(215, 218, 220, 0.2);
+                margin: 4px 0px 4px 8px;
+                padding-left: 8px;
+                quotes: none;
+            }
+
+            .DIV_28 a {
+                color: rgb(79, 188, 255) !important;
+                text-decoration: underline !important;
+            }
+        </style>
+    </head>
+
+    <body>
+        {{> comment this}}
+    </body>
 </html>
