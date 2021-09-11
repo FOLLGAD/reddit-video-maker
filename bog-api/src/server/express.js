@@ -496,6 +496,7 @@ const init = () => {
                 owner: req.user._id,
                 voice: req.body.voice,
                 voiceSpeed: req.body.voiceSpeed,
+                translate: req.body.translate,
             })
             await theme.save()
 
@@ -516,7 +517,14 @@ const init = () => {
                 )
 
             let body = doBody(
-                ["name", "voice", "voiceSpeed", "callToAction", "volume"],
+                [
+                    "name",
+                    "voice",
+                    "voiceSpeed",
+                    "callToAction",
+                    "volume",
+                    "translate",
+                ],
                 req.body
             )
 
