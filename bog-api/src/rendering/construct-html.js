@@ -55,8 +55,13 @@ module.exports.renderComment = async function ({
     voice,
     commentIndex,
     callToAction,
+    translate,
 }) {
-    let rootComment = hydrate(commentData, 0.5)
+    let rootComment = hydrate({
+        comment: commentData,
+        upvoteProbability: 0.5,
+        translate,
+    })
     if (callToAction && commentIndex % 5 == 4) {
         // on the 5th comment and every 5 after, make a "call to action"
         rootComment.call_to_action = true // Set the parent-most comment to have a call to action

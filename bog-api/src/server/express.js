@@ -7,6 +7,7 @@ const {
     toFilesDir,
     legacyRenderFromRequest,
 } = require("./utils")
+const { translateText } = require("../utils/translation")
 const express = require("express")
 const multer = require("multer")
 const path = require("path")
@@ -616,19 +617,37 @@ const init = () => {
             }
 
             let body = req.body
-            let vid
+            let vids = []
 
             if (body.rerenderVideo) {
-                vid = await Video.findOne({ _id: body.rerenderVideo }).select({
-                    request_body: 1,
-                })
-                body = vid.request_body
                 Video.updateOne(
                     { _id: body.rerenderVideo },
                     { $set: { finished: null, failed: false } }
                 )
+
+                const vid = await Video.findOne({
+                    _id: body.rerenderVideo,
+                }).select({
+                    request_body: 1,
+                })
+                vids.push(vid)
             } else {
-                vid = await Video.create({
+                const theme = await Theme.findOne({ _id: body.options.theme })
+                const pms = theme.translate.map((lang) =>
+                    Video.create({
+                        name:
+                            (body.name || body.questionData?.title) +
+                            ` (${lang})` +
+                            " (Not started)",
+                        owner: req.user._id,
+                        preview: false,
+                        request_body: {
+                            ...body,
+                            options: { ...body.options, translate: lang },
+                        },
+                    })
+                )
+                const pm = await Video.create({
                     name:
                         (body.name || body.questionData?.title) +
                         " (Not started)",
@@ -636,6 +655,8 @@ const init = () => {
                     preview: false,
                     request_body: body,
                 })
+                const videos = await Promise.all([pm, ...pms])
+                vids.push(...videos)
             }
 
             let cost = getVideoPrice()
@@ -645,24 +666,26 @@ const init = () => {
             ).exec()
 
             try {
-                workersAsync(vid._id, body, req.user._id)
-                    .then(() => {
-                        Video.updateOne(
-                            { _id: vid._id },
-                            { $set: { finished: new Date() } }
-                        ).exec()
-                    })
-                    .catch(() => {
-                        console.error("Video failed in express.js")
-                        User.updateOne(
-                            { _id: req.user._id },
-                            { $inc: { credits: cost } }
-                        ).exec() // Refund credits
-                        Video.updateOne(
-                            { _id: vid._id },
-                            { $set: { failed: true } }
-                        ).exec() // Mark video as failed
-                    })
+                vids.map((vid) => {
+                    workersAsync(vid._id, vid.request_body, req.user._id)
+                        .then(() => {
+                            Video.updateOne(
+                                { _id: vid._id },
+                                { $set: { finished: new Date() } }
+                            ).exec()
+                        })
+                        .catch(() => {
+                            console.error("Video failed in express.js")
+                            User.updateOne(
+                                { _id: req.user._id },
+                                { $inc: { credits: cost } }
+                            ).exec() // Refund credits
+                            Video.updateOne(
+                                { _id: vid._id },
+                                { $set: { failed: true } }
+                            ).exec() // Mark video as failed
+                        })
+                })
 
                 res.json({ message: "Rendering" })
             } catch (error) {

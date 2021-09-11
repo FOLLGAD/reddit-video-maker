@@ -3,6 +3,7 @@ const path = require("path")
 const cheerio = require("cheerio")
 const timeAgo = require("node-time-ago")
 const { sanitizeHtml, sanitizeSynth, sanitizeUsername } = require("./sanitize")
+const { translateText } = require("../utils/translation")
 
 const splitCommentRegex = /((?:^|.)+?[.,?!]+[^\w\s]*\s+)/gm
 let splitComment = (module.exports.splitComment = function (str) {
@@ -237,7 +238,11 @@ module.exports.getFolderNames = function (dirPath) {
 
 // Recursively "hydrate" all comments in the comment tree.
 // Hydrating makes the data more fit for rendering and adds some extra data
-module.exports.hydrate = function hydrate(comment, upvoteProb) {
+module.exports.hydrate = function hydrate({
+    comment,
+    upvoteProbability,
+    translate,
+}) {
     comment.score = formatPoints(comment.score)
     comment.created = timeAgo(comment.created_utc * 1000)
     if (comment.edited) {
@@ -248,7 +253,7 @@ module.exports.hydrate = function hydrate(comment, upvoteProb) {
     }
     if (comment.replies) {
         comment.replies = comment.replies.map((reply) =>
-            hydrate(reply, upvoteProb)
+            hydrate({ comment: reply, upvoteProbability, translate })
         )
     }
     comment.all_awardings = comment.all_awardings
@@ -259,8 +264,16 @@ module.exports.hydrate = function hydrate(comment, upvoteProb) {
             icon_url: d.resized_icons[1].url, // Pick the 32x32 image (has index of 1)
         }))
     comment.showBottom = true
-    comment.upvoted = Math.random() < upvoteProb // Some of the posts will randomly be seen as upvoted
+    comment.upvoted = Math.random() < upvoteProbability // Some of the posts will randomly be seen as upvoted
     comment.authorHtml = sanitizeUsername(comment.author)
+
+    if (translate) {
+        if (comment.body_html) {
+            comment.body_html = translateText(comment.body_html, translate)
+        } else {
+            comment.title = translateText(comment.title, translate)
+        }
+    }
 
     return comment
 }

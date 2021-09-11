@@ -5,21 +5,17 @@ const translate = (text, lang) => {
         text,
         auth_key: process.env.DEEPL_KEY,
         target_lang: lang,
+        tag_handling: "xml",
+        preserve_formatting: "1",
     }
 
-    let formBody = []
-    for (const property in details) {
-        const encodedValue = encodeURIComponent(details[property])
-        formBody.push(property + "=" + encodedValue)
-    }
-    formBody = formBody.join("&")
     return fetch("https://api-free.deepl.com/v2/translate?auth_key=", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
             "User-Agent": "Reddit Video Maker",
         },
-        body: formBody,
+        body: new URLSearchParams(details).toString(),
     })
 }
 

@@ -149,6 +149,7 @@ module.exports.render = async function (questionData, commentData, options) {
                 voice: options.voice,
                 commentIndex: i,
                 callToAction: options.callToAction,
+                translate: options.translate,
             })
             videolist.push(commentPath)
             console.log("Successfully rendered comment", i)
@@ -174,6 +175,7 @@ module.exports.render = async function (questionData, commentData, options) {
         let question = await renderQuestion({
             questionData,
             voice: options.voice,
+            translate: options.translate,
         })
 
         console.log("Concatting...")

@@ -111,6 +111,7 @@ async function renderFromRequest(
             voiceSpeed: theme.voiceSpeed,
             volume: theme.volume,
             callToAction: theme.callToAction,
+            translate: options.translate,
         })
 
         await render(questionData, commentData, renderOptions)
