@@ -96,6 +96,7 @@ async function renderFromRequest(
             file: videoFile._id,
             owner,
             preview,
+            failed: false,
         }
     )
 
