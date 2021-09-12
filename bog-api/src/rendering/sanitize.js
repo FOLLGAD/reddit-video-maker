@@ -90,6 +90,14 @@ const foulSpanArray = [
     /(pe)(n)(is)/,
     /(va)(gi)(na)/,
     /(mast)(urb)(at)/,
+
+    /(jo)(d)(er)/,
+    /(c)(o)(ño)/,
+    /(v)(er)(ga)/,
+    /(jo)(d[aá])(s)/,
+    /(p)(ut)(a)/,
+    /(gilip)(oll)(as)/,
+    /(pin)(ch)(e)/,
 ]
 
 // These will replace the html with another word in full
