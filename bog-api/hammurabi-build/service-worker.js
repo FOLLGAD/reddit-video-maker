@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://app.redditvideomaker.com/precache-manifest.bee5d36a2c938b94bf34ec0bf909ed17.js"
+  "https://app.redditvideomaker.com/precache-manifest.2635f9abb7089c199d93920b9c0f6172.js"
 );
 
 self.addEventListener('message', (event) => {

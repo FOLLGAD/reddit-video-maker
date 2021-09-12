@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "0659361ef7532568d1ec01c2300331b7",
+    "revision": "ce9d33f1cc63353b60de59288a3183c1",
     "url": "https://app.redditvideomaker.com/index.html"
   },
   {
-    "revision": "fff48086620625560f17",
+    "revision": "b43e7b990a316665543e",
     "url": "https://app.redditvideomaker.com/static/css/2.d19085d1.chunk.css"
   },
   {
-    "revision": "d99f6527c50cd0839bc9",
-    "url": "https://app.redditvideomaker.com/static/css/main.9016f006.chunk.css"
+    "revision": "ecc52e446605024b081a",
+    "url": "https://app.redditvideomaker.com/static/css/main.d33fd989.chunk.css"
   },
   {
-    "revision": "fff48086620625560f17",
-    "url": "https://app.redditvideomaker.com/static/js/2.451973a3.chunk.js"
+    "revision": "b43e7b990a316665543e",
+    "url": "https://app.redditvideomaker.com/static/js/2.f62f1e44.chunk.js"
   },
   {
-    "revision": "d99f6527c50cd0839bc9",
-    "url": "https://app.redditvideomaker.com/static/js/main.089ccaf7.chunk.js"
+    "revision": "ecc52e446605024b081a",
+    "url": "https://app.redditvideomaker.com/static/js/main.e7fd4aea.chunk.js"
   },
   {
     "revision": "77ede285c3186baf6552",

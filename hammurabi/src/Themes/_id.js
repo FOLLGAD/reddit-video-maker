@@ -11,6 +11,7 @@ import {
 } from "../api"
 import FileInput from "../FileInput"
 import FrontNav from "../FrontNav"
+import { toast } from "react-toastify"
 
 let voices = [
     {
@@ -68,11 +69,11 @@ class Theme extends React.Component {
                 transition && data.append("transition", transition)
 
                 await uploadThemeFiles(this.props.themeId, data)
-
-                this.setState({ loading: false })
-            } else {
-                this.setState({ loading: false })
             }
+
+            this.setState({ loading: false })
+
+            toast.success("Theme saved")
         })
     }
     removeFile = (type) => {
@@ -127,13 +128,31 @@ class Theme extends React.Component {
                             onChange={this.handleChange}
                         />
                         {this.props.isAdmin && (
-                            <Form.Checkbox
-                                name="callToAction"
-                                placeholder="Call to action?"
-                                label="Call to action"
-                                checked={this.state.form.callToAction}
-                                onChange={this.handleCheckboxChange}
-                            ></Form.Checkbox>
+                            <>
+                                <Form.Checkbox
+                                    name="callToAction"
+                                    placeholder="Call to action?"
+                                    label="Call to action"
+                                    checked={this.state.form.callToAction}
+                                    onChange={this.handleCheckboxChange}
+                                ></Form.Checkbox>
+                                <Form.Select
+                                    name="translate"
+                                    placeholder="Translate to..."
+                                    label="Translate to..."
+                                    onChange={this.handleChange}
+                                    value={this.state.form.translate}
+                                    options={[
+                                        { value: "ES", text: "Spanish" },
+                                        {
+                                            value: "PT-BR",
+                                            text: "Portuguese (Brazil)",
+                                        },
+                                    ]}
+                                    multiple
+                                    clearable
+                                />
+                            </>
                         )}
 
                         {/* </Form.Group> */}

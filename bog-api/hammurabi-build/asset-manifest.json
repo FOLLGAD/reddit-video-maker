@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "https://app.redditvideomaker.com/static/css/main.9016f006.chunk.css",
-    "main.js": "https://app.redditvideomaker.com/static/js/main.089ccaf7.chunk.js",
-    "main.js.map": "https://app.redditvideomaker.com/static/js/main.089ccaf7.chunk.js.map",
+    "main.css": "https://app.redditvideomaker.com/static/css/main.d33fd989.chunk.css",
+    "main.js": "https://app.redditvideomaker.com/static/js/main.e7fd4aea.chunk.js",
+    "main.js.map": "https://app.redditvideomaker.com/static/js/main.e7fd4aea.chunk.js.map",
     "runtime~main.js": "https://app.redditvideomaker.com/static/js/runtime~main.05d8bc98.js",
     "runtime~main.js.map": "https://app.redditvideomaker.com/static/js/runtime~main.05d8bc98.js.map",
     "static/css/2.d19085d1.chunk.css": "https://app.redditvideomaker.com/static/css/2.d19085d1.chunk.css",
-    "static/js/2.451973a3.chunk.js": "https://app.redditvideomaker.com/static/js/2.451973a3.chunk.js",
-    "static/js/2.451973a3.chunk.js.map": "https://app.redditvideomaker.com/static/js/2.451973a3.chunk.js.map",
+    "static/js/2.f62f1e44.chunk.js": "https://app.redditvideomaker.com/static/js/2.f62f1e44.chunk.js",
+    "static/js/2.f62f1e44.chunk.js.map": "https://app.redditvideomaker.com/static/js/2.f62f1e44.chunk.js.map",
     "index.html": "https://app.redditvideomaker.com/index.html",
-    "precache-manifest.bee5d36a2c938b94bf34ec0bf909ed17.js": "https://app.redditvideomaker.com/precache-manifest.bee5d36a2c938b94bf34ec0bf909ed17.js",
+    "precache-manifest.2635f9abb7089c199d93920b9c0f6172.js": "https://app.redditvideomaker.com/precache-manifest.2635f9abb7089c199d93920b9c0f6172.js",
     "service-worker.js": "https://app.redditvideomaker.com/service-worker.js",
     "static/css/2.d19085d1.chunk.css.map": "https://app.redditvideomaker.com/static/css/2.d19085d1.chunk.css.map",
-    "static/css/main.9016f006.chunk.css.map": "https://app.redditvideomaker.com/static/css/main.9016f006.chunk.css.map",
+    "static/css/main.d33fd989.chunk.css.map": "https://app.redditvideomaker.com/static/css/main.d33fd989.chunk.css.map",
     "static/media/semantic.min.css": "https://app.redditvideomaker.com/static/media/outline-icons.ef60a4f6.woff"
   }
 }
