@@ -1,6 +1,6 @@
 const fetch = require("node-fetch")
 
-const translate = (text, lang) => {
+const translate = async (text, lang) => {
     const details = {
         text,
         auth_key: process.env.DEEPL_KEY,
@@ -9,16 +9,18 @@ const translate = (text, lang) => {
         preserve_formatting: "1",
     }
 
-    return fetch("https://api-free.deepl.com/v2/translate?auth_key=", {
+    const res = await fetch("https://api-free.deepl.com/v2/translate", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
             "User-Agent": "Reddit Video Maker",
         },
         body: new URLSearchParams(details).toString(),
-    })
+    }).then((r) => r.json())
+
+    return res.translations
 }
 
 module.exports.translateText = function translateText(text, lang) {
-    return translate(text, lang)
+    return translate(text, lang).then((translations) => translations[0].text)
 }

@@ -8,13 +8,13 @@ const { fetchAboutSubreddit } = require("./reddit-api")
 
 const vidExtension = "mp4"
 
-async function sequentialWork(works, { voice, dsf = 2.4 }) {
+async function sequentialWork(works, { voice, dsf = 2.4, language }) {
     let arr = []
     for (const workObject of works) {
         const [markup, text] = workObject
         try {
             const puppet = launchPuppet(markup, dsf)
-            const daniel = synthSpeech({ text, voice })
+            const daniel = synthSpeech({ text, voice, language })
             // .then(filepath => {
             // 	// Speed up by a factor
             // 	let { name } = tmp.fileSync({ postfix: '.mp3' })
@@ -27,13 +27,12 @@ async function sequentialWork(works, { voice, dsf = 2.4 }) {
             // 	})
             // })
 
-            let todo = [puppet, daniel]
-
             let file = tmp.fileSync({ postfix: "." + vidExtension })
             let path = file.name
-            let [imgPath, audioPath] = await Promise.all(todo)
+            let [imgPath, audioResponse] = await Promise.all([puppet, daniel])
+            const { audioPath, delay } = audioResponse
 
-            await combineImageAudio(imgPath, audioPath, path, -0.35, text)
+            await combineImageAudio(imgPath, audioPath, path, delay, text)
             arr.push(path)
         } catch (e) {
             // Do nothing, skips frame
@@ -57,7 +56,7 @@ module.exports.renderComment = async function ({
     callToAction,
     translate,
 }) {
-    let rootComment = hydrate({
+    let rootComment = await hydrate({
         comment: commentData,
         upvoteProbability: 0.5,
         translate,
@@ -72,7 +71,11 @@ module.exports.renderComment = async function ({
 
     let workLine = createBodyWorkLine(markup, tts)
 
-    let videos = await sequentialWork(workLine, { voice, dsf: 3 })
+    let videos = await sequentialWork(workLine, {
+        voice,
+        dsf: 3,
+        language: translate,
+    })
     let file = tmp.fileSync({ postfix: "." + vidExtension })
     let path = file.name
     await simpleConcat(
@@ -82,8 +85,16 @@ module.exports.renderComment = async function ({
     return path
 }
 
-module.exports.renderQuestion = async function ({ questionData, voice }) {
-    let hydrated = hydrate(questionData, 1)
+module.exports.renderQuestion = async function ({
+    questionData,
+    voice,
+    translate,
+}) {
+    let hydrated = await hydrate({
+        translate,
+        comment: questionData,
+        upvoteProbability: 1,
+    })
 
     let subredditInfo = await fetchAboutSubreddit(hydrated.subreddit)
 
@@ -128,7 +139,11 @@ module.exports.renderQuestion = async function ({ questionData, voice }) {
         workLine.push(...bodyWorks)
     }
 
-    let videos = await sequentialWork(workLine, { voice, dsf: 3 })
+    let videos = await sequentialWork(workLine, {
+        language: translate,
+        voice,
+        dsf: 3,
+    })
 
     let file = tmp.fileSync({ postfix: "." + vidExtension })
     await simpleConcat(

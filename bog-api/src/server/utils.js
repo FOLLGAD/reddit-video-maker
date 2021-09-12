@@ -90,7 +90,9 @@ async function renderFromRequest(
         { _id: video },
         {
             theme: theme._id,
-            name: name || questionData.title,
+            name:
+                (name || questionData.title) +
+                (options.translate ? ` (${options.translate})` : ""),
             file: videoFile._id,
             owner,
             preview,

@@ -7,7 +7,6 @@ const {
     toFilesDir,
     legacyRenderFromRequest,
 } = require("./utils")
-const { translateText } = require("../utils/translation")
 const express = require("express")
 const multer = require("multer")
 const path = require("path")

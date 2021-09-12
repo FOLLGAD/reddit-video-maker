@@ -37,7 +37,7 @@ const startBrowser = async () => {
 }
 
 module.exports.startInstance = async function startInstance() {
-    startBrowser()
+    await startBrowser()
 
     let page = await browser.newPage()
     await page.setContent(questionTemplate({}))

@@ -6,7 +6,44 @@ const { synthDaniel } = require("./our-daniel")
 const { spawn } = require("child_process")
 const tmp = require("tmp")
 
-module.exports.synthSpeech = function ({ text, voice }) {
+const AWS = require("aws-sdk")
+const Polly = new AWS.Polly({
+    signatureVersion: "v4",
+    region: "eu-west-1",
+})
+
+const pollySynthSpeech = ({ text, voiceId }) => {
+    return new Promise((resolve, reject) =>
+        Polly.synthesizeSpeech(
+            {
+                Text: text,
+                VoiceId: voiceId,
+                OutputFormat: "mp3",
+            },
+            (err, data) => {
+                if (err) return rej(err)
+
+                let file = tmp.fileSync({ postfix: ".mp3" })
+                let filepath = file.name
+
+                // Write the binary audio content to a local file
+                fs.writeFile(filepath, data.AudioStream, (err) => {
+                    if (err) {
+                        return reject(err)
+                    }
+                    resolve(filepath)
+                })
+            }
+        )
+    )
+}
+
+const voicemap = {
+    "PT-BR": "Ricardo",
+    ES: "Miguel",
+}
+
+module.exports.synthSpeech = async function ({ text, voice, language }) {
     if (!/[\d\w]/.test(text)) {
         // If no letter or number is in text, don't produce it
         return new Promise((_, rej) =>
@@ -14,37 +51,59 @@ module.exports.synthSpeech = function ({ text, voice }) {
         )
     }
 
+    if (language) {
+        return {
+            audioPath: await pollySynthSpeech({
+                text,
+                voiceId: voicemap[language],
+            }),
+            delay: 0,
+        }
+    }
+
     switch (voice) {
         case "daniel":
             if (process.platform === "darwin") {
                 // Darwin means Mac
-                return module.exports.macTTSToFile(text)
+                return {
+                    audioPath: await module.exports.macTTSToFile(text),
+                    delay: -0.35,
+                }
             }
             // Else, fall back on the epic Oddcast api
             // return module.exports.synthOddcast(text)
-            return synthDaniel(text).then((p) => p.path)
+            return {
+                audioPath: await synthDaniel(text).then((p) => p.path),
+                delay: -0.35,
+            }
 
         case "linux":
             // Don't use
-            return module.exports.linuxTTSToFile(text)
+            return await module.exports.linuxTTSToFile(text)
 
         case "google-uk":
-            return module.exports.synthGoogle(text, {
-                languageCode: "en-GB",
-                voiceName: "en-GB-Wavenet-B",
-                pitch: -4.4,
-                speakingRate: 0.96,
-            })
+            return {
+                audioPath: await module.exports.synthGoogle(text, {
+                    languageCode: "en-GB",
+                    voiceName: "en-GB-Wavenet-B",
+                    pitch: -4.4,
+                    speakingRate: 0.96,
+                }),
+                delay: -0.35,
+            }
 
         case "google-us":
         default:
             // Fallthrough to default
-            return module.exports.synthGoogle(text, {
-                speakingRate: 0.98,
-                languageCode: "en-US",
-                voiceName: "en-US-Wavenet-D",
-                pitch: -2.0,
-            })
+            return {
+                audioPath: await module.exports.synthGoogle(text, {
+                    speakingRate: 0.98,
+                    languageCode: "en-US",
+                    voiceName: "en-US-Wavenet-D",
+                    pitch: -2.0,
+                }),
+                delay: -0.35,
+            }
     }
 }
 
