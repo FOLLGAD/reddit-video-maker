@@ -634,7 +634,7 @@ const init = () => {
                 Video.updateOne(
                     { _id: body.rerenderVideo },
                     { $set: { finished: null, failed: false } }
-                )
+                ).exec()
 
                 const vid = await Video.findOne({
                     _id: body.rerenderVideo,
