@@ -97,7 +97,7 @@ let renderQueue = []
 
 const init = () => {
     // Mark all non-finished videos as "failed"
-    Video.updateMany({ finished: null }, { $set: { failed: true } })
+    Video.updateMany({ finished: null }, { $set: { failed: true } }).exec()
 
     const app = express()
     const upload = multer({
