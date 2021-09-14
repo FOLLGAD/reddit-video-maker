@@ -18,8 +18,9 @@ const { promisify } = require("util")
 const workerFarm = require("worker-farm")
 const workers = workerFarm(
     {
-        maxCallsPerWorker: 4,
-        maxConcurrentWorkers: require("os").cpus().length,
+        maxCallsPerWorker: 2,
+        maxConcurrentWorkers:
+            parseInt(process.env.MAX_CONCURRENT) || require("os").cpus().length,
         maxConcurrentCallsPerWorker: 1,
         autoStart: true,
         maxRetries: 5,
@@ -95,7 +96,7 @@ function getVideoPrice(length) {
 let renderQueue = []
 
 const init = () => {
-  // Mark all non-finished videos as "failed"
+    // Mark all non-finished videos as "failed"
     Video.updateMany({ finished: null }, { $set: { failed: true } })
 
     const app = express()
