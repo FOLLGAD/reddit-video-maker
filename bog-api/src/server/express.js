@@ -95,6 +95,9 @@ function getVideoPrice(length) {
 let renderQueue = []
 
 const init = () => {
+  // Mark all non-finished videos as "failed"
+    Video.updateMany({ finished: null }, { $set: { failed: true } })
+
     const app = express()
     const upload = multer({
         storage: multerStorage,
