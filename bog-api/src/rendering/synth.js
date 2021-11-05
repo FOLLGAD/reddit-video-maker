@@ -5,6 +5,7 @@ const { makeCall } = require("./daniel");
 const { synthDaniel } = require("./our-daniel");
 const { spawn } = require("child_process");
 const tmp = require("tmp");
+const escape = require("escape-html");
 
 const AWS = require("aws-sdk");
 const Polly = new AWS.Polly({
@@ -16,9 +17,10 @@ const pollySynthSpeech = ({ text, voiceId }) => {
   return new Promise((resolve, reject) =>
     Polly.synthesizeSpeech(
       {
-        Text: text,
+        Text: `<prosody volume="+6dB">${escape(text)}</prosody>`,
         VoiceId: voiceId,
         OutputFormat: "mp3",
+        TextType: "ssml",
       },
       (err, data) => {
         if (err) return rej(err);
