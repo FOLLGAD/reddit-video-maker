@@ -54,7 +54,7 @@ module.exports.synthSpeech = async function ({ text, voice, language }) {
   if (language) {
     return {
       audioPath: await pollySynthSpeech({
-        text: `<prosody volume="+4dB">${text}</prosody>`,
+        text: text,
         voiceId: voicemap[language],
       }),
       delay: 0,
@@ -187,19 +187,13 @@ module.exports.synthOddcast = function (text) {
         let file = tmp.fileSync({ postfix: ".mp3" });
         let filepath = file.name;
 
-
         fs.writeFileSync(filepath, buffer);
 
         resolve(filepath);
-
       })
 
       .catch(() => {
-
         reject();
-
       });
-
   });
-
 };
