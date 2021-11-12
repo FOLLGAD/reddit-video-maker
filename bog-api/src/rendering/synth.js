@@ -43,6 +43,10 @@ const pollySynthSpeech = ({ text, voiceId }) => {
 const voicemap = {
   "PT-BR": "Ricardo",
   ES: "Miguel",
+  FR: "Mathieu",
+  DE: "Hans",
+  AR: "Zeina",
+  RU: "Maxim",
 };
 
 module.exports.synthSpeech = async function ({ text, voice, language }) {

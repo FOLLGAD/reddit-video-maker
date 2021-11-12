@@ -74,7 +74,6 @@ const ThemeSchema = new Schema({
 
     translate: {
         type: [String],
-        enum: ["ES", "PT-BR"],
         select: 1,
         default: [],
     },
