@@ -13,11 +13,26 @@ const Polly = new AWS.Polly({
   region: "eu-west-1",
 });
 
+// Copied from https://stackoverflow.com/a/56396333/6912118
+const removeNonUtf8 = (characters) => {
+  try {
+    // ignore invalid char ranges
+    var bytelike = unescape(encodeURIComponent(characters));
+    characters = decodeURIComponent(escape(bytelike));
+  } catch (error) {}
+  // remove �
+  characters = characters.replace(/\uFFFD/g, "");
+  return characters;
+};
+
 const pollySynthSpeech = ({ text, voiceId }) => {
+  const ssml = `<prosody volume="+6dB">${escape(
+    removeNonUtf8(text)
+  )}</prosody>`;
   return new Promise((resolve, reject) =>
     Polly.synthesizeSpeech(
       {
-        Text: `<prosody volume="+6dB">${escape(text)}</prosody>`,
+        Text: ssml,
         VoiceId: voiceId,
         OutputFormat: "mp3",
         TextType: "ssml",
