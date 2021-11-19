@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "https://app.redditvideomaker.com/static/css/main.d33fd989.chunk.css",
-    "main.js": "https://app.redditvideomaker.com/static/js/main.e7fd4aea.chunk.js",
-    "main.js.map": "https://app.redditvideomaker.com/static/js/main.e7fd4aea.chunk.js.map",
-    "runtime~main.js": "https://app.redditvideomaker.com/static/js/runtime~main.05d8bc98.js",
-    "runtime~main.js.map": "https://app.redditvideomaker.com/static/js/runtime~main.05d8bc98.js.map",
-    "static/css/2.d19085d1.chunk.css": "https://app.redditvideomaker.com/static/css/2.d19085d1.chunk.css",
-    "static/js/2.f62f1e44.chunk.js": "https://app.redditvideomaker.com/static/js/2.f62f1e44.chunk.js",
-    "static/js/2.f62f1e44.chunk.js.map": "https://app.redditvideomaker.com/static/js/2.f62f1e44.chunk.js.map",
-    "index.html": "https://app.redditvideomaker.com/index.html",
-    "precache-manifest.2635f9abb7089c199d93920b9c0f6172.js": "https://app.redditvideomaker.com/precache-manifest.2635f9abb7089c199d93920b9c0f6172.js",
-    "service-worker.js": "https://app.redditvideomaker.com/service-worker.js",
-    "static/css/2.d19085d1.chunk.css.map": "https://app.redditvideomaker.com/static/css/2.d19085d1.chunk.css.map",
-    "static/css/main.d33fd989.chunk.css.map": "https://app.redditvideomaker.com/static/css/main.d33fd989.chunk.css.map",
-    "static/media/semantic.min.css": "https://app.redditvideomaker.com/static/media/outline-icons.ef60a4f6.woff"
+    "main.css": "/static/css/main.d33fd989.chunk.css",
+    "main.js": "/static/js/main.0005b457.chunk.js",
+    "main.js.map": "/static/js/main.0005b457.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+    "static/css/2.57fb0317.chunk.css": "/static/css/2.57fb0317.chunk.css",
+    "static/js/2.939c365e.chunk.js": "/static/js/2.939c365e.chunk.js",
+    "static/js/2.939c365e.chunk.js.map": "/static/js/2.939c365e.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.163cb5174329db5870ca176eec0b705a.js": "/precache-manifest.163cb5174329db5870ca176eec0b705a.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.57fb0317.chunk.css.map": "/static/css/2.57fb0317.chunk.css.map",
+    "static/css/main.d33fd989.chunk.css.map": "/static/css/main.d33fd989.chunk.css.map",
+    "static/media/semantic.min.css": "/static/media/outline-icons.ef60a4f6.woff"
   }
 }
