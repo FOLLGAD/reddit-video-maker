@@ -104,9 +104,9 @@ async function renderFromRequest(
         (name || questionData.title) +
         (options.translate ? ` (${options.translate})` : ""),
       file: videoFile._id,
-      owner,
       preview,
       failed: false,
+      ...(owner ? { owner } : {}),
     }
   );
 
