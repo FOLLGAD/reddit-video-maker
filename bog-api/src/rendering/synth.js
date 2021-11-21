@@ -65,7 +65,7 @@ const voicemap = {
 };
 
 module.exports.synthSpeech = async function ({ text, voice, language }) {
-  if (!/[\d\w]/.test(text)) {
+  if (!/\S/.test(text)) {
     // If no letter or number is in text, don't produce it
     return new Promise((_, rej) =>
       rej("Warning: TTS for current frame is empty")

@@ -67,6 +67,7 @@ module.exports.renderComment = async function ({
     }
 
     let tts = compileHtml(rootComment)
+  console.log("GENERATED TTS", rootComment.body_html)
     let markup = commentTemplate(rootComment)
 
     let workLine = createBodyWorkLine(markup, tts)
