@@ -621,8 +621,6 @@ const init = () => {
 
         // RENDER VIDEO
         .post("/videos", async (req, res) => {
-            // Take credit from user
-
             if (req.user.credits < 1) {
                 return res.status(400).json({ error: "NOT_ENOUGH_CREDITS" })
             }
@@ -644,6 +642,8 @@ const init = () => {
                 vids.push(vid)
             } else {
                 const theme = await Theme.findOne({ _id: body.options.theme })
+
+                // Create videos for all translations
                 const pms = theme.translate.map((lang) =>
                     Video.create({
                         name:
@@ -670,6 +670,7 @@ const init = () => {
                 vids.push(...videos)
             }
 
+            // Take credit from user
             let cost = getVideoPrice()
             User.updateOne(
                 { _id: req.user._id },
