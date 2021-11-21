@@ -209,4 +209,6 @@ module.exports = {
   syncRenderFromRequest,
 
   legacyRenderFromRequest,
+
+  rerenderVideo,
 };
