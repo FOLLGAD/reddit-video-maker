@@ -14,7 +14,9 @@ const Polly = new AWS.Polly({
 });
 
 const removeNonUtf8 = (characters) => {
-  characters = characters.replace(/[^\p{Emoji_Presentation}]/gu, "").replace(/\uFFFD/g, "");
+  characters = characters
+    .replace(/[\p{Emoji_Presentation}]/gu, "")
+    .replace(/\uFFFD/g, "");
   return characters;
 };
 
