@@ -13,15 +13,8 @@ const Polly = new AWS.Polly({
   region: "eu-west-1",
 });
 
-// Copied from https://stackoverflow.com/a/56396333/6912118
 const removeNonUtf8 = (characters) => {
-  try {
-    // ignore invalid char ranges
-    var bytelike = unescape(encodeURIComponent(characters));
-    characters = decodeURIComponent(escape(bytelike));
-  } catch (error) {}
-  // remove �
-  characters = characters.replace(/\uFFFD/g, "");
+  characters = characters.replace(/[^\p{Emoji_Presentation}]/gu, "").replace(/\uFFFD/g, "");
   return characters;
 };
 
@@ -38,7 +31,7 @@ const pollySynthSpeech = ({ text, voiceId }) => {
         TextType: "ssml",
       },
       (err, data) => {
-        if (err) return rej(err);
+        if (err) return reject(err);
 
         let file = tmp.fileSync({ postfix: ".mp3" });
         let filepath = file.name;

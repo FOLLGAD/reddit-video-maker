@@ -58,7 +58,7 @@ const foulDict2 = [
 module.exports.sanitizeSynth = function (text) {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes
   text = text.replace(/(\p{P})\p{P}+/gu, "$1"); // Turns repeated punctuation into one
-  text = text.replace(/(\s|^)[^\p{S}\p{L}\p{N}]+(\s|$)/gu, "$1$2"); // Turns ` :) `, ` " ` into `  `
+  text = text.replace(/(\s|^)[^\p{S}\p{L}\p{N}&]+(\s|$)/gu, "$1$2"); // Turns ` :) `, ` " ` into `  `
 
   foulDict2.forEach((elem) => {
     // Replaces every occurance with the the corresponding value in the dictionary
