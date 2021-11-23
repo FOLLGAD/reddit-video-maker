@@ -790,7 +790,8 @@ const init = () => {
                 .replace(/-+$/, ""); // Trim - from end of text
             };
             res.setHeader(
-              `Content-Disposition: attachment; filename="${slugify(
+              "Content-Disposition",
+              `attachment; filename="${slugify(
                 `${vid.name}.${vid.file.filename.split(".").pop()}`
               )}"`
             );
