@@ -780,10 +780,19 @@ const init = () => {
         .then((vid) => {
           if (vid) {
             // Set download name to video name
+
+            const slugify = (text) => {
+              return text
+                .replace(/\s+/g, "-") // Replace spaces with -
+                .replace(/[^\w-.)(]+/g, "") // Remove all non-word chars
+                .replace(/--+/g, "-") // Replace multiple - with single -
+                .replace(/^-+/, "") // Trim - from start of text
+                .replace(/-+$/, ""); // Trim - from end of text
+            };
             res.setHeader(
-              `Content-Disposition: attachment; filename="${
-                vid.name
-              }.${vid.file.filename.split(".").pop()}"`
+              `Content-Disposition: attachment; filename="${slugify(
+                `${vid.name}.${vid.file.filename.split(".").pop()}`
+              )}"`
             );
             res.download(toFilesDir(vid.file.filename));
 
