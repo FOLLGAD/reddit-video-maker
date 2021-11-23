@@ -19,6 +19,15 @@ const uuidFileName = (extension) =>
 
 const vidExtension = "mp4";
 
+const slugify = (text) => {
+  return text
+    .replace(/\s+/g, "-") // Replace spaces with -
+    .replace(/[^\w-.)(]+/g, "") // Remove all non-word chars
+    .replace(/--+/g, "-") // Replace multiple - with single -
+    .replace(/^-+/, "") // Trim - from start of text
+    .replace(/-+$/, ""); // Trim - from end of text
+};
+
 function createToken(email) {
   return new Promise((res, rej) => {
     jwt.sign({ email }, tokenSecret, { expiresIn: "30d" }, (err, token) => {
@@ -191,24 +200,15 @@ async function legacyRenderFromRequest(
 
 module.exports = {
   vidExtension,
-
   uuidFileName,
-
   filesLocation,
-
   toFilesDir,
-
   createToken,
-
   verifyToken,
-
   deleteFileCond,
-
   renderFromRequest,
-
   syncRenderFromRequest,
-
   legacyRenderFromRequest,
-
   rerenderVideo,
+  slugify,
 };
