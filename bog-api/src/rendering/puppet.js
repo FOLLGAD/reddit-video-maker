@@ -26,9 +26,13 @@ handles.registerPartial("comment", commentPartial);
 
 let browser;
 
-process.on("exit", () => {
+const cleanExit = () => {
   browser?.close();
-});
+};
+
+process.on("SIGTERM", cleanExit);
+process.on("SIGINT", cleanExit);
+process.on("exit", cleanExit);
 
 const startBrowser = async () => {
   if (!browser) {
