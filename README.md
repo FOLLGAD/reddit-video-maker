@@ -1,6 +1,8 @@
-# Project BOG
+# Reddit Video Maker
 
-Monorepo for BOG and Hammurabi
+Reddit Video Maker as a SaaS
+
+## get started
 
 ```bash
 # Install packages for both repos
