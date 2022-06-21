@@ -2,6 +2,14 @@
 
 Reddit Video Maker as a SaaS
 
+Repo consists of two parts:
+
+## `project-bog`
+The backend generating all the videos, communicating with reddit API etc.
+
+## `hammurabi`
+The frontend.
+
 ## get started
 
 ```bash
