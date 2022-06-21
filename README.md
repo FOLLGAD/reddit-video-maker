@@ -10,7 +10,7 @@ The backend generating all the videos, communicating with reddit API etc.
 ## `hammurabi`
 The frontend.
 
-## get started
+# get started
 
 ```bash
 # Install packages for both repos
