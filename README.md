@@ -2,6 +2,15 @@
 
 Reddit Video Maker as a SaaS
 
+Features:
+- Runs as a web app and renders on a server to maximize portability
+- You can manually edit title and comment body text if wanted.
+- Automatically censor words proven to be "bad" for the youtube algorithm.
+- Generate video of a given length
+- Automatically translate to different languages (spanish, russian, portuguese, german etc.) using DeepL. Works surprisingly well!
+- Add custom transition
+- Dark mode :)
+
 ## Example
 [![Redditors Studios](https://img.youtube.com/vi/83ow2lHd-8o/0.jpg)](https://www.youtube.com/watch?v=83ow2lHd-8o)
 
