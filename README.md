@@ -4,6 +4,7 @@ Reddit Video Maker as a SaaS
 
 Features:
 - Runs as a web app and renders on a server to maximize portability
+- Choose any soundtrack for the video
 - You can manually edit title and comment body text if wanted.
 - Automatically censor words proven to be "bad" for the youtube algorithm.
 - Generate video of a given length
