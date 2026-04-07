@@ -31,12 +31,13 @@ const workers = workerFarm(
 );
 const workersAsync = promisify(workers.syncRenderFromRequest);
 
+require("dotenv").config();
+
 require("./cronjob");
 
 const { normalizeSong, normalizeVideo } = require("../rendering/video");
 const { fetchThread, initAuth } = require("../rendering/reddit-api");
 
-require("dotenv").config();
 const { STRIPE_WEBHOOK_SECRET, STRIPE_API_KEY, PORT } = process.env;
 
 const stripe = require("stripe")(STRIPE_API_KEY);
@@ -112,8 +113,8 @@ const init = () => {
     )
   );
 
-  if (process.env.NODE_ENV !== "production") {
-    // Enable cors for development mode
+  if (process.env.NODE_ENV === "development") {
+    // Enable cors for development mode only
     app.use(
       require("cors")({
         credentials: true,
@@ -141,8 +142,8 @@ const init = () => {
           STRIPE_WEBHOOK_SECRET
         );
       } catch (err) {
-        console.error(err);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
+        console.error("Stripe webhook signature verification failed");
+        return res.status(400).send("Webhook signature verification failed");
       }
 
       // Handle the checkout.session.completed event
@@ -151,7 +152,6 @@ const init = () => {
 
         // Fulfill the purchase...
         let userId = session.client_reference_id;
-        console.log(session);
         if (!userId) {
           throw new Error(
             "No client_reference_id gotten! Can't match payment with payer."
@@ -202,6 +202,9 @@ const init = () => {
 
       let emailUsername = {};
       if (username) {
+        if (typeof username !== "string") {
+          return res.status(400).json({ error: "INVALID_INPUT" });
+        }
         emailUsername.username = username;
         let nm = await User.countDocuments({ username });
         if (nm > 0) {
@@ -210,6 +213,9 @@ const init = () => {
       }
 
       if (email) {
+        if (typeof email !== "string") {
+          return res.status(400).json({ error: "INVALID_INPUT" });
+        }
         emailUsername.email = email;
         let nm = await User.countDocuments({ email });
         if (nm > 0) {
@@ -221,11 +227,13 @@ const init = () => {
       res.json(user);
     })
     .put("/users/:userId/change-password", async (req, res) => {
-      let user = await User.updateOne(
-        { _id: req.params.userId },
-        { password: req.body.password }
-      );
-      res.json(user);
+      let user = await User.findOne({ _id: req.params.userId });
+      if (!user) {
+        return res.status(404).json({ error: "USER_NOT_FOUND" });
+      }
+      user.password = req.body.password;
+      await user.save();
+      res.json({ success: true });
     })
     .put("/users/:userId/add-credits", async (req, res) => {
       if (isNaN(req.body.quantity))
@@ -250,7 +258,7 @@ const init = () => {
     .Router()
     .post("/register", async (req, res) => {
       let { password, email, username } = req.body;
-      if (!password) {
+      if (!password || typeof password !== "string") {
         return res.status(400).json({ error: "NO_PASSWORD" });
       } else if (password.length < 8) {
         return res.status(400).json({ error: "PASSWORD_TOO_SHORT" });
@@ -261,6 +269,9 @@ const init = () => {
 
       let emailUsername = {};
       if (username) {
+        if (typeof username !== "string") {
+          return res.status(400).json({ error: "INVALID_INPUT" });
+        }
         emailUsername.username = username;
         let nm = await User.countDocuments({ username });
         if (nm > 0) {
@@ -269,6 +280,9 @@ const init = () => {
       }
 
       if (email) {
+        if (typeof email !== "string") {
+          return res.status(400).json({ error: "INVALID_INPUT" });
+        }
         emailUsername.email = email;
         let nm = await User.countDocuments({ email });
         if (nm > 0) {
@@ -313,6 +327,8 @@ const init = () => {
         .then((token) => {
           res.cookie("token", token, {
             httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
             maxAge: 1000 * 60 * 60 * 24 * 365,
           });
           res.status(200).json({});
@@ -611,15 +627,20 @@ const init = () => {
 
       if (body.rerenderVideo) {
         Video.updateOne(
-          { _id: body.rerenderVideo },
+          { _id: body.rerenderVideo, owner: req.user._id },
           { $set: { finished: null, failed: false } }
         ).exec();
 
         const vid = await Video.findOne({
           _id: body.rerenderVideo,
+          owner: req.user._id,
         }).select({
           request_body: 1,
         });
+
+        if (!vid) {
+          return res.status(404).json({ error: "VIDEO_NOT_FOUND" });
+        }
         vids.push(vid);
       } else {
         const theme = await Theme.findOne({ _id: body.options.theme });
